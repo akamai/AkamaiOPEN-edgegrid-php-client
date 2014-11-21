@@ -1,0 +1,10 @@
+<phpunit colors="true" verbose="true">
+    <php>
+        <ini name="display_errors" value="on"/>
+    </php>
+    <testsuites>
+        <testsuite name="Unit Test">
+            <directory>./</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

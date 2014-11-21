@@ -1,0 +1,23 @@
+### Test Files ###
+test_client.php
+
+### PHP ###
+composer.phar
+composer.lock
+vendor/
+
+### IntelliJ ###
+*.iml
+.idea/
+*.ipr
+*.iws
+
+### OS X ###
+.DS_Store
+.AppleDouble
+.LSOverride
+
+### Windows ###
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
