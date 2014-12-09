@@ -1,5 +1,10 @@
 <?php
 /**
+ *
+ * Original Author: Hideki Okamoto <hokamoto@akamai.com>
+ *
+ * For more information visit https://developer.akamai.com
+ *
  * Copyright 2014 Akamai Technologies, Inc. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
