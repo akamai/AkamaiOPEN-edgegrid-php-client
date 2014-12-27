@@ -11,29 +11,26 @@ For more information visit the [Akamai {OPEN} Developer Community](https://devel
 Installation
 ------------
 
-This library requires PHP 5.4 or later.  To easily install we recommend using [Composer](https://getcomposer.org/)
+This library requires PHP 5.4 or later.  
 
-1. Install [Composer](https://getcomposer.org/)
+Place the EdgeGrid.php file with the rest of your PHP libraries (or in the same directory as your other scripts)
 
-    ``` sh
-    $ curl -sS https://getcomposer.org/installer | php
-    ```
+Example scripts can be found in the api-kickstart repository.
 
-2. Create a composer.json
+This library requires that your credentials be in an .edgerc file in your home directory (or the script can be
+instructed to use a different file).  The format for this file is as follows:
 
-    ```json
-    {
-        "require": {
-            "akamai/edgegrid": ">=1.0.0"
-        }
-    }
-    ```
+[default]
+client_secret = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=
+host = xxxxx.luna.akamaiapis.net/
+access_token = xxxxx
+client_token = xxxxx
 
-3. Run Composer
+Credentials can be generated using information on the developer site at:
+https://developer.akamai.com/introduction/Prov_Creds.html
 
-    ```sh
-    php composer.phar install
-    ```
+Once the credentials are set, export them via the export button on the upper right hand side of the screen in the luna portal 
+and format them as above in your .edgerc file.
 
 Usage
 -----
@@ -41,14 +38,17 @@ Usage
 ```php
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once ('EdgeGrid.php');
+$client = new \Akamai\EdgeGrid(false, 'test', 'test'); # insert the section of the .edgerc file for the calls here.
 
-$client = new \Akamai\EdgeGrid(
-    'akab-xxxxxxxxxxxxxxxx-yyyyyyyyyyyyyyyy', // Client Token
-    'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=',  // Client Secret
-    'akab-xxxxxxxxxxxxxxxx-yyyyyyyyyyyyyyyy.luna.akamaiapis.net', // Hostname in Base URL
-    'akab-xxxxxxxxxxxxxxxx-yyyyyyyyyyyyyyyy' // Access Token
-);
+$client->path = '/diagnostic-tools/v1/locations';
+$client->headers = array('X-testheader' => 'testdata');
+$response = $client->request();
+if($response['error']){
+        var_dump($response['error']);
+} else {
+        var_dump($response['body']);
+}
 
 $response = $client->get('/billing-usage/v1/reportSources', []);
 echo $response->body;
@@ -57,7 +57,7 @@ echo $response->body;
 Author
 ------
 
-Hideki Okamoto <hokamoto@akamai.com>
+Michael Coury <consulting@vorien.com>
 
 License
 -------
