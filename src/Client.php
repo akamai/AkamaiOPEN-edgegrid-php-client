@@ -144,7 +144,7 @@ class Client {
             $options['headers']['Authorization'] = $this->createAuthHeader($httpMethod, $path);
         }
         
-        $return = $this->guzzle->$method(... $args);
+        $return = call_user_func_array([$this->guzzle, $method], $args);
         $this->body = '';
         $this->headers = '';
         
