@@ -159,7 +159,7 @@ class Client {
      * @param string $path Path to .edgerc credentials file
      * @return \Akamai\Open\EdgeGrid\Client
      */
-    public static function createFromEdgeRcFile($section = 'default', $path = null)
+    public static function createFromEdgeRcFile($section = 'default', $path = null, $options = [])
     {
         if ($path === null) {
             if (isset($_SERVER['HOME']) && file_exists($_SERVER['HOME'] . '/.edgerc')) {
@@ -183,7 +183,7 @@ class Client {
             throw new \Exception("Section \"$section\" does not exist!");
         }
         
-        $client = new static(['base_uri' => 'https://' . $options[$section]['host']]);
+        $client = new static(array_merge($options, ['base_uri' => 'https://' . $options[$section]['host']]));
         $client->setAuth($options[$section]['client_token'], $options[$section]['client_secret'], $options[$section]['access_token']);
         if (isset($options[$section]['max-size'])) {
             $client->setMaxBodySize($options[$section]['max-size']);
