@@ -49,6 +49,10 @@ class Client {
 
     public function __construct($options = [], Client\Timestamp $timestamp = null, Client\Nonce $nonce = null)
     {
+        if (isset($options['base_uri']) && strpos($options['base_uri'], '://') === false) {
+            $options['base_uri'] = 'https://' .$options['base_uri'];
+        }
+        
         $this->guzzle = new \GuzzleHttp\Client($options);
         
         if ($options['base_uri']) {
@@ -132,7 +136,7 @@ class Client {
             if (isset($options['base_uri'])) {
                 $this->setHost($options['base_uri']);
             } elseif (isset($this->host)) {
-                $options['base_uri'] = $this->host;
+                $options['base_uri'] = 'https://' . $this->host;
             } else {
                 throw new \Exception("No Host set");
             }
@@ -179,7 +183,7 @@ class Client {
             throw new \Exception("Section \"$section\" does not exist!");
         }
         
-        $client = new static(['base_uri' => $options[$section]['host']]);
+        $client = new static(['base_uri' => 'https://' . $options[$section]['host']]);
         $client->setAuth($options[$section]['client_token'], $options[$section]['client_secret'], $options[$section]['access_token']);
         if (isset($options[$section]['max-size'])) {
             $client->setMaxBodySize($options[$section]['max-size']);
