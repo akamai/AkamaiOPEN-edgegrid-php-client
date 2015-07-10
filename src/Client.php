@@ -114,6 +114,8 @@ class Client {
 
                 if (isset($args[1])) {
                     $options = &$args[1];
+                } else {
+                    $args[1] = &$options;
                 }
             } elseif ($httpMethod == 'send') {
                 // PSR-7
@@ -127,6 +129,8 @@ class Client {
 
                 if (isset($args[2])) {
                     $options = &$args[2];
+                } else {
+                    $args[2] = &$options;
                 }
             }
             
