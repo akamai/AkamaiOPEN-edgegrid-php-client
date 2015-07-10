@@ -1,4 +1,4 @@
-<phpunit colors="true" verbose="true">
+<phpunit colors="true" verbose="true" bootstrap="./bootstrap.php">
     <php>
         <ini name="display_errors" value="on"/>
     </php>
