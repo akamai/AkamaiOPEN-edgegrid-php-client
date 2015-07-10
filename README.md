@@ -10,7 +10,7 @@ For more information visit the [Akamai {OPEN} Developer Community](https://devel
 
 ## Installation
 
-This library requires PHP 5.6 or later.
+This library requires PHP 5.5+, or HHVM 3.5+.
 
 To install use [`composer`](http://getcomposer.org):
 
