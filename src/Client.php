@@ -193,7 +193,7 @@ class Client {
             throw new \Exception("Unable to read .edgerc file!");
         }
         
-        $options = parse_ini_file($file, true);
+        $options = parse_ini_file($file, true, INI_SCANNER_RAW);
         if (!$options[$section]) {
             throw new \Exception("Section \"$section\" does not exist!");
         }
