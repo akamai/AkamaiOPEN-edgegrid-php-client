@@ -163,6 +163,17 @@
                 "data": "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP"
             },
             "expectedAuthorization": "EG1-HMAC-SHA256 client_token=akab-client-token-xxx-xxxxxxxxxxxxxxxx;access_token=akab-access-token-xxx-xxxxxxxxxxxxxxxx;timestamp=20140321T19:34:21+0000;nonce=nonce-xx-xxxx-xxxx-xxxx-xxxxxxxxxxxx;signature=GNBWEYSEWOLtu+7dD52da2C39aX/Jchpon3K/AmBqBU="
+        },
+        {
+            "testName": "GET with query args as option",
+            "request": {
+                "method": "GET",
+                "path": "/testapi/v1/t6",
+                "query": {
+                    "test": "arg"
+                }
+            },
+            "expectedAuthorization": "EG1-HMAC-SHA256 client_token=akab-client-token-xxx-xxxxxxxxxxxxxxxx;access_token=akab-access-token-xxx-xxxxxxxxxxxxxxxx;timestamp=20140321T19:34:21+0000;nonce=nonce-xx-xxxx-xxxx-xxxx-xxxxxxxxxxxx;signature=Lal1dZsnzeYKXX7Q5NPmHnReZqlZk5bmI8KGXT0K2jc="
         }
     ]
 }

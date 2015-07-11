@@ -132,7 +132,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
     
     public function testCreateFromEdgeRcDefault()
     {
-        chdir(__DIR__ .'/edgerc');
+        $_SERVER['HOME'] = __DIR__ .'/edgerc';
         $client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile();
         $closure = function($what) {
             return $this->{$what};

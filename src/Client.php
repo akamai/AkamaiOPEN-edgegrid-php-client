@@ -30,6 +30,11 @@ class Client {
     protected $max_body_size = 131072;
 
     /**
+     * @var array
+     */
+    protected $query = [];
+    
+    /**
      * @var string
      */
     protected $body = '';
@@ -134,6 +139,7 @@ class Client {
                 }
             }
             
+            $this->query = isset($options['query']) ? $options['query'] : [];
             $this->body = isset($options['body']) ? $options['body'] : '';
             $this->headers = isset($options['headers']) ? $options['headers'] : [];
 
@@ -147,6 +153,11 @@ class Client {
 
             if (isset($options['headers']['Host'])) {
                 $this->setHost($options['headers']['Host']);
+            }
+            
+            if ($query = parse_url($path, PHP_URL_QUERY)) {
+                parse_str($query, $this->query);
+                $path = str_replace('?' . $query, '', $path);
             }
 
             $options['headers']['Authorization'] = $this->createAuthHeader($httpMethod, $path);
@@ -243,7 +254,7 @@ class Client {
                 strtoupper($method),
                 'https',
                 $this->host,
-                $path,
+                $path . ($this->query ? '?' . (is_string($this->query) ? $this->query : http_build_query($this->query, null, '&', PHP_QUERY_RFC3986)) : ''),
                 $this->canonicalizeHeaders(),
                 (strtoupper($method) == 'POST') ? $this->makeContentHash() : '',
                 $auth_header
