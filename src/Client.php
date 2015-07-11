@@ -60,7 +60,7 @@ class Client {
         
         $this->guzzle = new \GuzzleHttp\Client($options);
         
-        if ($options['base_uri']) {
+        if (isset($options['base_uri'])) {
             $this->setHost($options['base_uri']);
         }
         
@@ -85,6 +85,11 @@ class Client {
         if (strpos($host, '://') !== false) {
             $host = parse_url($host, PHP_URL_HOST);
         }
+        
+        if (substr($host, -1) == '/') {
+            $host = substr($host, 0, -1);
+        }
+        
         $this->host = $host;
     }
     

@@ -191,6 +191,19 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $this->assertRegExp('/\A\d{4}[0-1][0-9][0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9][+]0000\z/', (string) $timestamp);
     }
     
+    public function testHostnameWithTrailingSlash()
+    {
+        $client = new \Akamai\Open\EdgeGrid\Client();
+        $closure = function($what) {
+            return $this->{$what};
+        };
+        $tester = $closure->bindTo($client, $client);
+        
+        $client->setHost('akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net/');
+        
+        $this->assertEquals('akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net', $tester('host'));
+    }
+    
     public function makeAuthHeaderProvider()
     {
         $testdata = json_decode(file_get_contents(__DIR__ . '/testdata.json'), true);
