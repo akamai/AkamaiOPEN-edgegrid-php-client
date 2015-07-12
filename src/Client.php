@@ -198,15 +198,15 @@ class Client {
             throw new \Exception("Unable to read .edgerc file!");
         }
         
-        $options = parse_ini_file($file, true, INI_SCANNER_RAW);
-        if (!$options[$section]) {
+        $ini = parse_ini_file($file, true, INI_SCANNER_RAW);
+        if (!$ini[$section]) {
             throw new \Exception("Section \"$section\" does not exist!");
         }
         
-        $client = new static(array_merge($options, ['base_uri' => 'https://' . $options[$section]['host']]));
-        $client->setAuth($options[$section]['client_token'], $options[$section]['client_secret'], $options[$section]['access_token']);
-        if (isset($options[$section]['max-size'])) {
-            $client->setMaxBodySize($options[$section]['max-size']);
+        $client = new static(array_merge($options, ['base_uri' => 'https://' . $ini[$section]['host']]));
+        $client->setAuth($ini[$section]['client_token'], $ini[$section]['client_secret'], $ini[$section]['access_token']);
+        if (isset($ini[$section]['max-size'])) {
+            $client->setMaxBodySize($ini[$section]['max-size']);
         }
 
         return $client;
