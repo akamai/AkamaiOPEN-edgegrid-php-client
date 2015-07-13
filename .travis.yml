@@ -10,4 +10,4 @@ sudo: false
 
 install: travis_retry composer install --no-interaction --prefer-source
 
-script: cd tests && phpunit
+script: phpunit
