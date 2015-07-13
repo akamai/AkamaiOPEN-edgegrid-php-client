@@ -1,82 +1,125 @@
 <?php
+/**
+ * Akamai {OPEN} EdgeGrid Client for PHP
+ * 
+ * Akamai\Open\EdgeGrid\Client wraps GuzzleHttp\Client
+ * providing request authentication/signing for Akamai
+ * {OPEN} APIs.
+ * 
+ * This client works _identically_ to GuzzleHttp\Client
+ * with the following exceptions:
+ * 
+ * - You *must* call {@see Akamai\Open\EdgeGrid\Client->setAuth()} 
+ *   before making a request.
+ * - Will only make `https` requests
+ * - Is intended _only_ for use with Akamai {OPEN} APIs (use Guzzle
+ *   directly for other usages)
+ * 
+ * @author Davey Shafik <dshafik@akamai.com>
+ * @copyright Copyright 2015 Akamai Technologies, Inc. All rights reserved.
+ * @license Apache 2.0
+ * @link https://github.com/akamai-open/edgegrid-auth-php 
+ * @link https://developer.akamai.com
+ * @link https://developer.akamai.com/introduction/Client_Auth.html
+ */
 namespace Akamai\Open\EdgeGrid;
 
 use GuzzleHttp\Middleware;
 Use GuzzleHttp\HandlerStack;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * Class Client
+ * 
+ * Akamai {OPEN} EdgeGrid Client for PHP. Based on
+ * [Guzzle](http://guzzlephp.org).
+ * 
+ * @package Akamai {OPEN} EdgeGrid Client
+ */
 class Client {
+    /**
+     * @const int Default Timeout in seconds
+     */
     const DEFAULT_REQUEST_TIMEOUT = 10;
 
     /**
-     * @var bool Print JSON responses to STDOUT 
+     * @var boolean Print JSON responses to STDOUT 
      */
     static protected $verbose = false;
 
     /**
-     * @var bool Print HTTP request/responses to STDOUT
+     * @var boolean Print HTTP request/responses to STDOUT
      */
     static protected $debug = false;
 
     /**
-     * @var bool for debugging/verbose
+     * @var array An array of requests 
      */
     static protected $requests = false;
+
+    /**
+     * @var mixed History middleware to track requests
+     * @see \GuzzleHttp\Middleware::history()
+     */
     static protected $history = false;
+
+    /**
+     * @var \GuzzleHttp\HandlerStack The handler stack for middleware
+     */
     static protected $handlerStack = false;
     
     /**
-     * @var \GuzzleHttp\Client
+     * @var \GuzzleHttp\Client Proxied GuzzleHttp\Client
      */
     protected $guzzle;
 
     /**
-     * @var array
+     * @var array Authentication credentials
      */
     protected $auth = [];
 
     /**
-     * @var string
+     * @var string Akamai {OPEN} API host
      */
     protected $host;
 
     /**
-     * @var int
+     * @var int Timeout in seconds
      */
     protected $timeout_in_seconds = self::DEFAULT_REQUEST_TIMEOUT;
 
     /**
-     * @var int
+     * @var int Maximum body size for signing
      */
     protected $max_body_size = 131072;
 
     /**
-     * @var array
+     * @var array Request query string
      */
     protected $query = [];
     
     /**
-     * @var string
+     * @var string Request body
      */
     protected $body = '';
 
     /**
-     * @var array
+     * @var array Request headers
      */
     protected $headers = [];
 
     /**
-     * @var array
+     * @var array A list of headers to be included in the signature
      */
     protected $headers_to_sign = [];
 
     /**
-     * @var Client\Timestamp
+     * @var Client\Timestamp Request timestamp
      */
     protected $timestamp;
 
     /**
-     * @var Client\Nonce
+     * @var Client\Nonce Requent nonce
      */
     protected $nonce;
 
@@ -283,7 +326,14 @@ class Client {
     }
 
     /**
+     * Factory method to create a client using credentials from `.edgerc`
+     * 
+     * Automatically checks your HOME directory, and the current working
+     * directory for credentials, if no path is supplied.
+     * 
+     * @param string $section Credential section to use
      * @param string $path Path to .edgerc credentials file
+     * @param array $options Options to pass to the constructor/guzzle
      * @return \Akamai\Open\EdgeGrid\Client
      */
     public static function createFromEdgeRcFile($section = 'default', $path = null, $options = [])
@@ -339,6 +389,12 @@ class Client {
         self::$debug = $enable;
     }
 
+    /**
+     * Output JSON when verbose mode is turned on
+     * 
+     * @param $requests Array of requests captured by {@see GuzzleHttp\MiddleWare::history()}
+     * @see \Akamai\Open\EdgeGrid\Client::setVerbose
+     */
     protected function verbose($requests)
     {
         $colors = [
@@ -366,7 +422,15 @@ class Client {
         }
         echo "{$colors['reset']}\n";
     }
-    
+
+    /**
+     * Create the Authentication header
+     * 
+     * @param $method HTTP method
+     * @param $path Request path
+     * @return string
+     * @link https://developer.akamai.com/introduction/Client_Auth.html
+     */
     protected function createAuthHeader($method, $path)
     {
         $auth_header =
@@ -401,8 +465,6 @@ class Client {
      *
      * @param string $method
      * @param string $path
-     * @param array $headers
-     * @param string $body
      * @param string $auth_header
      * @return string
      */
@@ -510,4 +572,4 @@ class Client {
     {
         return base64_encode(hash('sha256', $data, true));
     }
-} 
+}
