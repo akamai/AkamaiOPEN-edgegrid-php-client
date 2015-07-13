@@ -15,6 +15,9 @@
                      <coverage path="coverage/xml" /> 
                      <filter directory="${phpDox.project.source}" />
                 </source>
+                <source type="checkstyle">
+                    <file name="phpcs.xml" />
+                </source>
             </enrich>
             <build engine="html" enabled="true" output="docs">
                 <template dir="${phpDox.home}/templates/html" />

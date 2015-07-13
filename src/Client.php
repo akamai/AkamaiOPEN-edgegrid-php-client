@@ -1,20 +1,20 @@
 <?php
 /**
  * Akamai {OPEN} EdgeGrid Client for PHP
- * 
+ *
  * Akamai\Open\EdgeGrid\Client wraps GuzzleHttp\Client
  * providing request authentication/signing for Akamai
  * {OPEN} APIs.
- * 
+ *
  * This client works _identically_ to GuzzleHttp\Client
  *
  * However, if you try to call an Akamai {OPEN} API you *must*
  * first call {@see Akamai\Open\EdgeGrid\Client->setAuth()}.
- * 
+ *
  * @author Davey Shafik <dshafik@akamai.com>
  * @copyright Copyright 2015 Akamai Technologies, Inc. All rights reserved.
  * @license Apache 2.0
- * @link https://github.com/akamai-open/edgegrid-auth-php 
+ * @link https://github.com/akamai-open/edgegrid-auth-php
  * @link https://developer.akamai.com
  * @link https://developer.akamai.com/introduction/Client_Auth.html
  */
@@ -22,7 +22,7 @@ namespace Akamai\Open\EdgeGrid;
 
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Middleware;
-Use GuzzleHttp\HandlerStack;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -30,43 +30,44 @@ use Psr\Http\Message\UriInterface;
 
 /**
  * Class Client
- * 
+ *
  * Akamai {OPEN} EdgeGrid Client for PHP. Based on
  * [Guzzle](http://guzzlephp.org).
- * 
+ *
  * @package Akamai {OPEN} EdgeGrid Client
  */
-class Client implements \GuzzleHttp\ClientInterface {
+class Client implements \GuzzleHttp\ClientInterface
+{
     /**
      * @const int Default Timeout in seconds
      */
     const DEFAULT_REQUEST_TIMEOUT = 10;
 
     /**
-     * @var boolean Print JSON responses to STDOUT 
+     * @var boolean Print JSON responses to STDOUT
      */
-    static protected $verbose = false;
+    protected static $verbose = false;
 
     /**
      * @var boolean Print HTTP request/responses to STDOUT
      */
-    static protected $debug = false;
+    protected static $debug = false;
 
     /**
-     * @var array An array of requests 
+     * @var array An array of requests
      */
-    static protected $requests = false;
+    protected static $requests = false;
 
     /**
      * @var mixed History middleware to track requests
      * @see \GuzzleHttp\Middleware::history()
      */
-    static protected $history = false;
+    protected static $history = false;
 
     /**
      * @var \GuzzleHttp\HandlerStack The handler stack for middleware
      */
-    static protected $handlerStack = false;
+    protected static $handlerStack = false;
     
     /**
      * @var \GuzzleHttp\Client Proxied GuzzleHttp\Client
@@ -125,7 +126,7 @@ class Client implements \GuzzleHttp\ClientInterface {
 
     /**
      * \GuzzleHttp\Client-compatible constructor
-     * 
+     *
      * @param array $options Options array
      * @param Client\Timestamp|null $timestamp inject a timestamp (for testing)
      * @param Client\Nonce|null $nonce inject a nonce (for testing)
@@ -161,7 +162,7 @@ class Client implements \GuzzleHttp\ClientInterface {
 
     /**
      * Set Akamai EdgeGrid Authentication Tokens/Secret
-     * 
+     *
      * @param string $client_token
      * @param string $client_secret
      * @param string $access_token
@@ -173,7 +174,7 @@ class Client implements \GuzzleHttp\ClientInterface {
 
     /**
      * Set Akamai EdgeGrid API host
-     * 
+     *
      * @param $host
      */
     public function setHost($host)
@@ -191,10 +192,10 @@ class Client implements \GuzzleHttp\ClientInterface {
 
     /**
      * Specify the headers to include when signing the request
-     * 
+     *
      * This is specified by the API, currently no APIs use this
      * feature.
-     * 
+     *
      * @param array $headers
      */
     public function setHeadersToSign(array $headers)
@@ -204,7 +205,7 @@ class Client implements \GuzzleHttp\ClientInterface {
 
     /**
      * Set the max body size
-     * 
+     *
      * @param int $max_body_size
      */
     public function setMaxBodySize($max_body_size)
@@ -214,7 +215,7 @@ class Client implements \GuzzleHttp\ClientInterface {
 
     /**
      * Set the HTTP request timeout
-     * 
+     *
      * @param $timeout_in_seconds
      */
     public function setTimeout($timeout_in_seconds)
@@ -224,7 +225,7 @@ class Client implements \GuzzleHttp\ClientInterface {
 
     /**
      * Proxy calls smartly to the \GuzzleHttp\Client
-     * 
+     *
      * @param $method
      * @param $args
      * @return mixed
@@ -285,7 +286,8 @@ class Client implements \GuzzleHttp\ClientInterface {
                     $path = str_replace('?' . $query, '', $path);
                 }
 
-                if (strpos($options['base_uri'], 'https://') !== false && strpos($options['base_uri'], 'akamaiapis.net') !== false) {
+                if (strpos($options['base_uri'], 'https://') !== false &&
+                    strpos($options['base_uri'], 'akamaiapis.net') !== false) {
                     $options['headers']['Authorization'] = $this->createAuthHeader($httpMethod, $path);
                 }
             }
@@ -331,10 +333,10 @@ class Client implements \GuzzleHttp\ClientInterface {
 
     /**
      * Factory method to create a client using credentials from `.edgerc`
-     * 
+     *
      * Automatically checks your HOME directory, and the current working
      * directory for credentials, if no path is supplied.
-     * 
+     *
      * @param string $section Credential section to use
      * @param string $path Path to .edgerc credentials file
      * @param array $options Options to pass to the constructor/guzzle
@@ -365,7 +367,11 @@ class Client implements \GuzzleHttp\ClientInterface {
         }
         
         $client = new static(array_merge($options, ['base_uri' => 'https://' . $ini[$section]['host']]));
-        $client->setAuth($ini[$section]['client_token'], $ini[$section]['client_secret'], $ini[$section]['access_token']);
+        $client->setAuth(
+            $ini[$section]['client_token'],
+            $ini[$section]['client_secret'],
+            $ini[$section]['access_token']
+        );
         if (isset($ini[$section]['max-size'])) {
             $client->setMaxBodySize($ini[$section]['max-size']);
         }
@@ -374,8 +380,8 @@ class Client implements \GuzzleHttp\ClientInterface {
     }
 
     /**
-     * Print formatted JSON responses to STDOUT 
-     * 
+     * Print formatted JSON responses to STDOUT
+     *
      * @param $enable
      */
     public static function setVerbose($enable)
@@ -385,7 +391,7 @@ class Client implements \GuzzleHttp\ClientInterface {
 
     /**
      * Print HTTP requests/responses to STDOUT
-     * 
+     *
      * @param $enable
      */
     public static function setDebug($enable)
@@ -395,7 +401,7 @@ class Client implements \GuzzleHttp\ClientInterface {
 
     /**
      * Output JSON when verbose mode is turned on
-     * 
+     *
      * @param $requests Array of requests captured by {@see GuzzleHttp\MiddleWare::history()}
      * @see \Akamai\Open\EdgeGrid\Client::setVerbose
      */
@@ -436,7 +442,7 @@ class Client implements \GuzzleHttp\ClientInterface {
 
     /**
      * Create the Authentication header
-     * 
+     *
      * @param $method HTTP method
      * @param $path Request path
      * @return string
@@ -481,13 +487,23 @@ class Client implements \GuzzleHttp\ClientInterface {
      */
     protected function makeDataToSign($method, $path, $auth_header)
     {
+        $query = '';
+        if ($this->query) {
+            $query .= '?';
+            if (is_string($this->query)) {
+                $query .= $this->query;
+            } else {
+                $query .= http_build_query($this->query, null, '&', PHP_QUERY_RFC3986);
+            }
+        }
+        
         $data = implode(
             "\t",
             [
                 strtoupper($method),
                 'https',
                 $this->host,
-                $path . ($this->query ? '?' . (is_string($this->query) ? $this->query : http_build_query($this->query, null, '&', PHP_QUERY_RFC3986)) : ''),
+                $path . $query,
                 $this->canonicalizeHeaders(),
                 (strtoupper($method) == 'POST') ? $this->makeContentHash() : '',
                 $auth_header

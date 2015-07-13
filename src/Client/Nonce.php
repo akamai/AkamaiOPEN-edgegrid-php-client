@@ -39,8 +39,8 @@ class Nonce
 
     /**
      * Constructor
-     * 
-     * Determines if PHP 7's random_bytes() can be used 
+     *
+     * Determines if PHP 7's random_bytes() can be used
      */
     public function __construct()
     {
@@ -54,7 +54,7 @@ class Nonce
 
     /**
      * Return the nonce when cast to string
-     * 
+     *
      * @return string Returns the nonce
      */
     public function __toString()

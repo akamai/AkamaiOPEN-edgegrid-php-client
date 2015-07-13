@@ -34,7 +34,7 @@ class Timestamp
 {
     /**
      * Return the timestamp when cast to string
-     * 
+     *
      * @return string Returns the date
      */
     public function __toString()
