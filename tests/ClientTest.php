@@ -203,6 +203,190 @@ class ClientTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals('akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net', $tester('host'));
     }
+
+    public function testDefaultTimeout()
+    {
+        // Mock the response, we don't care about it
+        $mock = new MockHandler([new Response(200)]);
+        $container = [];
+        $history = Middleware::history($container);
+
+        $handler = HandlerStack::create($mock);
+        $handler->push($history);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        
+        $this->assertArrayHasKey('timeout', $client->getConfig());
+        $this->assertEquals(Client::DEFAULT_REQUEST_TIMEOUT, $client->getConfig('timeout'));
+
+        $client->setAuth('test', 'test', 'test');
+        
+        $client->get('/test');
+        $this->assertEquals(Client::DEFAULT_REQUEST_TIMEOUT, $container[0]['options']['timeout']);
+    }
+
+    public function testTimeoutOption()
+    {
+        // Mock the response, we don't care about it
+        $mock = new MockHandler([new Response(200), new Response(200)]);
+        $container = [];
+        $history = Middleware::history($container);
+
+        $handler = HandlerStack::create($mock);
+        $handler->push($history);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+                'timeout' => 2
+            ]
+        );
+
+        $this->assertArrayHasKey('timeout', $client->getConfig());
+        $this->assertEquals(2, $client->getConfig('timeout'));
+
+        $client->setAuth('test', 'test', 'test');
+
+        $client->get('/test');
+        $this->assertEquals(2, end($container)['options']['timeout']);
+        
+        $client->get('/test', ['timeout' => 5]);
+        $this->assertEquals(5, end($container)['options']['timeout']);
+    }
+
+    public function testSetTimeout()
+    {
+        // Mock the response, we don't care about it
+        $mock = new MockHandler([new Response(200), new Response(200), new Response(200)]);
+        $container = [];
+        $history = Middleware::history($container);
+
+        $handler = HandlerStack::create($mock);
+        $handler->push($history);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+
+        $this->assertArrayHasKey('timeout', $client->getConfig());
+        $this->assertEquals(Client::DEFAULT_REQUEST_TIMEOUT, $client->getConfig('timeout'));
+
+        $client->setAuth('test', 'test', 'test');
+
+        $client->get('/test', ['timeout' => 2]);
+        $this->assertEquals(2, end($container)['options']['timeout']);
+
+        $this->assertEquals(Client::DEFAULT_REQUEST_TIMEOUT, $client->getConfig('timeout'));
+        
+        $client->setTimeout(5);
+        $client->get('/test');
+        
+        $this->assertEquals(Client::DEFAULT_REQUEST_TIMEOUT, $client->getConfig('timeout'));
+        $this->assertEquals(5, end($container)['options']['timeout']);
+
+        $client->get('/test', ['timeout' => 2]);
+        $this->assertEquals(2, end($container)['options']['timeout']);
+    }
+    
+    public function testVerboseSingle()
+    {
+        $mock = new MockHandler([new Response(200, [], json_encode(['test' => 'data']))]);
+        $handler = HandlerStack::create($mock);
+        
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+        
+        Client::setVerbose(true);
+        
+        ob_start();
+        $client->get('/test');
+        $output = ob_get_clean();
+        
+        $expectedOutput = '===> [VERBOSE] Response: 
+{
+    "test": "data"
+}
+';
+        
+        $this->assertEquals($expectedOutput, $output);
+    }
+
+    public function testVerboseMultiple()
+    {
+        $mock = new MockHandler([new Response(200, [], json_encode(['test' => 'data'])), new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))]);
+        $handler = HandlerStack::create($mock);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+
+        Client::setVerbose(true);
+
+        ob_start();
+        $client->get('/test');
+        $client->get('/test2');
+        $output = ob_get_clean();
+
+        $expectedOutput = '===> [VERBOSE] Response: 
+{
+    "test": "data"
+}
+===> [VERBOSE] Response: 
+{
+    "test": "data2",
+    "0": [
+        "foo",
+        "bar"
+    ],
+    "1": false,
+    "2": null,
+    "3": 123,
+    "4": 0.123
+}
+';
+
+        $this->assertEquals($expectedOutput, $output);
+    }
+    
+    public function testDebugSingle()
+    {
+        $mock = new MockHandler([new Response(200, [], json_encode(['test' => 'data'])), new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))]);
+        $container = [];
+        $history = Middleware::history($container);
+
+        $handler = HandlerStack::create($mock);
+        $handler->push($history);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+
+        Client::setDebug(true);
+        $client->get('/test');
+        $this->assertEquals(true, end($container)['options']['debug']);
+    }
     
     public function makeAuthHeaderProvider()
     {

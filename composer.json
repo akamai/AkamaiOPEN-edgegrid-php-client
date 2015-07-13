@@ -22,5 +22,10 @@
         "psr-4": {
             "Akamai\\Open\\EdgeGrid\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "GuzzleHttp\\Tests\\": "vendor/guzzlehttp/guzzle/tests"
+        }
     }
 }

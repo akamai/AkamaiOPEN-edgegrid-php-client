@@ -1,9 +1,29 @@
 <?php
 namespace Akamai\Open\EdgeGrid;
 
+use GuzzleHttp\Middleware;
+Use GuzzleHttp\HandlerStack;
+
 class Client {
     const DEFAULT_REQUEST_TIMEOUT = 10;
 
+    /**
+     * @var bool Print JSON responses to STDOUT 
+     */
+    static protected $verbose = false;
+
+    /**
+     * @var bool Print HTTP request/responses to STDOUT
+     */
+    static protected $debug = false;
+
+    /**
+     * @var bool for debugging/verbose
+     */
+    static protected $requests = false;
+    static protected $history = false;
+    static protected $handlerStack = false;
+    
     /**
      * @var \GuzzleHttp\Client
      */
@@ -48,14 +68,34 @@ class Client {
      * @var array
      */
     protected $headers_to_sign = [];
-    
+
+    /**
+     * @var Client\Timestamp
+     */
     protected $timestamp;
+
+    /**
+     * @var Client\Nonce
+     */
     protected $nonce;
 
+    /**
+     * \GuzzleHttp\Client-compatible constructor
+     * 
+     * @param array $options Options array
+     * @param Client\Timestamp|null $timestamp inject a timestamp (for testing)
+     * @param Client\Nonce|null $nonce inject a nonce (for testing)
+     */
     public function __construct($options = [], Client\Timestamp $timestamp = null, Client\Nonce $nonce = null)
     {
         if (isset($options['base_uri']) && strpos($options['base_uri'], '://') === false) {
             $options['base_uri'] = 'https://' .$options['base_uri'];
+        }
+        
+        if (!isset($options['timeout'])) {
+            $options['timeout'] = $this->timeout_in_seconds;
+        } else {
+            $this->timeout_in_seconds = $options['timeout'];
         }
         
         $this->guzzle = new \GuzzleHttp\Client($options);
@@ -75,11 +115,23 @@ class Client {
         }
     }
 
+    /**
+     * Set Akamai EdgeGrid Authentication Tokens/Secret
+     * 
+     * @param string $client_token
+     * @param string $client_secret
+     * @param string $access_token
+     */
     public function setAuth($client_token, $client_secret, $access_token)
     {
         $this->auth = compact('client_token', 'client_secret', 'access_token');
     }
 
+    /**
+     * Set Akamai EdgeGrid API host
+     * 
+     * @param $host
+     */
     public function setHost($host)
     {
         if (strpos($host, '://') !== false) {
@@ -92,13 +144,23 @@ class Client {
         
         $this->host = $host;
     }
-    
+
+    /**
+     * Specify the headers to include when signing the request
+     * 
+     * This is specified by the API, currently no APIs use this
+     * feature.
+     * 
+     * @param array $headers
+     */
     public function setHeadersToSign(array $headers)
     {
         $this->headers_to_sign = $headers;
     }
 
     /**
+     * Set the max body size
+     * 
      * @param int $max_body_size
      */
     public function setMaxBodySize($max_body_size)
@@ -106,11 +168,24 @@ class Client {
         $this->max_body_size = $max_body_size;
     }
 
+    /**
+     * Set the HTTP request timeout
+     * 
+     * @param $timeout_in_seconds
+     */
     public function setTimeout($timeout_in_seconds)
     {
         $this->timeout_in_seconds = $timeout_in_seconds;
     }
 
+    /**
+     * Proxy calls smartly to the \GuzzleHttp\Client
+     * 
+     * @param $method
+     * @param $args
+     * @return mixed
+     * @throws \Exception
+     */
     public function __call($method, $args)
     {
         // The only method that isn't a request-type method is getConfig
@@ -166,9 +241,40 @@ class Client {
             }
 
             $options['headers']['Authorization'] = $this->createAuthHeader($httpMethod, $path);
+
+            if (self::$verbose) {
+                self::$requests = [];
+                self::$history = Middleware::history(self::$requests);
+                
+                if (!isset($options['handler'])) {
+                    if ($handler = $this->guzzle->getConfig('handler')) {
+                        $handler->push(self::$history);
+                    } else {
+                        self::$handlerStack = HandlerStack::create();
+                        self::$handlerStack->push(self::$history);
+
+                        $options['handler'] = self::$handlerStack;
+                    }
+                } else {
+                    $options['handler']->push(self::$history);
+                }
+            }
+            
+            if (self::$debug) {
+                $options['debug'] = true;
+            }
+            
+            if (!isset($options['timeout'])) {
+                $options['timeout'] = $this->timeout_in_seconds;
+            }
         }
         
         $return = call_user_func_array([$this->guzzle, $method], $args);
+        
+        if (self::$verbose && !self::$debug && $httpMethod) {
+            static::verbose(self::$requests);
+        }
+        
         $this->body = '';
         $this->headers = '';
         
@@ -212,6 +318,33 @@ class Client {
         return $client;
     }
 
+    /**
+     * Print formatted JSON responses to STDOUT 
+     * 
+     * @param $enable
+     */
+    public static function setVerbose($enable)
+    {
+        self::$verbose = $enable;
+    }
+
+    /**
+     * Print HTTP requests/responses to STDOUT
+     * 
+     * @param $enable
+     */
+    public static function setDebug($enable)
+    {
+        self::$debug = $enable;
+    }
+
+    protected function verbose($requests)
+    {
+        $lastRequest = end($requests);
+        echo "===> [VERBOSE] Response: \n";
+        echo json_encode(json_decode($lastRequest['response']->getBody()->getContents()), JSON_PRETTY_PRINT) . "\n";
+    }
+    
     protected function createAuthHeader($method, $path)
     {
         $auth_header =
