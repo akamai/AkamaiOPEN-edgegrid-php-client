@@ -50,6 +50,9 @@
             <a href="#synopsis">Synopsis</a>
           </li>
           <li>
+            <a href="#hierarchy">Hierarchy</a>
+          </li>
+          <li>
             <a href="#coverage">Coverage</a>
           </li>
           <li>
@@ -73,6 +76,8 @@
         <ul/>
         <h2 id="synopsis">Synopsis</h2>
         <div class="synopsis">class Client
+                implements
+                ClientInterface
             {<br/><ul class="none"><li>// constants</li><li>const DEFAULT_REQUEST_TIMEOUT = 10;</li></ul><ul class="none"><li>// members</li><li>protected static boolean <a href="#members">$verbose</a> =
                         false;
                     </li><li>protected static boolean <a href="#members">$debug</a> =
@@ -120,20 +125,32 @@
                     </li><li>protected string <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/makeSigningKey.html">makeSigningKey</a>()
                     </li><li>protected string <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/makeBase64HmacSha256.html">makeBase64HmacSha256</a>()
                     </li><li>protected string <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/makeBase64Sha256.html">makeBase64Sha256</a>()
+                    </li><li>public ResponseInterface <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/send.html">send</a>()
+                    </li><li>public PromiseInterface <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/sendAsync.html">sendAsync</a>()
+                    </li><li>public ResponseInterface <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/request.html">request</a>()
+                    </li><li>public PromiseInterface <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/requestAsync.html">requestAsync</a>()
+                    </li><li>public mixed <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/getConfig.html">getConfig</a>()
                     </li></ul>
 
             }<br/></div>
+        <h2 id="hierarchy">Hierarchy</h2>
+        <div class="styled">
+          <h4>Implements</h4>
+          <ul>
+            <li>GuzzleHttp\ClientInterface</li>
+          </ul>
+        </div>
         <h2 id="coverage">Coverage</h2>
         <table class="styled">
           <tr>
             <td>Methods</td>
-            <td class="percent">73.68%</td>
-            <td class="nummeric">14 / 19</td>
+            <td class="percent">66.67%</td>
+            <td class="nummeric">16 / 24</td>
           </tr>
           <tr>
             <td>Lines</td>
-            <td class="percent">90.48%</td>
-            <td class="nummeric">171 / 189</td>
+            <td class="percent">89.22%</td>
+            <td class="nummeric">182 / 204</td>
           </tr>
         </table>
         <h2 id="constants">Constants</h2>
@@ -236,6 +253,16 @@
                 — Proxy calls smartly to the \GuzzleHttp\Client</li>
             <li id="createFromEdgeRcFile"><a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/createFromEdgeRcFile.html">createFromEdgeRcFile()</a>
                 — Factory method to create a client using credentials from `.edgerc`</li>
+            <li id="getConfig"><a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/getConfig.html">getConfig()</a>
+                — Get a client configuration option.</li>
+            <li id="request"><a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/request.html">request()</a>
+                — Create and send an HTTP request.</li>
+            <li id="requestAsync"><a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/requestAsync.html">requestAsync()</a>
+                — Create and send an asynchronous HTTP request.</li>
+            <li id="send"><a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/send.html">send()</a>
+                — Send an HTTP request.</li>
+            <li id="sendAsync"><a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/sendAsync.html">sendAsync()</a>
+                — Asynchronously send an HTTP request.</li>
             <li id="setAuth"><a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/setAuth.html">setAuth()</a>
                 — Set Akamai EdgeGrid Authentication Tokens/Secret</li>
             <li id="setDebug"><a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/setDebug.html">setDebug()</a>

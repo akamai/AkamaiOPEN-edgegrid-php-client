@@ -1,7 +1,8 @@
 #!/bin/sh
-cd ..
 export PATH=vendor/bin:$PATH
-php composer.phar install -q
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+cd $DIR && cd ../
+composer install
 phpunit
 phploc --log-xml=./build/phploc.xml ./src
 phpdox 
