@@ -35,6 +35,12 @@ use GuzzleHttp\Psr7\Response;
  */
 class ClientTest extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        Client::setVerbose(false);
+        Client::setDebug(false);
+    }
+    
     /**
      * @param $name
      * @param $options
@@ -316,11 +322,13 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $client->get('/test');
         $output = ob_get_clean();
         
-        $expectedOutput = '===> [VERBOSE] Response: 
-{
+        $expectedOutput = <<<EOF
+\x1b[36;01m===> [VERBOSE] Response: 
+\x1b[33;01m{
     "test": "data"
-}
-';
+}\x1b[39;49;00m
+
+EOF;
         
         $this->assertEquals($expectedOutput, $output);
     }
@@ -345,12 +353,13 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $client->get('/test2');
         $output = ob_get_clean();
 
-        $expectedOutput = '===> [VERBOSE] Response: 
-{
+        $expectedOutput = <<<EOF
+\x1b[36;01m===> [VERBOSE] Response: 
+\x1b[33;01m{
     "test": "data"
-}
-===> [VERBOSE] Response: 
-{
+}\x1b[39;49;00m
+\x1b[36;01m===> [VERBOSE] Response: 
+\x1b[33;01m{
     "test": "data2",
     "0": [
         "foo",
@@ -360,15 +369,16 @@ class ClientTest extends PHPUnit_Framework_TestCase
     "2": null,
     "3": 123,
     "4": 0.123
-}
-';
+}\x1b[39;49;00m
+
+EOF;
 
         $this->assertEquals($expectedOutput, $output);
     }
     
     public function testDebugSingle()
     {
-        $mock = new MockHandler([new Response(200, [], json_encode(['test' => 'data'])), new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))]);
+        $mock = new MockHandler([new Response(200)]);
         $container = [];
         $history = Middleware::history($container);
 
