@@ -235,57 +235,59 @@ class Client {
         // The only method that isn't a request-type method is getConfig
         // Don't create the auth header in that case
         if ($method != 'getConfig') {
-            $httpMethod = str_replace('async', '', $method);
-        
-            $options = [];
-            if ($httpMethod != 'request') {
-                $path = &$args[0];
+            if (empty($this->auth)) {
+                $httpMethod = str_replace('async', '', $method);
 
-                if (isset($args[1])) {
-                    $options = &$args[1];
-                } else {
-                    $args[1] = &$options;
-                }
-            } elseif ($httpMethod == 'send') {
-                // PSR-7
-                /**
-                 * @todo Add the request headers/body/auth to the PSR-7 Request
-                 */
-                throw new \RuntimeException("Not Implemented");
-            } else {
-                $httpMethod = $args[0];
-                $path = &$args[1];
+                $options = [];
+                if ($httpMethod != 'request') {
+                    $path = &$args[0];
 
-                if (isset($args[2])) {
-                    $options = &$args[2];
+                    if (isset($args[1])) {
+                        $options = &$args[1];
+                    } else {
+                        $args[1] = &$options;
+                    }
+                } elseif ($httpMethod == 'send') {
+                    // PSR-7
+                    /**
+                     * @todo Add the request headers/body/auth to the PSR-7 Request
+                     */
+                    throw new \RuntimeException("Not Implemented");
                 } else {
-                    $args[2] = &$options;
+                    $httpMethod = $args[0];
+                    $path = &$args[1];
+
+                    if (isset($args[2])) {
+                        $options = &$args[2];
+                    } else {
+                        $args[2] = &$options;
+                    }
                 }
+
+                $this->query = isset($options['query']) ? $options['query'] : [];
+                $this->body = isset($options['body']) ? $options['body'] : '';
+                $this->headers = isset($options['headers']) ? $options['headers'] : [];
+
+                if (isset($options['base_uri'])) {
+                    $this->setHost($options['base_uri']);
+                } elseif (isset($this->host)) {
+                    $options['base_uri'] = 'https://' . $this->host;
+                } else {
+                    throw new \Exception("No Host set");
+                }
+
+                if (isset($options['headers']['Host'])) {
+                    $this->setHost($options['headers']['Host']);
+                }
+
+                if ($query = parse_url($path, PHP_URL_QUERY)) {
+                    parse_str($query, $this->query);
+                    $path = str_replace('?' . $query, '', $path);
+                }
+
+                $options['headers']['Authorization'] = $this->createAuthHeader($httpMethod, $path);
             }
             
-            $this->query = isset($options['query']) ? $options['query'] : [];
-            $this->body = isset($options['body']) ? $options['body'] : '';
-            $this->headers = isset($options['headers']) ? $options['headers'] : [];
-
-            if (isset($options['base_uri'])) {
-                $this->setHost($options['base_uri']);
-            } elseif (isset($this->host)) {
-                $options['base_uri'] = 'https://' . $this->host;
-            } else {
-                throw new \Exception("No Host set");
-            }
-
-            if (isset($options['headers']['Host'])) {
-                $this->setHost($options['headers']['Host']);
-            }
-            
-            if ($query = parse_url($path, PHP_URL_QUERY)) {
-                parse_str($query, $this->query);
-                $path = str_replace('?' . $query, '', $path);
-            }
-
-            $options['headers']['Authorization'] = $this->createAuthHeader($httpMethod, $path);
-
             if (self::$verbose) {
                 self::$requests = [];
                 self::$history = Middleware::history(self::$requests);
@@ -416,7 +418,14 @@ class Client {
         $lastRequest = end($requests);
         echo "{$colors['cyan']}===> [VERBOSE] Response: \n";
         if ($lastRequest['response'] instanceof ResponseInterface) {
-            echo "{$colors['yellow']}" . json_encode(json_decode($lastRequest['response']->getBody()->getContents()), JSON_PRETTY_PRINT);
+            $body = trim($lastRequest['response']->getBody());
+            $result = json_decode($body);
+            if ($result !== null) {
+                $response = json_encode($result, JSON_PRETTY_PRINT);
+            } else {
+                $response = $body;
+            }
+            echo "{$colors['yellow']}" . $response;
         } else {
             echo "{$colors['red']}No response returned";
         }
