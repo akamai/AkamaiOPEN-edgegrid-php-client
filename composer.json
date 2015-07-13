@@ -4,7 +4,7 @@
     "keywords": ["akamai", "open", "edgegrid"],
     "type": "library",
     "license": "Apache-2.0",
-    "homepage": "https://github.com/akamai-open/edgegrid-client-php",
+    "homepage": "https://github.com/akamai-open/edgegrid-auth-php",
     "authors": [
         {
             "name": "Davey Shafik",
