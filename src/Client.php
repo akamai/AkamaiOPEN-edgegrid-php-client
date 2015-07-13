@@ -271,7 +271,7 @@ class Client {
         
         $return = call_user_func_array([$this->guzzle, $method], $args);
         
-        if (self::$verbose && !self::$debug && $httpMethod) {
+        if (self::$verbose && $httpMethod) {
             static::verbose(self::$requests);
         }
         
