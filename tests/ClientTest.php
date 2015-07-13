@@ -400,6 +400,41 @@ EOF;
         $this->assertEquals(true, end($container)['options']['debug']);
     }
     
+    public function testNonApiCall()
+    {
+        $mock = new MockHandler([new Response(200), new Response(200), new Response(200)]);
+        $container = [];
+        $history = Middleware::history($container);
+
+        $handler = HandlerStack::create($mock);
+        $handler->push($history);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        
+        $response = $client->get('/test');
+        $this->assertInstanceOf(\GuzzleHttp\Psr7\Response::class, $response);
+        $this->assertEquals('http', end($container)['request']->getUri()->getScheme());
+        $this->assertEquals('example.org', end($container)['request']->getUri()->getHost());
+        $this->assertArrayNotHasKey('Authentication', end($container)['request']->getHeaders());
+        
+        $response = $client->get('http://example.com/test');
+        $this->assertInstanceOf(\GuzzleHttp\Psr7\Response::class, $response);
+        $this->assertEquals('http', end($container)['request']->getUri()->getScheme());
+        $this->assertEquals('example.com', end($container)['request']->getUri()->getHost());
+        $this->assertArrayNotHasKey('Authentication', end($container)['request']->getHeaders());
+
+        $response = $client->get('https://example.net/test');
+        $this->assertInstanceOf(\GuzzleHttp\Psr7\Response::class, $response);
+        $this->assertEquals('https', end($container)['request']->getUri()->getScheme());
+        $this->assertEquals('example.net', end($container)['request']->getUri()->getHost());
+        $this->assertArrayNotHasKey('Authentication', end($container)['request']->getHeaders());
+    }
+    
     public function makeAuthHeaderProvider()
     {
         $testdata = json_decode(file_get_contents(__DIR__ . '/testdata.json'), true);

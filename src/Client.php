@@ -7,13 +7,9 @@
  * {OPEN} APIs.
  * 
  * This client works _identically_ to GuzzleHttp\Client
- * with the following exceptions:
- * 
- * - You *must* call {@see Akamai\Open\EdgeGrid\Client->setAuth()} 
- *   before making a request.
- * - Will only make `https` requests
- * - Is intended _only_ for use with Akamai {OPEN} APIs (use Guzzle
- *   directly for other usages)
+ *
+ * However, if you try to call an Akamai {OPEN} API you *must*
+ * first call {@see Akamai\Open\EdgeGrid\Client->setAuth()}.
  * 
  * @author Davey Shafik <dshafik@akamai.com>
  * @copyright Copyright 2015 Akamai Technologies, Inc. All rights reserved.
@@ -24,9 +20,13 @@
  */
 namespace Akamai\Open\EdgeGrid;
 
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Middleware;
 Use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Promise\PromiseInterface;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\UriInterface;
 
 /**
  * Class Client
@@ -36,7 +36,7 @@ use Psr\Http\Message\ResponseInterface;
  * 
  * @package Akamai {OPEN} EdgeGrid Client
  */
-class Client {
+class Client implements \GuzzleHttp\ClientInterface {
     /**
      * @const int Default Timeout in seconds
      */
@@ -235,7 +235,7 @@ class Client {
         // The only method that isn't a request-type method is getConfig
         // Don't create the auth header in that case
         if ($method != 'getConfig') {
-            if (empty($this->auth)) {
+            if (!empty($this->auth)) {
                 $httpMethod = str_replace('async', '', $method);
 
                 $options = [];
@@ -285,7 +285,9 @@ class Client {
                     $path = str_replace('?' . $query, '', $path);
                 }
 
-                $options['headers']['Authorization'] = $this->createAuthHeader($httpMethod, $path);
+                if (strpos($options['base_uri'], 'https://') !== false && strpos($options['base_uri'], 'akamaiapis.net') !== false) {
+                    $options['headers']['Authorization'] = $this->createAuthHeader($httpMethod, $path);
+                }
             }
             
             if (self::$verbose) {
@@ -580,5 +582,88 @@ class Client {
     protected function makeBase64Sha256($data)
     {
         return base64_encode(hash('sha256', $data, true));
+    }
+
+    /**
+     * Send an HTTP request.
+     *
+     * @param RequestInterface $request Request to send
+     * @param array $options Request options to apply to the given
+     *                                  request and to the transfer.
+     *
+     * @return ResponseInterface
+     * @throws GuzzleException
+     */
+    public function send(RequestInterface $request, array $options = [])
+    {
+        return $this->__call(__FUNCTION__, [$request, $options]);
+    }
+
+    /**
+     * Asynchronously send an HTTP request.
+     *
+     * @param RequestInterface $request Request to send
+     * @param array $options Request options to apply to the given
+     *                                  request and to the transfer.
+     *
+     * @return PromiseInterface
+     */
+    public function sendAsync(RequestInterface $request, array $options = [])
+    {
+        return $this->__call(__FUNCTION__, [$request, $options]);
+    }
+
+    /**
+     * Create and send an HTTP request.
+     *
+     * Use an absolute path to override the base path of the client, or a
+     * relative path to append to the base path of the client. The URL can
+     * contain the query string as well.
+     *
+     * @param string $method HTTP method
+     * @param string|UriInterface $uri URI object or string.
+     * @param array $options Request options to apply.
+     *
+     * @return ResponseInterface
+     * @throws GuzzleException
+     */
+    public function request($method, $uri, array $options = [])
+    {
+        return $this->__call(__FUNCTION__, [$method, $uri, $options]);
+    }
+
+    /**
+     * Create and send an asynchronous HTTP request.
+     *
+     * Use an absolute path to override the base path of the client, or a
+     * relative path to append to the base path of the client. The URL can
+     * contain the query string as well. Use an array to provide a URL
+     * template and additional variables to use in the URL template expansion.
+     *
+     * @param string $method HTTP method
+     * @param string|UriInterface $uri URI object or string.
+     * @param array $options Request options to apply.
+     *
+     * @return PromiseInterface
+     */
+    public function requestAsync($method, $uri, array $options = [])
+    {
+        return $this->__call(__FUNCTION__, [$method, $uri, $options]);
+    }
+
+    /**
+     * Get a client configuration option.
+     *
+     * These options include default request options of the client, a "handler"
+     * (if utilized by the concrete client), and a "base_uri" if utilized by
+     * the concrete client.
+     *
+     * @param string|null $option The config option to retrieve.
+     *
+     * @return mixed
+     */
+    public function getConfig($option = null)
+    {
+        return $this->__call(__FUNCTION__, [$option]);
     }
 }
