@@ -341,8 +341,9 @@ class Client {
     protected function verbose($requests)
     {
         $lastRequest = end($requests);
-        echo "===> [VERBOSE] Response: \n";
-        echo json_encode(json_decode($lastRequest['response']->getBody()->getContents()), JSON_PRETTY_PRINT) . "\n";
+        echo "\x1b[36;01m===> [VERBOSE] Response: \n";
+        echo "\x1b[33;01m" . json_encode(json_decode($lastRequest['response']->getBody()->getContents()), JSON_PRETTY_PRINT);
+        echo "\x1b[39;49;00m\n";
     }
     
     protected function createAuthHeader($method, $path)
