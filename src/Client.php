@@ -3,6 +3,7 @@ namespace Akamai\Open\EdgeGrid;
 
 use GuzzleHttp\Middleware;
 Use GuzzleHttp\HandlerStack;
+use Psr\Http\Message\ResponseInterface;
 
 class Client {
     const DEFAULT_REQUEST_TIMEOUT = 10;
@@ -340,10 +341,30 @@ class Client {
 
     protected function verbose($requests)
     {
+        $colors = [
+            'red' => "",
+            'yellow' => "",
+            'cyan' => "",
+            'reset' => "",
+        ];
+        
+        if (PHP_SAPI == 'cli') {
+            $colors = [
+                'red' => "\x1b[31;01m",
+                'yellow' => "\x1b[33;01m",
+                'cyan' => "\x1b[36;01m",
+                'reset' => "\x1b[39;49;00m",
+            ];
+        }
+        
         $lastRequest = end($requests);
-        echo "\x1b[36;01m===> [VERBOSE] Response: \n";
-        echo "\x1b[33;01m" . json_encode(json_decode($lastRequest['response']->getBody()->getContents()), JSON_PRETTY_PRINT);
-        echo "\x1b[39;49;00m\n";
+        echo "{$colors['cyan']}===> [VERBOSE] Response: \n";
+        if ($lastRequest['response'] instanceof ResponseInterface) {
+            echo "{$colors['yellow']}" . json_encode(json_decode($lastRequest['response']->getBody()->getContents()), JSON_PRETTY_PRINT);
+        } else {
+            echo "{$colors['red']}No response returned";
+        }
+        echo "{$colors['reset']}\n";
     }
     
     protected function createAuthHeader($method, $path)
