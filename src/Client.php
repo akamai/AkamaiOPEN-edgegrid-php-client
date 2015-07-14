@@ -266,7 +266,8 @@ class Client implements \GuzzleHttp\ClientInterface
                 }
 
                 $this->query = isset($options['query']) ? $options['query'] : [];
-                $this->body = isset($options['body']) ? $options['body'] : '';
+                $this->body = isset($options['body']) ? $options['body'] : $this->body;
+                $this->body = isset($options['form_params']) ? http_build_query($options['form_params']) : $this->body;
                 $this->headers = isset($options['headers']) ? $options['headers'] : [];
 
                 if (isset($options['base_uri'])) {
