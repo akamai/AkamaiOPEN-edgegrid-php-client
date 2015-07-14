@@ -11,3 +11,5 @@ sudo: false
 install: travis_retry composer install --no-interaction --prefer-source
 
 script: phpunit
+
+after_script: wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover build/coverage/coverage.clover
