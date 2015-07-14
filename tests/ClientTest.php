@@ -50,9 +50,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
      */
     public function testMakeAuthHeader($name, $options, $request, $result)
     {
-        if (!isset($_SERVER['IDE_PHPUNIT_CUSTOM_LOADER'])) {
-            $this->setName($name);
-        }
+        //$this->setName($name);
         
         // Mock the response, we don't care about it
         $mock = new MockHandler([new Response(200)]);

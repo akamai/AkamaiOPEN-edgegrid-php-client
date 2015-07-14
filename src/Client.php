@@ -237,99 +237,24 @@ class Client implements \GuzzleHttp\ClientInterface
         // Don't create the auth header in that case
         if ($method != 'getConfig') {
             $options = [];
-            
+
+            list($path, $options, $httpMethod) = $this->handleArgs($method, $args);
             if (!empty($this->auth)) {
-                $httpMethod = str_replace('async', '', $method);
-
-                if ($httpMethod != 'request') {
-                    $path = &$args[0];
-
-                    if (isset($args[1])) {
-                        $options = &$args[1];
-                    } else {
-                        $args[1] = &$options;
-                    }
-                } elseif ($httpMethod == 'send') {
-                    // PSR-7
-                    /**
-                     * @todo Add the request headers/body/auth to the PSR-7 Request
-                     */
-                    throw new \RuntimeException("Not Implemented");
-                } else {
-                    $httpMethod = $args[0];
-                    $path = &$args[1];
-
-                    if (isset($args[2])) {
-                        $options = &$args[2];
-                    } else {
-                        $args[2] = &$options;
-                    }
-                }
-
-                $this->query = isset($options['query']) ? $options['query'] : [];
-                $this->body = isset($options['body']) ? $options['body'] : $this->body;
-                $this->body = isset($options['form_params']) ? http_build_query($options['form_params']) : $this->body;
-                $this->headers = isset($options['headers']) ? $options['headers'] : [];
-
-                if (isset($options['base_uri'])) {
-                    $this->setHost($options['base_uri']);
-                } elseif (isset($this->host)) {
-                    $options['base_uri'] = 'https://' . $this->host;
-                } else {
-                    throw new \Exception("No Host set");
-                }
-
-                if (isset($options['headers']['Host'])) {
-                    $this->setHost($options['headers']['Host']);
-                }
-
-                if ($query = parse_url($path, PHP_URL_QUERY)) {
-                    parse_str($query, $this->query);
-                    $path = str_replace('?' . $query, '', $path);
-                }
-
-                if (strpos($options['base_uri'], 'https://') !== false &&
-                    strpos($options['base_uri'], 'akamaiapis.net') !== false) {
-                    $options['headers']['Authorization'] = $this->createAuthHeader($httpMethod, $path);
-                }
+                $options = $this->getAuthenticatedOptions($path, $options, $httpMethod);
+                $path = $this->normalizePath($path);
             }
-            
-            if (self::$verbose) {
-                self::$requests = [];
-                self::$history = Middleware::history(self::$requests);
-                
-                if (!isset($options['handler'])) {
-                    if ($handler = $this->guzzle->getConfig('handler')) {
-                        $handler->push(self::$history);
-                    } else {
-                        self::$handlerStack = HandlerStack::create();
-                        self::$handlerStack->push(self::$history);
 
-                        $options['handler'] = self::$handlerStack;
-                    }
-                } else {
-                    $options['handler']->push(self::$history);
-                }
-            }
-            
-            if (self::$debug) {
-                $options['debug'] = true;
-            }
-            
-            if (!isset($options['timeout'])) {
-                $options['timeout'] = $this->timeout_in_seconds;
-            }
+            $options = $this->getOptions($options);
+            $args = $this->normalizeArgs($args, $path, $options, $method);
         }
         
         try {
             $return = call_user_func_array([$this->guzzle, $method], $args);
         } finally {
-            $this->query = [];
-            $this->body = '';
-            $this->headers = [];
+            $this->cleanup();
             
-            if (self::$verbose && isset($httpMethod)) {
-                static::verbose(self::$requests);
+            if (isset($httpMethod)) {
+                static::verbose();
             }
         }
         
@@ -410,8 +335,12 @@ class Client implements \GuzzleHttp\ClientInterface
      * @param $requests Array of requests captured by {@see GuzzleHttp\MiddleWare::history()}
      * @see \Akamai\Open\EdgeGrid\Client::setVerbose
      */
-    protected function verbose($requests)
+    protected function verbose()
     {
+        if (!static::$verbose) {
+            return;
+        }
+        
         $colors = [
             'red' => "",
             'yellow' => "",
@@ -428,7 +357,7 @@ class Client implements \GuzzleHttp\ClientInterface
             ];
         }
         
-        $lastRequest = end($requests);
+        $lastRequest = end(static::$requests);
         echo "{$colors['cyan']}===> [VERBOSE] Response: \n";
         if ($lastRequest['response'] instanceof ResponseInterface) {
             $body = trim($lastRequest['response']->getBody());
@@ -684,5 +613,289 @@ class Client implements \GuzzleHttp\ClientInterface
     public function getConfig($option = null)
     {
         return $this->__call(__FUNCTION__, [$option]);
+    }
+
+    /**
+     * Sort out path/options/http method args
+     *
+     * Regardless of whether a specific HTTP
+     * method was called, or the generic request()
+     * this will return the path/options/http method
+     *
+     * @param string $method Original method called
+     * @param array $args Original __call() arguments
+     * @return array
+     */
+    protected function handleArgs($method, $args)
+    {
+        $options = [];
+        $path = '/';
+        $httpMethod = strtolower(str_replace('async', '', $method));
+
+        if ($httpMethod != 'request' && $httpMethod != 'send') {
+            $path = $args[0];
+
+            if (isset($args[1])) {
+                $options = $args[1];
+            }
+        }
+
+        if ($httpMethod == 'send') {
+            // PSR-7
+            /**
+             * @todo Add the request headers/body/auth to the PSR-7 Request
+             */
+            throw new \RuntimeException("Not Implemented");
+        }
+
+        if ($httpMethod == 'request') {
+            $httpMethod = $args[0];
+            $path = $args[1];
+
+            if (isset($args[2])) {
+                $options = $args[2];
+            }
+        }
+
+        return [$path, $options, $httpMethod];
+    }
+
+    /**
+     * Normalize __call() arguments
+     * 
+     * @param array $args Arguments passed to __call()
+     * @param string $path Request Path
+     * @param array $options Guzzle options
+     * @param string $method original method called
+     * @return array
+     */
+    protected function normalizeArgs($args, $path, $options, $method)
+    {
+        $httpMethod = strtolower(str_replace('async', '', $method));
+
+        if ($httpMethod != 'request' && $httpMethod != 'send') { // not ->request() or ->send()
+            $args[0] = $path;
+            $args[1] = $options;
+        }
+        
+        if ($httpMethod == 'send') {
+            throw new \RuntimeException("Not implemented");
+        }
+        
+        if ($httpMethod == 'request') {
+            $args[0] = $method;
+            $args[1] = $path;
+            $args[2] = $options;
+        }
+        
+        return $args;
+    }
+
+    /**
+     * Get query option
+     *
+     * @param string $path Path to request
+     * @param array $options Guzzle options
+     * @return string
+     */
+    protected function getQueryOption($path, $options)
+    {
+        if ($query = parse_url($path, PHP_URL_QUERY)) {
+            parse_str($query, $this->query);
+        }
+        
+        $query = isset($options['query']) ? array_merge($options['query'], $this->query) : $this->query;
+        
+        return http_build_query($query, null, '&', PHP_QUERY_RFC3986);
+    }
+
+    /**
+     * Get body option
+     * 
+     * @param array $options
+     * @return string
+     */
+    protected function getBodyOption($options)
+    {
+        if (isset($options['form_params'])) {
+            if (is_array($options['form_params'])) {
+                // Do not use PHP_QUERY_RFC3986 as with query params — same as Guzzle internally
+                return http_build_query($options['form_params']);
+            }
+            return $options['form_params'];
+        }
+        
+        if (isset($options['body'])) {
+            return $options['body'];
+        }
+        
+        return "";
+    }
+
+    /**
+     * Get headers option
+     * 
+     * @param array $options
+     * @return array
+     */
+    protected function getHeadersOption($options)
+    {
+        return isset($options['headers']) && is_array($options['headers']) ? $options['headers'] : [];
+    }
+
+    /**
+     * Get host option
+     *
+     * @param array $options Guzzle options
+     * @return string
+     * @throws \Exception
+     */
+    protected function getHostOption($path, $options)
+    {
+        if (isset($options['headers']['Host'])) {
+            $this->setHost($options['headers']['Host']);
+        }
+        
+        if (isset($options['base_uri'])) {
+            $this->setHost($options['base_uri']);
+            return $options['base_uri'];
+        }
+        
+        if ($host = parse_url($path, PHP_URL_HOST)) {
+            return $host;
+        } 
+        
+        if (isset($this->host)) {
+            return 'https://' . $this->host;
+        }
+        
+        throw new \Exception("No Host set");
+    }
+
+    /**
+     * Get handler option
+     *
+     * @param array $options Guzzle options
+     * @return HandlerStack|bool
+     */
+    protected function getHandlerOption($options)
+    {
+        if (self::$verbose) {
+            if (!self::$requests || !self::$history) {
+                self::$requests = [];
+                self::$history = Middleware::history(self::$requests);
+            }
+
+            $handler = self::$handlerStack;
+            
+            // Is the user passing an handler in for this request?
+            if (isset($options['handler'])) {
+                $handler = $options['handler'];
+            } elseif ($configHandler = $this->guzzle->getConfig('handler')) {
+                $handler = $configHandler;
+            } elseif (!self::$handlerStack) {
+                $handler = HandlerStack::create();
+            }
+
+            self::$handlerStack = $handler;
+            $handler->push(self::$history);
+            
+            return $handler;
+        }
+
+        return false;
+    }
+
+    /**
+     * Normalize path
+     * 
+     * This returns just the path part of the URL.
+     * Most importantly, it removes any query args
+     * as these are handler by {@see Client->getQueryOption()}
+     * 
+     * @param string $path Path to normalize
+     * @return string
+     */
+    protected function normalizePath($path)
+    {
+        return parse_url($path, PHP_URL_PATH);
+    }
+
+    /**
+     * Get timeout option
+     * 
+     * @param array $options Guzzle options
+     * @return int
+     */
+    protected function getTimeoutOption($options)
+    {
+        if (!isset($options['timeout'])) {
+            return $this->timeout_in_seconds;
+        }
+        
+        return $options['timeout'];
+    }
+
+    /**
+     * Get the authenticated Guzzle options array
+     * 
+     * @param string $path Request path
+     * @param array $options Request options to normalize
+     * @param string $httpMethod Request HTTP method
+     * @return array
+     */
+    protected function getAuthenticatedOptions($path, $options, $httpMethod)
+    {
+        $options['query'] = $this->query = $this->getQueryOption($path, $options);
+        $options['body'] = $this->body = $this->getBodyOption($options);
+        $options['headers'] = $this->headers = $this->getHeadersOption($options);
+        $options['base_uri'] = $this->getHostOption($path, $options);
+
+        $path = $this->normalizePath($path);
+
+        if (strpos($options['base_uri'], 'https://') !== false &&
+            strpos($options['base_uri'], 'akamaiapis.net') !== false
+        ) {
+            $options['headers']['Authorization'] = $this->createAuthHeader($httpMethod, $path);
+        }
+
+        unset($options['form_params']);
+        
+        return $options;
+    }
+
+    /**
+     * Retrieve the normalized Guzzle options array
+     * 
+     * @param array $options The options to normalize
+     * @return array
+     */
+    protected function getOptions($options)
+    {
+        if ($handler = $this->getHandlerOption($options)) {
+            $options['handler'] = $handler;
+        }
+
+        $options['debug'] = self::$debug;
+        
+        if (!isset($options['verbose'])) {
+            $options['verbose'] = static::$verbose;
+        }
+        
+        $options['timeout'] = $this->getTimeoutOption($options);
+        
+        return $options;
+    }
+
+    /**
+     * Cleanup for a new request
+     * 
+     * @return void
+     */
+    protected function cleanup()
+    {
+        $this->query = [];
+        $this->body = '';
+        $this->headers = [];
     }
 }
