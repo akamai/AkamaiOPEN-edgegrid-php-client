@@ -1,26 +1,36 @@
 {
-    "name": "akamai/edgegrid",
+    "name": "akamai-open/edgegrid-client",
     "description": "Implements the Akamai {OPEN} EdgeGrid Authentication specified by https://developer.akamai.com/introduction/Client_Auth.html",
     "keywords": ["akamai", "open", "edgegrid"],
     "type": "library",
     "license": "Apache-2.0",
-    "homepage": "https://github.com/akamai-open/AkamaiOPEN-edgegrid-php",
+    "homepage": "https://github.com/akamai-open/edgegrid-auth-php",
     "authors": [
         {
-            "name": "Hideki Okamoto",
-            "email": "hokamoto@akamai.com"
+            "name": "Davey Shafik",
+            "email": "dshafik@akamai.com"
         }
     ],
     "require": {
-        "php": ">=5.4",
-        "guzzlehttp/guzzle": "5.*"
+        "php": ">=5.5",
+        "guzzlehttp/guzzle": "~6.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.3.*"
+        "phpunit/phpunit": "~4.7",
+        "theseer/phpdox": "~0.8",
+        "phploc/phploc": "^2.1",
+        "squizlabs/php_codesniffer": "^2.3",
+        "fabpot/php-cs-fixer": "^1.9",
+        "kherge/box": "^2.5"
     },
     "autoload": {
-        "classmap": [
-            "lib/"
-        ]
+        "psr-4": {
+            "Akamai\\Open\\EdgeGrid\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "GuzzleHttp\\Tests\\": "vendor/guzzlehttp/guzzle/tests"
+        }
     }
 }

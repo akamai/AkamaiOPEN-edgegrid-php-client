@@ -1,10 +1,9 @@
-### Test Files ###
-test_client.php
-
 ### PHP ###
 composer.phar
 composer.lock
 vendor/
+build/
+akamai-open-edgegrid-client.phar
 
 ### IntelliJ ###
 *.iml
