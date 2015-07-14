@@ -134,7 +134,7 @@ class Client implements \GuzzleHttp\ClientInterface
     public function __construct($options = [], Client\Timestamp $timestamp = null, Client\Nonce $nonce = null)
     {
         if (isset($options['base_uri']) && strpos($options['base_uri'], '://') === false) {
-            $options['base_uri'] = 'https://' .$options['base_uri'];
+            $options['base_uri'] = 'https://' . $options['base_uri'];
         }
         
         if (!isset($options['timeout'])) {
@@ -226,8 +226,8 @@ class Client implements \GuzzleHttp\ClientInterface
     /**
      * Proxy calls smartly to the \GuzzleHttp\Client
      *
-     * @param $method
-     * @param $args
+     * @param string $method
+     * @param array $args
      * @return mixed
      * @throws \Exception
      */
