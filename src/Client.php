@@ -319,14 +319,17 @@ class Client implements \GuzzleHttp\ClientInterface
             }
         }
         
-        $return = call_user_func_array([$this->guzzle, $method], $args);
-        
-        if (self::$verbose && $httpMethod) {
-            static::verbose(self::$requests);
+        try {
+            $return = call_user_func_array([$this->guzzle, $method], $args);
+        } finally {
+            $this->query = [];
+            $this->body = '';
+            $this->headers = [];
+            
+            if (self::$verbose && $httpMethod) {
+                static::verbose(self::$requests);
+            }
         }
-        
-        $this->body = '';
-        $this->headers = '';
         
         return $return;
     }
