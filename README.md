@@ -1,5 +1,7 @@
 # akamai-open/edgegrid-client
 
+[![License](https://img.shields.io/github/license/akamai-open/edgegrid-auth-php.png)](https://github.com/akamai-open/edgegrid-auth-php/blob/master/LICENSE) [![Build Status](https://travis-ci.org/akamai-open/edgegrid-auth-php.svg?branch=master)](https://travis-ci.org/akamai-open/edgegrid-auth-php) [![Code Coverage](https://scrutinizer-ci.com/g/akamai-open/edgegrid-auth-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/akamai-open/edgegrid-auth-php/?branch=master)
+
 [Akamai {OPEN} EdgeGrid Authentication] for PHP
 
 [Akamai {OPEN} EdgeGrid Authentication]: https://developer.akamai.com/introduction/Client_Auth.html
