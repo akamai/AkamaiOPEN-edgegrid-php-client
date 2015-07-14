@@ -236,10 +236,11 @@ class Client implements \GuzzleHttp\ClientInterface
         // The only method that isn't a request-type method is getConfig
         // Don't create the auth header in that case
         if ($method != 'getConfig') {
+            $options = [];
+            
             if (!empty($this->auth)) {
                 $httpMethod = str_replace('async', '', $method);
 
-                $options = [];
                 if ($httpMethod != 'request') {
                     $path = &$args[0];
 
@@ -327,7 +328,7 @@ class Client implements \GuzzleHttp\ClientInterface
             $this->body = '';
             $this->headers = [];
             
-            if (self::$verbose && $httpMethod) {
+            if (self::$verbose && isset($httpMethod)) {
                 static::verbose(self::$requests);
             }
         }
@@ -520,7 +521,6 @@ class Client implements \GuzzleHttp\ClientInterface
     /**
      * Returns headers in normalized form
      *
-     * @param array $headers
      * @return string
      */
     protected function canonicalizeHeaders()
@@ -557,7 +557,6 @@ class Client implements \GuzzleHttp\ClientInterface
     /**
      * Returns a hash of the HTTP POST body
      *
-     * @param string $body POST body
      * @return string
      */
     protected function makeContentHash()
