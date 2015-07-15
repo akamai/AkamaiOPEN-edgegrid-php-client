@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <title>phpDox - Akamai\Open\EdgeGrid\Client\OptionsHandler</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css" media="screen"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  </head>
+  <body>
+    <nav class="topnav">
+      <ul>
+        <li>
+          <div class="logo"><span>/**</span>phpDox</div>
+        </li>
+        <li class="separator">
+          <a href="../index.html">Overview</a>
+        </li>
+        <li class="separator">
+          <a href="../namespaces.html">Namespaces</a>
+        </li>
+        <li>
+          <a href="../classes.html">Classes</a>
+        </li>
+        <li class="separator">
+          <a href="../source/index.html">Source</a>
+        </li>
+      </ul>
+    </nav>
+    <div id="mainstage">
+      <div class="box">
+        <ul class="breadcrumb">
+          <li>
+            <a href="../index.html">Overview</a>
+          </li>
+          <li class="separator">
+            <a href="../classes.html">Classes</a>
+          </li>
+          <li class="separator">
+            <a href="../classes.html#Akamai_Open_EdgeGrid_Client">Akamai\Open\EdgeGrid\Client</a>
+          </li>
+          <li class="separator">OptionsHandler</li>
+        </ul>
+      </div>
+      <nav class="box">
+        <ul>
+          <li>
+            <a href="#introduction">Introduction</a>
+          </li>
+          <li>
+            <a href="#synopsis">Synopsis</a>
+          </li>
+          <li>
+            <a href="#coverage">Coverage</a>
+          </li>
+          <li>
+            <a href="#members">Members</a>
+          </li>
+          <li>
+            <a href="#methods">Methods</a>
+          </li>
+          <li>
+            <a href="../source/Client/OptionsHandler.php.html#line21">Source</a>
+          </li>
+        </ul>
+      </nav>
+      <section>
+        <h1 id="introduction"><small>Akamai\Open\EdgeGrid\Client\</small>OptionsHandler</h1>
+        <h4>GuzzleHttp\Guzzle &amp; Akamai\Open\EdgeGrid\Client Options Marshaller</h4>
+        <p/>
+        <ul/>
+        <h2 id="synopsis">Synopsis</h2>
+        <div class="synopsis">class OptionsHandler
+            {<br/><ul class="none"><li>// members</li><li>protected <span title="Akamai\Open\EdgeGrid\Client\Authentication|bool">Authentication|bool</span> <a href="#members">$authentication</a> =
+                        false;
+                    </li><li>protected string <a href="#members">$scheme</a> =
+                        'https';
+                    </li><li>protected  <a href="#members">$host</a>;
+                    </li><li>protected string <a href="#members">$path</a> =
+                        '';
+                    </li><li>protected array <a href="#members">$query</a> =
+                        ;
+                    </li><li>protected array <a href="#members">$options</a> =
+                        ;
+                    </li><li>protected int <a href="#members">$timeout_in_seconds</a> =
+                        Akamai\Open\EdgeGrid\Client::DEFAULT_REQUEST_TIMEOUT;
+                    </li></ul><ul class="none"><li>// methods</li><li>public void <a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/__construct.html">__construct</a>()
+                    </li><li>public array <a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/getOptions.html">getOptions</a>()
+                    </li><li>protected array <a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/getAuthenticatedOptions.html">getAuthenticatedOptions</a>()
+                    </li><li>protected void <a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/getStandardOptions.html">getStandardOptions</a>()
+                    </li><li>protected string <a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/getQueryOption.html">getQueryOption</a>()
+                    </li><li>protected string <a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/getBodyOption.html">getBodyOption</a>()
+                    </li><li>protected array <a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/getHeadersOption.html">getHeadersOption</a>()
+                    </li><li>protected string <a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/getHostOption.html">getHostOption</a>()
+                    </li><li>protected int <a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/getTimeoutOption.html">getTimeoutOption</a>()
+                    </li><li>public string <a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/getScheme.html">getScheme</a>()
+                    </li><li>public $this <a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/setScheme.html">setScheme</a>()
+                    </li><li>public string <a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/getHost.html">getHost</a>()
+                    </li><li>public $this <a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/setHost.html">setHost</a>()
+                    </li><li>public $this <a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/setPath.html">setPath</a>()
+                    </li><li>public $this <a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/setOptions.html">setOptions</a>()
+                    </li><li>public $this <a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/setAuthentication.html">setAuthentication</a>()
+                    </li><li>public $this <a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/setQuery.html">setQuery</a>()
+                    </li><li>public int <a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/getTimeout.html">getTimeout</a>()
+                    </li><li>public $this <a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/setTimeout.html">setTimeout</a>()
+                    </li></ul>
+
+            }<br/></div>
+        <h2 id="coverage">Coverage</h2>
+        <table class="styled">
+          <tr>
+            <td>Methods</td>
+            <td class="percent">73.68%</td>
+            <td class="nummeric">14 / 19</td>
+          </tr>
+          <tr>
+            <td>Lines</td>
+            <td class="percent">80.77%</td>
+            <td class="nummeric">63 / 78</td>
+          </tr>
+        </table>
+        <h2 id="members">Members</h2>
+        <div class="styled members">
+          <h4>protected</h4>
+          <ul class="members">
+            <li id="authentication"><strong>$authentication</strong>
+                —
+                <a title="Akamai\Open\EdgeGrid\Client\Authentication|bool" href="../classes/Akamai_Open_EdgeGrid_Client_Authentication|bool.html">Akamai\Open\EdgeGrid\Client\Authentication|bool</a></li>
+            <li id="host"><strong>$host</strong>
+                —
+                string</li>
+            <li id="options"><strong>$options</strong>
+                —
+                array</li>
+            <li id="path"><strong>$path</strong>
+                —
+                string</li>
+            <li id="query"><strong>$query</strong>
+                —
+                array</li>
+            <li id="scheme"><strong>$scheme</strong>
+                —
+                string</li>
+            <li id="timeout_in_seconds"><strong>$timeout_in_seconds</strong>
+                —
+                int</li>
+          </ul>
+        </div>
+        <h2 id="methods">Methods</h2>
+        <div class="styled">
+          <h4>protected</h4>
+          <ul>
+            <li id="getAuthenticatedOptions"><a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/getAuthenticatedOptions.html">getAuthenticatedOptions()</a>
+                — Get the authenticated Guzzle options array</li>
+            <li id="getBodyOption"><a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/getBodyOption.html">getBodyOption()</a>
+                — Get body option</li>
+            <li id="getHeadersOption"><a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/getHeadersOption.html">getHeadersOption()</a>
+                — Get headers option</li>
+            <li id="getHostOption"><a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/getHostOption.html">getHostOption()</a>
+                — Get host option</li>
+            <li id="getQueryOption"><a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/getQueryOption.html">getQueryOption()</a>
+                — Get query option</li>
+            <li id="getStandardOptions"><a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/getStandardOptions.html">getStandardOptions()</a>
+                — Retrieve the normalized Guzzle options array</li>
+            <li id="getTimeoutOption"><a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/getTimeoutOption.html">getTimeoutOption()</a>
+                — Get timeout option</li>
+          </ul>
+          <h4>public</h4>
+          <ul>
+            <li id="__construct"><a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/__construct.html">__construct()</a>
+                — Guzzle Options Handler</li>
+            <li id="getHost"><a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/getHost.html">getHost()</a>
+                — Get host</li>
+            <li id="getOptions"><a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/getOptions.html">getOptions()</a>
+                — Get guzzle options</li>
+            <li id="getScheme"><a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/getScheme.html">getScheme()</a>
+                — Get URI scheme</li>
+            <li id="getTimeout"><a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/getTimeout.html">getTimeout()</a>
+                — Get Request timeout</li>
+            <li id="setAuthentication"><a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/setAuthentication.html">setAuthentication()</a>
+                — Inject Authentication instance</li>
+            <li id="setHost"><a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/setHost.html">setHost()</a>
+                — Set host</li>
+            <li id="setOptions"><a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/setOptions.html">setOptions()</a>
+                — Set Guzzle options</li>
+            <li id="setPath"><a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/setPath.html">setPath()</a>
+                — Set Request path</li>
+            <li id="setQuery"><a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/setQuery.html">setQuery()</a>
+                — Set GET args</li>
+            <li id="setScheme"><a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/setScheme.html">setScheme()</a>
+                — Set URI scheme</li>
+            <li id="setTimeout"><a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler/setTimeout.html">setTimeout()</a>
+                — Set Request timeout</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+    <footer>
+      <span>Generated using phpDox 0.8.2-dev - Copyright (C) 2010 - 2015 by Arne Blankerts</span>
+    </footer>
+  </body>
+</html>
