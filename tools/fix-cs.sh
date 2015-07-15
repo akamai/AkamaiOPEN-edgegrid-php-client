@@ -21,4 +21,5 @@ then
         echo "Running php-cs-fixer: "
         php-cs-fixer fix ./src --level=psr2
     fi
+    exit -1
 fi
