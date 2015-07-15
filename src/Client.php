@@ -172,6 +172,8 @@ class Client implements \GuzzleHttp\ClientInterface
 
             if (isset($options['timestamp'])) {
                 $this->authentication->setTimestamp($options['timestamp']);
+            } elseif (!$this->guzzle->getConfig('timestamp')) {
+                $this->authentication->setTimestamp();
             }
 
             if (isset($options['nonce'])) {

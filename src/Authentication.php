@@ -78,7 +78,7 @@ class Authentication
     public function createAuthHeader()
     {
         if ($this->timestamp === null) {
-            $this->timestamp = new Timestamp();
+            $this->setTimestamp();
         }
         
         if (!$this->timestamp->isValid()) {
