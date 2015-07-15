@@ -33,7 +33,7 @@ class Timestamp
      */
     public function __construct()
     {
-        $this->timestamp = new \DateTimeImmutable(null, new \DateTimeZone('UTC'));
+        $this->timestamp = new \DateTimeImmutable("now", new \DateTimeZone('UTC'));
     }
 
     /**
@@ -43,7 +43,7 @@ class Timestamp
      */
     public function isValid()
     {
-        $now = new \DateTimeImmutable(null, new \DateTimeZone('UTC'));
+        $now = new \DateTimeImmutable("now", new \DateTimeZone('UTC'));
         return $this->timestamp->add(new \DateInterval($this->validFor)) >= $now;
     }
 
