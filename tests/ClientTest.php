@@ -38,6 +38,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        Client::setVerbose(false);
+        Client::setDebug(false);
     }
     
     /**
@@ -233,7 +235,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, end($container)['options']['timeout']);
     }
     
-    public function testVerboseSingle()
+    public function testInstanceVerboseSingle()
     {
         $mock = new MockHandler([new Response(200, [], json_encode(['test' => 'data']))]);
         $handler = HandlerStack::create($mock);
@@ -246,7 +248,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         );
         $client->setAuth('test', 'test', 'test');
         
-        $client->setVerbose(true);
+        $client->setInstanceVerbose(true);
         
         ob_start();
         $client->get('/test');
@@ -263,7 +265,7 @@ EOF;
         $this->assertEquals($expectedOutput, $output);
     }
 
-    public function testVerboseMultiple()
+    public function testInstanceVerboseMultiple()
     {
         $mock = new MockHandler([new Response(200, [], json_encode(['test' => 'data'])), new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))]);
         $handler = HandlerStack::create($mock);
@@ -276,7 +278,7 @@ EOF;
         );
         $client->setAuth('test', 'test', 'test');
 
-        $client->setVerbose(true);
+        $client->setInstanceVerbose(true);
 
         ob_start();
         $client->get('/test');
@@ -306,7 +308,7 @@ EOF;
         $this->assertEquals($expectedOutput, $output);
     }
     
-    public function testDebugSingle()
+    public function testInstanceDebugSingle()
     {
         $mock = new MockHandler([new Response(200)]);
         $container = [];
@@ -323,9 +325,223 @@ EOF;
         );
         $client->setAuth('test', 'test', 'test');
 
-        $client->setDebug(true);
+        $client->setInstanceDebug(true);
         $client->get('/test');
         $this->assertEquals(true, end($container)['options']['debug']);
+    }
+
+    public function testStaticVerboseSingle()
+    {
+        $mock = new MockHandler([new Response(200, [], json_encode(['test' => 'data']))]);
+        $handler = HandlerStack::create($mock);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+
+        Client::setVerbose(true);
+
+        ob_start();
+        $client->get('/test');
+        $output = ob_get_clean();
+
+        $expectedOutput = <<<EOF
+\x1b[36;01m===> [VERBOSE] Response: 
+\x1b[33;01m{
+    "test": "data"
+}\x1b[39;49;00m
+
+EOF;
+
+        $this->assertEquals($expectedOutput, $output);
+    }
+
+    public function testStaticVerboseMultiple()
+    {
+        $mock = new MockHandler([new Response(200, [], json_encode(['test' => 'data'])), new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))]);
+        $handler = HandlerStack::create($mock);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+
+        Client::setVerbose(true);
+
+        ob_start();
+        $client->get('/test');
+        $client->get('/test2');
+        $output = ob_get_clean();
+
+        $expectedOutput = <<<EOF
+\x1b[36;01m===> [VERBOSE] Response: 
+\x1b[33;01m{
+    "test": "data"
+}\x1b[39;49;00m
+\x1b[36;01m===> [VERBOSE] Response: 
+\x1b[33;01m{
+    "test": "data2",
+    "0": [
+        "foo",
+        "bar"
+    ],
+    "1": false,
+    "2": null,
+    "3": 123,
+    "4": 0.123
+}\x1b[39;49;00m
+
+EOF;
+
+        $this->assertEquals($expectedOutput, $output);
+    }
+
+    public function testStaticDebugSingle()
+    {
+        $mock = new MockHandler([new Response(200)]);
+        $container = [];
+        $history = Middleware::history($container);
+
+        $handler = HandlerStack::create($mock);
+        $handler->push($history);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+
+        Client::setDebug(true);
+        
+        $client->get('/test');
+        $this->assertEquals(true, end($container)['options']['debug']);
+    }
+
+    public function testVerboseOverrideSingle()
+    {
+        $mock = new MockHandler([new Response(200, [], json_encode(['test' => 'data']))]);
+        $handler = HandlerStack::create($mock);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+
+        Client::setVerbose(true);
+        $client->setInstanceVerbose(false);
+
+        ob_start();
+        $client->get('/test');
+        $output = ob_get_clean();
+
+        $expectedOutput = "";
+
+        $this->assertEquals($expectedOutput, $output);
+    }
+
+    public function testVerboseOverrideMultiple()
+    {
+        $mock = new MockHandler([new Response(200, [], json_encode(['test' => 'data'])), new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))]);
+        $handler = HandlerStack::create($mock);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+
+        Client::setVerbose(true);
+        $client->setInstanceVerbose(false);
+
+        ob_start();
+        $client->get('/test');
+        $client->get('/test2');
+        $output = ob_get_clean();
+
+        $expectedOutput = "";
+
+        $this->assertEquals($expectedOutput, $output);
+    }
+
+    public function testDebugOverrideSingle()
+    {
+        $mock = new MockHandler([new Response(200), new Response(200)]);
+        $container = [];
+        $history = Middleware::history($container);
+
+        $handler = HandlerStack::create($mock);
+        $handler->push($history);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+
+        Client::setDebug(true);
+        $client->setInstanceDebug(false);
+
+        $client->get('/test');
+        $this->assertEquals(false, end($container)['options']['debug']);
+    }
+
+    public function testInstanceDebugOptionSingle()
+    {
+        $mock = new MockHandler([new Response(200), new Response(200), new Response(200)]);
+        $container = [];
+        $history = Middleware::history($container);
+
+        $handler = HandlerStack::create($mock);
+        $handler->push($history);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+
+        $client->get('/test', ['debug' => true]);
+        $this->assertEquals(true, end($container)['options']['debug']);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+        $client->setDebug(true);
+        $client->get('/test', ['debug' => false]);
+        $this->assertEquals(false, end($container)['options']['debug']);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+        Client::setDebug(true);
+        $client->get('/test', ['debug' => false]);
+        $this->assertEquals(false, end($container)['options']['debug']);
     }
     
     public function testNonApiCall()

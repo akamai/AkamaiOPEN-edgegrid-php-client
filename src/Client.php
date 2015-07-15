@@ -81,9 +81,13 @@ class Client implements \GuzzleHttp\ClientInterface
      * @var \Akamai\Open\EdgeGrid\Authentication
      */
     protected $authentication;
-    
+
     protected $verbose = false;
     protected $debug = false;
+    protected $verboseOverride = false;
+    protected $debugOverride = false;
+    protected static $staticVerbose = false;
+    protected static $staticDebug = false;
 
     /**
      * @var array An array of requests
@@ -179,8 +183,8 @@ class Client implements \GuzzleHttp\ClientInterface
             if ($handler = $this->getHandlerOption($options)) {
                 $options['handler'] = $handler;
             }
-            
-            $options['debug'] = $this->debug;
+
+            $options['debug'] = $this->getDebugOption($options);
 
             $args = $this->normalizeArgs($args, $path, $options, $method);
         }
@@ -293,8 +297,9 @@ class Client implements \GuzzleHttp\ClientInterface
      *
      * @param $enable
      */
-    public function setVerbose($enable)
+    public function setInstanceVerbose($enable)
     {
+        $this->verboseOverride = true;
         $this->verbose = $enable;
         return $this;
     }
@@ -304,10 +309,31 @@ class Client implements \GuzzleHttp\ClientInterface
      *
      * @param $enable
      */
-    public function setDebug($enable)
+    public function setInstanceDebug($enable)
     {
+        $this->debugOverride = true;
         $this->debug = $enable;
         return $this;
+    }
+
+    /**
+     * Print formatted JSON responses to STDOUT
+     *
+     * @param $enable
+     */
+    public static function setVerbose($enable)
+    {
+        self::$staticVerbose = $enable;
+    }
+
+    /**
+     * Print HTTP requests/responses to STDOUT
+     *
+     * @param $enable
+     */
+    public static function setDebug($enable)
+    {
+        self::$staticDebug = $enable;
     }
 
     /**
@@ -318,7 +344,7 @@ class Client implements \GuzzleHttp\ClientInterface
      */
     protected function getHandlerOption($options)
     {
-        if ($this->verbose) {
+        if ($this->isVerbose()) {
             if (!$this->requests || !$this->history) {
                 $this->requests = [];
                 $this->history = Middleware::history($this->requests);
@@ -348,11 +374,11 @@ class Client implements \GuzzleHttp\ClientInterface
      * Output JSON when verbose mode is turned on
      *
      * @param $requests Array of requests captured by {@see GuzzleHttp\MiddleWare::history()}
-     * @see \Akamai\Open\EdgeGrid\Client::setVerbose
+     * @see \Akamai\Open\EdgeGrid\Client::setInstanceVerbose
      */
     protected function verbose()
     {
-        if (!$this->verbose) {
+        if (!$this->isVerbose()) {
             return;
         }
         
@@ -387,6 +413,15 @@ class Client implements \GuzzleHttp\ClientInterface
             echo "{$colors['red']}No response returned";
         }
         echo "{$colors['reset']}\n";
+    }
+    
+    protected function isVerbose()
+    {
+        if (($this->verboseOverride && !$this->verbose) || (!($this->verboseOverride) && !static::$staticVerbose)) {
+            return false;
+        }
+        
+        return true;
     }
 
     /**
@@ -608,6 +643,10 @@ class Client implements \GuzzleHttp\ClientInterface
         } else {
             $this->optionsHandler->setTimeout($options['timeout']);
         }
+        
+        if (isset($options['debug'])) {
+            $this->setInstanceDebug(true);
+        }
 
         if (isset($options['base_uri'])) {
             $this->optionsHandler->setHost($options['base_uri']);
@@ -619,5 +658,23 @@ class Client implements \GuzzleHttp\ClientInterface
             return $options;
         }
         return $options;
+    }
+
+    /**
+     * Handle debug option
+     *
+     * @return bool
+     */
+    protected function getDebugOption($options)
+    {
+        if (isset($options['debug'])) {
+            return $options['debug'];
+        }
+        
+        if (($this->debugOverride && $this->debug) || (!$this->debugOverride && static::$staticDebug)) {
+            return true;
+        }
+        
+        return false;
     }
 }
