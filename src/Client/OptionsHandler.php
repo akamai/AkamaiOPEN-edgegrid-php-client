@@ -111,7 +111,7 @@ class OptionsHandler
     /**
      * Retrieve the normalized Guzzle options array
      *
-     * @param array $options The options to normalize
+     * return array
      */
     protected function getStandardOptions()
     {
@@ -125,7 +125,6 @@ class OptionsHandler
     /**
      * Get query option
      *
-     * @param string $path Path to request
      * @param array $options Guzzle options
      * @return string
      */
@@ -209,7 +208,6 @@ class OptionsHandler
     /**
      * Get timeout option
      *
-     * @param array $options Guzzle options
      * @return int
      */
     protected function getTimeoutOption()
@@ -289,10 +287,10 @@ class OptionsHandler
     /**
      * Set Guzzle options
      *
-     * @param mixed $options
+     * @param array $options
      * @return OptionsHandler
      */
-    public function setOptions($options)
+    public function setOptions(array $options)
     {
         $this->options = $options;
         return $this;
@@ -314,7 +312,7 @@ class OptionsHandler
      *
      * @param array $query
      */
-    public function setQuery($query)
+    public function setQuery(array $query)
     {
         $this->query = $query;
         return $this;

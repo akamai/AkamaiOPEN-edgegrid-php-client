@@ -72,8 +72,6 @@ class Authentication
     /**
      * Create the Authentication header
      *
-     * @param $method \Akamai\Open\EdgeGrid\Client\HTTP method
-     * @param $path \Akamai\Open\EdgeGrid\Client\Request path
      * @return string
      * @link https://developer.akamai.com/introduction/Client_Auth.html
      */
@@ -121,8 +119,6 @@ class Authentication
     /**
      * Returns a string with all data that will be signed
      *
-     * @param string $method
-     * @param string $path
      * @param string $auth_header
      * @return string
      */
@@ -208,7 +204,6 @@ class Authentication
     /**
      * Creates a signing key based on the secret and timestamp
      *
-     * @param string $timestamp
      * @return string
      */
     protected function makeSigningKey()

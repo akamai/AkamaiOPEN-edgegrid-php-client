@@ -196,7 +196,7 @@ class Client implements \GuzzleHttp\ClientInterface
 
             $options = $this->optionsHandler->getOptions();
 
-            if ($handler = $this->getHandlerOption()) {
+            if ($handler = $this->getHandlerOption($options)) {
                 $options['handler'] = $handler;
             }
             
@@ -336,7 +336,7 @@ class Client implements \GuzzleHttp\ClientInterface
      * @param array $options Guzzle options
      * @return HandlerStack|bool
      */
-    protected function getHandlerOption()
+    protected function getHandlerOption($options)
     {
         if ($this->verbose) {
             if (!$this->requests || !$this->history) {
@@ -347,8 +347,8 @@ class Client implements \GuzzleHttp\ClientInterface
             $handler = $this->handlerStack;
 
             // Is the user passing an handler in for this request?
-            if (isset($this->options['handler'])) {
-                $handler = $this->options['handler'];
+            if (isset($options['handler'])) {
+                $handler = $options['handler'];
             } elseif ($configHandler = $this->guzzle->getConfig('handler')) {
                 $handler = $configHandler;
             } elseif (!$this->handlerStack) {
