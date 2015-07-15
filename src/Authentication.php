@@ -102,9 +102,6 @@ class Authentication
     /**
      * Returns a signature of the given request, timestamp and auth_header
      *
-     * @param string $method
-     * @param string $path
-     * @param string $timestamp
      * @param string $auth_header
      * @return string
      */
