@@ -117,35 +117,15 @@ class Client implements \GuzzleHttp\ClientInterface
         if ($authentication === null) {
             $this->authentication = new Authentication();
         }
-        
-        if (isset($options['timestamp']) && $options['timestamp'] instanceof Timestamp) {
-            $this->authentication->setTimestamp($options['timestamp']);
-        }
-        
-        if (isset($options['timestamp']) && $options['nonce'] instanceof Nonce) {
-            $this->authentication->setNonce($options['nonce']);
-        }
 
         $this->optionsHandler = $optionsHandler;
         if ($optionsHandler === null) {
             $this->optionsHandler = new OptionsHandler($this->authentication);
         }
 
-        if (!isset($options['timeout'])) {
-            $options['timeout'] = $this->optionsHandler->getTimeout();
-        } else {
-            $this->optionsHandler->setTimeout($options['timeout']);
-        }
-        
-        if (isset($options['base_uri'])) {
-            $this->optionsHandler->setHost($options['base_uri']);
-            
-            if (strpos($options['base_uri'], '://') === false) {
-                $options['base_uri'] = 'https://' . $options['base_uri'];
-            }
-        }
-        
         $this->optionsHandler->setAuthentication($this->authentication);
+
+        $options = $this->handleOptions($options);
 
         $this->guzzle = new \GuzzleHttp\Client($options);
     }
@@ -605,5 +585,39 @@ class Client implements \GuzzleHttp\ClientInterface
         $this->query = [];
         $this->body = '';
         $this->headers = [];
+    }
+
+    /**
+     * Handle incoming options
+     *
+     * @param $options
+     * @return mixed
+     */
+    protected function handleOptions($options)
+    {
+        if (isset($options['timestamp']) && $options['timestamp'] instanceof Timestamp) {
+            $this->authentication->setTimestamp($options['timestamp']);
+        }
+
+        if (isset($options['nonce']) && $options['nonce'] instanceof Nonce) {
+            $this->authentication->setNonce($options['nonce']);
+        }
+
+        if (!isset($options['timeout'])) {
+            $options['timeout'] = $this->optionsHandler->getTimeout();
+        } else {
+            $this->optionsHandler->setTimeout($options['timeout']);
+        }
+
+        if (isset($options['base_uri'])) {
+            $this->optionsHandler->setHost($options['base_uri']);
+
+            if (strpos($options['base_uri'], '://') === false) {
+                $options['base_uri'] = 'https://' . $options['base_uri'];
+                return $options;
+            }
+            return $options;
+        }
+        return $options;
     }
 }
