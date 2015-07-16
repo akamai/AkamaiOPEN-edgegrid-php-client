@@ -238,38 +238,13 @@ class Client implements \GuzzleHttp\ClientInterface
      */
     public static function createFromEdgeRcFile($section = 'default', $path = null, $options = [])
     {
-        if ($path === null) {
-            if (isset($_SERVER['HOME']) && file_exists($_SERVER['HOME'] . '/.edgerc')) {
-                $path = $_SERVER['HOME'] . "/.edgerc";
-            } elseif (file_exists('./.edgerc')) {
-                $path = './.edgerc';
-            }
+        $auth = Authentication::createFromEdgeRcFile($section, $path);
+        
+        if ($host = $auth->getHost()) {
+            $options['base_uri'] = 'https://' .$host;
         }
         
-        $file = !$path ? false : realpath($path);
-        if (!$file) {
-            throw new \Exception("File \"$file\" does not exist!");
-        }
-        
-        if (!is_readable($file)) {
-            throw new \Exception("Unable to read .edgerc file!");
-        }
-        
-        $ini = parse_ini_file($file, true, INI_SCANNER_RAW);
-        if (!$ini[$section]) {
-            throw new \Exception("Section \"$section\" does not exist!");
-        }
-        
-        $client = new static(array_merge($options, ['base_uri' => 'https://' . $ini[$section]['host']]));
-        $client->setAuth(
-            $ini[$section]['client_token'],
-            $ini[$section]['client_secret'],
-            $ini[$section]['access_token']
-        );
-        if (isset($ini[$section]['max-size'])) {
-            $client->setMaxBodySize($ini[$section]['max-size']);
-        }
-
+        $client = new static($options, null, $auth);
         return $client;
     }
 
