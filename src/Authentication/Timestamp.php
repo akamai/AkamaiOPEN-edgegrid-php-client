@@ -48,15 +48,18 @@ class Timestamp
     }
 
     /**
-     * @param $interval
+     * Set how long the current timestamp is considered valid
+     *
      * @see \DateInterval
+     * @param $interval
+     * @return $this
      */
     public function setValidFor($interval)
     {
         $this->validFor = $interval;
         return $this;
     }
-    
+
     /**
      * Return the timestamp when cast to string
      *

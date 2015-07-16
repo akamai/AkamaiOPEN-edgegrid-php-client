@@ -293,6 +293,7 @@ class Authentication
      * {@see http_build_query()}
      *
      * @param array|string $query
+     * @return $this
      */
     public function setQuery($query, $ensure_encoding = true)
     {
@@ -302,33 +303,38 @@ class Authentication
             $query = http_build_query($query_args, null, '&', PHP_QUERY_RFC3986);
         }
         $this->options['query'] = $query;
+        return $this;
     }
 
     /**
      * Set request body
      *
      * @param $body
+     * return $this;
      */
     public function setBody($body)
     {
         $this->options['body'] = $body;
+        return $this;
     }
 
     /**
      * Set request headers
      *
      * @param array $headers
+     * @returrn $this
      */
     public function setHeaders(array $headers)
     {
         $this->options['headers'] = $headers;
+        return $this;
     }
 
     /**
      * Set request path
      *
      * @param mixed $path
-     * @return Authentication
+     * @return $this
      */
     public function setPath($path)
     {
@@ -349,7 +355,7 @@ class Authentication
      * Set signing timestamp
      *
      * @param mixed $timestamp
-     * @return Authentication
+     * @return $this
      */
     public function setTimestamp($timestamp = null)
     {
@@ -364,6 +370,7 @@ class Authentication
      * Set signing nonce
      *
      * @param Nonce $nonce
+     * @return $this
      */
     public function setNonce($nonce = null)
     {
@@ -378,6 +385,7 @@ class Authentication
      * Set headers to sign
      *
      * @param array $headers_to_sign
+     * @return $this
      */
     public function setHeadersToSign($headers_to_sign)
     {
@@ -389,7 +397,7 @@ class Authentication
      * Set max body size to sign
      *
      * @param int $max_body_size Size (in bytes)
-     * @return Authentication
+     * @return $this
      */
     public function setMaxBodySize($max_body_size)
     {
@@ -403,9 +411,11 @@ class Authentication
      * @param string $client_token
      * @param string $client_secret
      * @param string $access_token
+     * @return $this
      */
     public function setAuth($client_token, $client_secret, $access_token)
     {
         $this->auth = compact('client_token', 'client_secret', 'access_token');
+        return $this;
     }
 }

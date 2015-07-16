@@ -256,6 +256,7 @@ class OptionsHandler
      * Set host
      *
      * @param $host
+     * @return $this
      */
     public function setHost($host)
     {
@@ -270,13 +271,14 @@ class OptionsHandler
         }
 
         $this->host = $host;
+        return $this;
     }
 
     /**
      * Set Request path
      *
      * @param mixed $path
-     * @return OptionsHandler
+     * @return $this
      */
     public function setPath($path)
     {
@@ -288,7 +290,7 @@ class OptionsHandler
      * Set Guzzle options
      *
      * @param array $options
-     * @return OptionsHandler
+     * @return $this
      */
     public function setOptions(array $options)
     {
@@ -300,6 +302,7 @@ class OptionsHandler
      * Inject Authentication instance
      *
      * @param Authentication|bool $authentication
+     * @return $this
      */
     public function setAuthentication(Authentication $authentication)
     {
@@ -311,6 +314,7 @@ class OptionsHandler
      * Set GET args
      *
      * @param array $query
+     * @return $this
      */
     public function setQuery(array $query)
     {
@@ -332,6 +336,7 @@ class OptionsHandler
      * Set Request timeout
      *
      * @param int $timeout_in_seconds
+     * @return $this
      */
     public function setTimeout($timeout_in_seconds)
     {

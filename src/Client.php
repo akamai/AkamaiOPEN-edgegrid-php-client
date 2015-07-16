@@ -239,7 +239,15 @@ class Client implements \GuzzleHttp\ClientInterface
 
         return $client;
     }
-    
+
+    /**
+     * Set Akamai {OPEN} Authentication Credentials
+     *
+     * @param $client_token
+     * @param $client_secret
+     * @param $access_token
+     * @return $this
+     */
     public function setAuth($client_token, $client_secret, $access_token)
     {
         $this->authentication->setAuth($client_token, $client_secret, $access_token);
@@ -254,6 +262,7 @@ class Client implements \GuzzleHttp\ClientInterface
      * feature.
      *
      * @param array $headers
+     * @return $this
      */
     public function setHeadersToSign(array $headers)
     {
@@ -266,6 +275,7 @@ class Client implements \GuzzleHttp\ClientInterface
      * Set the max body size
      *
      * @param int $max_body_size
+     * @return $this
      */
     public function setMaxBodySize($max_body_size)
     {
@@ -273,7 +283,13 @@ class Client implements \GuzzleHttp\ClientInterface
 
         return $this;
     }
-    
+
+    /**
+     * Set Request Host
+     *
+     * @param $host
+     * @return $this
+     */
     public function setHost($host)
     {
         $this->optionsHandler->setHost($host);
@@ -285,6 +301,7 @@ class Client implements \GuzzleHttp\ClientInterface
      * Set the HTTP request timeout
      *
      * @param $timeout_in_seconds
+     * @return $this
      */
     public function setTimeout($timeout_in_seconds)
     {
@@ -296,6 +313,7 @@ class Client implements \GuzzleHttp\ClientInterface
      * Print formatted JSON responses to STDOUT
      *
      * @param $enable
+     * @return $this
      */
     public function setInstanceVerbose($enable)
     {
@@ -308,6 +326,7 @@ class Client implements \GuzzleHttp\ClientInterface
      * Print HTTP requests/responses to STDOUT
      *
      * @param $enable
+     * @return $this
      */
     public function setInstanceDebug($enable)
     {
