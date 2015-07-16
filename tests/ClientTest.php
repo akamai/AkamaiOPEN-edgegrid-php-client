@@ -40,6 +40,13 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         Client::setVerbose(false);
         Client::setDebug(false);
+        $closure = function () {
+        
+            self::$logger = false;
+        };
+        
+        $reset = $closure->bindTo(new Client, new Client);
+        $reset();
     }
     
     /**
@@ -54,12 +61,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         //$this->setName($name);
         
         // Mock the response, we don't care about it
-        $mock = new MockHandler([new Response(200)]);
         $container = [];
-        $history = Middleware::history($container);
-        
-        $handler = HandlerStack::create($mock);
-        $handler->push($history);
+        $handler = $this->getMockHandler([new Response(200)], $container);
         
         $timestamp = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Timestamp::CLASS);
         $timestamp->__toString()->willReturn($options['timestamp']);
@@ -69,7 +72,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         
         $client = new Client(
             array_merge($options, [
-                'base_uri' => $options['base_url'], 
+                'base_uri' => $options['base_url'],
                 'handler' => $handler,
                 'timestamp' => $timestamp->reveal(),
                 'nonce' => $nonce->reveal()
@@ -125,14 +128,17 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             'client_secret' => "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=",
             'access_token' => "akab-access-token-xxx-xxxxxxxxxxxxxxxx"
         ], $authClosure('auth'));
-        $this->assertEquals('akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net', $clientClosure('optionsHandler')->getHost());
+        $this->assertEquals(
+            'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
+            $clientClosure('optionsHandler')->getHost()
+        );
         $this->assertEquals(2048, $authClosure('max_body_size'));
     }
     
     public function testHostnameWithTrailingSlash()
     {
         $client = new \Akamai\Open\EdgeGrid\Client();
-        $closure = function() {
+        $closure = function () {
             return $this->optionsHandler->getHost();
         };
         $tester = $closure->bindTo($client, $client);
@@ -145,12 +151,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function testDefaultTimeout()
     {
         // Mock the response, we don't care about it
-        $mock = new MockHandler([new Response(200)]);
         $container = [];
-        $history = Middleware::history($container);
-
-        $handler = HandlerStack::create($mock);
-        $handler->push($history);
+        $handler = $this->getMockHandler([new Response(200)], $container);
 
         $client = new Client(
             [
@@ -171,12 +173,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function testTimeoutOption()
     {
         // Mock the response, we don't care about it
-        $mock = new MockHandler([new Response(200), new Response(200)]);
         $container = [];
-        $history = Middleware::history($container);
-
-        $handler = HandlerStack::create($mock);
-        $handler->push($history);
+        $handler = $this->getMockHandler([new Response(200), new Response(200)], $container);
 
         $client = new Client(
             [
@@ -201,13 +199,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function testSetTimeout()
     {
         // Mock the response, we don't care about it
-        $mock = new MockHandler([new Response(200), new Response(200), new Response(200)]);
         $container = [];
-        $history = Middleware::history($container);
-
-        $handler = HandlerStack::create($mock);
-        $handler->push($history);
-
+        $handler = $this->getMockHandler([new Response(200), new Response(200), new Response(200)], $container);
         $client = new Client(
             [
                 'base_uri' => 'http://example.org',
@@ -237,9 +230,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     
     public function testInstanceVerboseSingle()
     {
-        $mock = new MockHandler([new Response(200, [], json_encode(['test' => 'data']))]);
-        $handler = HandlerStack::create($mock);
-        
+        $handler = $this->getMockHandler([new Response(200, [], json_encode(['test' => 'data']))]);
         $client = new Client(
             [
                 'base_uri' => 'http://example.org',
@@ -267,9 +258,10 @@ EOF;
 
     public function testInstanceVerboseMultiple()
     {
-        $mock = new MockHandler([new Response(200, [], json_encode(['test' => 'data'])), new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))]);
-        $handler = HandlerStack::create($mock);
-
+        $handler = $this->getMockHandler([
+            new Response(200, [], json_encode(['test' => 'data'])),
+            new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))
+        ]);
         $client = new Client(
             [
                 'base_uri' => 'http://example.org',
@@ -310,13 +302,8 @@ EOF;
     
     public function testInstanceDebugSingle()
     {
-        $mock = new MockHandler([new Response(200)]);
         $container = [];
-        $history = Middleware::history($container);
-
-        $handler = HandlerStack::create($mock);
-        $handler->push($history);
-
+        $handler = $this->getMockHandler([new Response(200)], $container);
         $client = new Client(
             [
                 'base_uri' => 'http://example.org',
@@ -332,9 +319,7 @@ EOF;
 
     public function testStaticVerboseSingle()
     {
-        $mock = new MockHandler([new Response(200, [], json_encode(['test' => 'data']))]);
-        $handler = HandlerStack::create($mock);
-
+        $handler = $this->getMockHandler([new Response(200, [], json_encode(['test' => 'data']))]);
         $client = new Client(
             [
                 'base_uri' => 'http://example.org',
@@ -362,9 +347,10 @@ EOF;
 
     public function testStaticVerboseMultiple()
     {
-        $mock = new MockHandler([new Response(200, [], json_encode(['test' => 'data'])), new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))]);
-        $handler = HandlerStack::create($mock);
-
+        $handler = $this->getMockHandler([
+            new Response(200, [], json_encode(['test' => 'data'])),
+            new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))
+        ]);
         $client = new Client(
             [
                 'base_uri' => 'http://example.org',
@@ -405,13 +391,8 @@ EOF;
 
     public function testStaticDebugSingle()
     {
-        $mock = new MockHandler([new Response(200)]);
         $container = [];
-        $history = Middleware::history($container);
-
-        $handler = HandlerStack::create($mock);
-        $handler->push($history);
-
+        $handler = $this->getMockHandler([new Response(200)], $container);
         $client = new Client(
             [
                 'base_uri' => 'http://example.org',
@@ -428,9 +409,7 @@ EOF;
 
     public function testVerboseOverrideSingle()
     {
-        $mock = new MockHandler([new Response(200, [], json_encode(['test' => 'data']))]);
-        $handler = HandlerStack::create($mock);
-
+        $handler = $this->getMockHandler([new Response(200, [], json_encode(['test' => 'data']))]);
         $client = new Client(
             [
                 'base_uri' => 'http://example.org',
@@ -453,9 +432,10 @@ EOF;
 
     public function testVerboseOverrideMultiple()
     {
-        $mock = new MockHandler([new Response(200, [], json_encode(['test' => 'data'])), new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))]);
-        $handler = HandlerStack::create($mock);
-
+        $handler = $this->getMockHandler([
+            new Response(200, [], json_encode(['test' => 'data'])),
+            new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))
+        ]);
         $client = new Client(
             [
                 'base_uri' => 'http://example.org',
@@ -479,13 +459,8 @@ EOF;
 
     public function testDebugOverrideSingle()
     {
-        $mock = new MockHandler([new Response(200), new Response(200)]);
         $container = [];
-        $history = Middleware::history($container);
-
-        $handler = HandlerStack::create($mock);
-        $handler->push($history);
-
+        $handler = $this->getMockHandler([new Response(200), new Response(200)], $container);
         $client = new Client(
             [
                 'base_uri' => 'http://example.org',
@@ -503,13 +478,8 @@ EOF;
 
     public function testInstanceDebugOptionSingle()
     {
-        $mock = new MockHandler([new Response(200), new Response(200), new Response(200)]);
         $container = [];
-        $history = Middleware::history($container);
-
-        $handler = HandlerStack::create($mock);
-        $handler->push($history);
-
+        $handler = $this->getMockHandler([new Response(200), new Response(200), new Response(200)], $container);
         $client = new Client(
             [
                 'base_uri' => 'http://example.org',
@@ -546,13 +516,8 @@ EOF;
     
     public function testNonApiCall()
     {
-        $mock = new MockHandler([new Response(200), new Response(200), new Response(200)]);
         $container = [];
-        $history = Middleware::history($container);
-
-        $handler = HandlerStack::create($mock);
-        $handler->push($history);
-
+        $handler = $this->getMockHandler([new Response(200), new Response(200), new Response(200)], $container);
         $client = new Client(
             [
                 'base_uri' => 'http://example.org',
@@ -591,6 +556,64 @@ EOF;
         $uri = $tester('guzzle')->getConfig('base_uri');
         $this->assertEquals('https', parse_url($uri, PHP_URL_SCHEME));
     }
+
+    /**
+     * @param $response
+     * @param $path
+     * @param $expected
+     * @dataProvider loggingProvider
+     */
+    public function testLogging($method, $response, $path, $expected)
+    {
+        $handler = $this->getMockHandler([$response]);
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+
+        list($fp, $logger) = $this->getMockLocker();
+        $client->setLogger($logger);
+        
+        try {
+            $client->{$method}($path);
+        } catch (\Exception $e) {
+        }
+        
+        rewind($fp);
+        $this->assertEquals($expected, fgets($fp));
+        fclose($fp);
+    }
+    
+    public function testLoggingRedirect()
+    {
+        $handler = $this->getMockHandler([
+            new Response(301, ['Location' => '/redirected']),
+            new Response(200, ['Content-Type' => 'application/json'])
+        ]);
+        
+        $handler->push(\GuzzleHttp\Middleware::redirect());
+        
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        
+        list($fp, $logger) = $this->getMockLocker();
+        $client::setLogger($logger);
+        
+        try {
+            $client->get("/redirect");
+        } catch (\Exception $e) {
+        }
+        
+        rewind($fp);
+        $this->assertEquals("GET /redirected 200 application/json\n", fgets($fp));
+        fclose($fp);
+    }
     
     public function makeAuthHeaderProvider()
     {
@@ -625,5 +648,77 @@ EOF;
                 'file' => __DIR__ . '/.edgerc.default-testing',
             ]
         ];
+    }
+    
+    public function loggingProvider()
+    {
+        return [
+            [
+                'get',
+                new Response(200),
+                '/test',
+                "GET /test 200 \n"
+            ],
+            [
+                'get',
+                new Response(404),
+                '/error',
+                "GET /error 404 \n"
+            ],
+            [
+                'post',
+                new Response(500),
+                '/error',
+                "POST /error 500 \n"
+            ],
+            [
+                'put',
+                new Response(200, ['Content-Type' => 'application/json']),
+                '/test',
+                "PUT /test 200 application/json\n"
+            ],
+            [
+                'options',
+                new Response(405, ['Content-Type' => 'application/json']),
+                '/error',
+                "OPTIONS /error 405 application/json\n"
+            ],
+            [
+                'get',
+                new Response(503, ['Content-Type' => 'text/csv']),
+                '/error',
+                "GET /error 503 text/csv\n"
+            ],
+            [
+                'get',
+                new Response(301, ['Location' => '/redirect']),
+                '/notthere',
+                "GET /notthere 301 \n",
+            ]
+        ];
+    }
+
+    protected function getMockHandler($requests, array &$container = null)
+    {
+        $mock = new MockHandler($requests);
+        $container = [];
+        $history = Middleware::history($container);
+
+        $handler = HandlerStack::create($mock);
+        $handler->push($history);
+        
+        return $handler;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getMockLocker()
+    {
+        $fp = fopen('php://memory', 'a+');
+        $streamHandler = new \Monolog\Handler\StreamHandler($fp);
+        $streamHandler->setFormatter(new \Monolog\Formatter\LineFormatter("%message%\n"));
+        $logger = new \Monolog\Logger('Test Logger', [$streamHandler]);
+        return array($fp, $logger);
     }
 }

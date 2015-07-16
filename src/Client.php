@@ -20,17 +20,17 @@
  */
 namespace Akamai\Open\EdgeGrid;
 
+use Akamai\Open\EdgeGrid\Authentication;
+use Akamai\Open\EdgeGrid\Authentication\Nonce;
+use Akamai\Open\EdgeGrid\Authentication\Timestamp;
+use Akamai\Open\EdgeGrid\Client\OptionsHandler;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Middleware;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
-use Akamai\Open\EdgeGrid\Client\OptionsHandler;
-use Akamai\Open\EdgeGrid\Authentication;
-use Akamai\Open\EdgeGrid\Authentication\Timestamp;
-use Akamai\Open\EdgeGrid\Authentication\Nonce;
 
 /**
  * Akamai {OPEN} EdgeGrid Client for PHP
@@ -82,12 +82,40 @@ class Client implements \GuzzleHttp\ClientInterface
      */
     protected $authentication;
 
+    /**
+     * @var bool Whether verbose mode is on
+     */
     protected $verbose = false;
+
+    /**
+     * @var bool Whether debugging is on
+     */
     protected $debug = false;
+
+    /**
+     * @var bool Whether to override the static verbose setting
+     */
     protected $verboseOverride = false;
+
+    /**
+     * @var bool Whether to override the static debug setting
+     */
     protected $debugOverride = false;
+
+    /**
+     * @var bool Whether verbose mode is on
+     */
     protected static $staticVerbose = false;
+
+    /**
+     * @var bool Whether debug mode is on
+     */
     protected static $staticDebug = false;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected static $logger;
 
     /**
      * @var array An array of requests
@@ -181,11 +209,16 @@ class Client implements \GuzzleHttp\ClientInterface
         
         try {
             $return = call_user_func_array([$this->guzzle, $method], $args);
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            $this->log($e);
+            throw $e;
         } finally {
             $this->cleanup();
             
             if (isset($httpMethod)) {
-                $this->verbose();
+                $lastRequest = end($this->requests);
+                $this->log($lastRequest);
+                $this->verbose($lastRequest);
             }
         }
         
@@ -309,6 +342,7 @@ class Client implements \GuzzleHttp\ClientInterface
 
         return $this;
     }
+
     /**
      * Print formatted JSON responses to STDOUT
      *
@@ -333,6 +367,52 @@ class Client implements \GuzzleHttp\ClientInterface
         $this->debugOverride = true;
         $this->debug = $enable;
         return $this;
+    }
+
+    /**
+     * Set a PSR-3 compatible logger (or use monolog by default)
+     *
+     * @param \Psr\Log\LoggerInterface $logger
+     * @return void
+     */
+    public static function setLogger(
+        \Psr\Log\LoggerInterface $logger = null,
+        \Monolog\Handler\HandlerInterface $handler = null,
+        \Monolog\Formatter\FormatterInterface $formatter = null
+    ) {
+        static::$logger = $logger;
+        if (static::$logger === null) {
+            static::$logger = new \Monolog\Logger(self::CLASS . ' Log');
+        }
+
+        if ($handler !== null) {
+            static::$logger->pushHandler($handler);
+        }
+
+        if ($formatter !== null) {
+            foreach (static::$logger->getHandlers() as $handler) {
+                $handler->setFormatter($formatter);
+            }
+        }
+    }
+
+    /**
+     * Add logger using a given filename/format
+     *
+     * @param $filename
+     * @param string $format
+     */
+    public static function setSimpleLog($filename, $format = "%message%\n")
+    {
+        $handler = new \Monolog\Handler\StreamHandler($filename);
+        $handler->setFormatter(new \Monolog\Formatter\LineFormatter($format));
+
+        if (!static::$logger) {
+            self::setLogger(null, $handler);
+            return;
+        }
+
+        static::$logger->pushHandler($handler);
     }
 
     /**
@@ -363,7 +443,7 @@ class Client implements \GuzzleHttp\ClientInterface
      */
     protected function getHandlerOption($options)
     {
-        if ($this->isVerbose()) {
+        if ($this->isVerbose() || $this->isLogging()) {
             if (!$this->requests || !$this->history) {
                 $this->requests = [];
                 $this->history = Middleware::history($this->requests);
@@ -388,6 +468,64 @@ class Client implements \GuzzleHttp\ClientInterface
 
         return false;
     }
+
+    /**
+     * Log something
+     *
+     * @param \Exception|array $what
+     * @return void
+     */
+    protected function log($what)
+    {
+        if (!static::$logger) {
+            return;
+        }
+
+        if ($what instanceof \GuzzleHttp\Exception\RequestException) {
+            $what = ['request' => $what->getRequest(), 'response' => $what->getResponse()];
+        }
+        
+        if (is_array($what) && isset($what['request'])) {
+            $msg = [];
+            $statusCode = false;
+            
+            if ($what['request'] instanceof RequestInterface) {
+                $msg[] = $what['request']->getMethod();
+                $msg[] = $what['request']->getUri()->getPath();
+            }
+            
+            if (isset($what['response']) && $what['response'] instanceof ResponseInterface) {
+                $statusCode = $what['response']->getStatusCode();
+                ;
+                $header = $what['response']->getHeader('Content-Type');
+                    
+                $msg[] = $statusCode;
+                $msg[] = array_shift($header);
+            }
+            
+            $msg = implode(" ", $msg);
+
+            if ($statusCode) {
+                $type = substr($statusCode, 0, 1);
+                if (in_array($type, [4, 5])) {
+                    static::$logger->error($msg);
+                    return;
+                }
+
+                static::$logger->info($msg);
+                return;
+            }
+            
+            static::$logger->warning($msg);
+        }
+        
+        return;
+    }
+    
+    public function isLogging()
+    {
+        return static::$logger instanceof \Psr\Log\LoggerInterface;
+    }
     
     /**
      * Output JSON when verbose mode is turned on
@@ -395,7 +533,7 @@ class Client implements \GuzzleHttp\ClientInterface
      * @param $requests Array of requests captured by {@see GuzzleHttp\MiddleWare::history()}
      * @see \Akamai\Open\EdgeGrid\Client::setInstanceVerbose
      */
-    protected function verbose()
+    protected function verbose($lastRequest)
     {
         if (!$this->isVerbose()) {
             return;
@@ -417,9 +555,8 @@ class Client implements \GuzzleHttp\ClientInterface
             ];
         }
         
-        $lastRequest = end($this->requests);
         echo "{$colors['cyan']}===> [VERBOSE] Response: \n";
-        if ($lastRequest['response'] instanceof ResponseInterface) {
+        if (isset($lastRequest['response']) && $lastRequest['response'] instanceof ResponseInterface) {
             $body = trim($lastRequest['response']->getBody());
             $result = json_decode($body);
             if ($result !== null) {
