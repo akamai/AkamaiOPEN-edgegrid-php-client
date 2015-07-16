@@ -705,7 +705,7 @@ EOF;
         $history = Middleware::history($container);
 
         $handler = HandlerStack::create($mock);
-        $handler->push($history);
+        $handler->push($history, 'history');
         
         return $handler;
     }

@@ -32,7 +32,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "GuzzleHttp\\Tests\\": "vendor/guzzlehttp/guzzle/tests"
+            "GuzzleHttp\\Tests\\": "vendor/guzzlehttp/guzzle/tests",
+            "Akamai\\Open\\EdgeGrid\\Tests\\": "tests"
         }
     }
 }

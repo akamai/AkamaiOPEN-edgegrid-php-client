@@ -175,8 +175,6 @@ class Client implements \GuzzleHttp\ClientInterface
         // The only method that isn't a request-type method is getConfig
         // Don't create the auth header in that case
         if ($method != 'getConfig') {
-            #$options = [];
-
             list($path, $options, $httpMethod) = $this->handleArgs($method, $args);
 
             $this->optionsHandler->setPath($path)
