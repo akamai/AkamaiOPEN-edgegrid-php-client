@@ -443,25 +443,9 @@ class Authentication
         if ($section === null) {
             $section = 'default';
         }
-        
-        if ($path === null) {
-            if (isset($_SERVER['HOME']) && file_exists($_SERVER['HOME'] . '/.edgerc')) {
-                $path = $_SERVER['HOME'] . "/.edgerc";
-            } elseif (file_exists('./.edgerc')) {
-                $path = './.edgerc';
-            }
-        }
 
-        $file = !$path ? false : realpath($path);
-        if (!$file) {
-            throw new \Exception("File \"$path\" does not exist!");
-        }
+        $ini = self::parseEdgeRcFile($path);
 
-        if (!is_readable($file)) {
-            throw new \Exception("Unable to read .edgerc file!");
-        }
-
-        $ini = parse_ini_file($file, true, INI_SCANNER_RAW);
         if (!isset($ini[$section])) {
             throw new \Exception("Section \"$section\" does not exist!");
         }
@@ -482,5 +466,36 @@ class Authentication
         }
         
         return $auth;
+    }
+
+    /**
+     * Parse a .edgerc File
+     *
+     * @param $path
+     * @return array
+     * @throws \Exception
+     */
+    protected static function parseEdgeRcFile($path)
+    {
+        if ($path === null) {
+            if (isset($_SERVER['HOME']) && file_exists($_SERVER['HOME'] . '/.edgerc')) {
+                $path = $_SERVER['HOME'] . "/.edgerc";
+            } elseif (file_exists('./.edgerc')) {
+                $path = './.edgerc';
+            }
+        }
+
+        $file = !$path ? false : realpath($path);
+        if (!$file) {
+            throw new \Exception("File \"$path\" does not exist!");
+        }
+
+        if (!is_readable($file)) {
+            throw new \Exception("Unable to read .edgerc file!");
+        }
+
+        $ini = parse_ini_file($file, true, INI_SCANNER_RAW);
+        
+        return $ini;
     }
 }

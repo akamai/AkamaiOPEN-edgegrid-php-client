@@ -324,15 +324,11 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
             $auth = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile();
             $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Authentication::CLASS, $auth);
         } catch (\Exception $e) {
+            $this->assertEquals('Section "default" does not exist!', $e->getMessage());
+        } finally {
             if ($unlink) {
-                $this->assertEquals('Section "default" does not exist!', $e->getMessage());
-            } else {
-                throw $e;
+                unlink('./.edgerc');
             }
-        }
-        
-        if ($unlink) {
-            unlink('./.edgerc');
         }
     }
 
