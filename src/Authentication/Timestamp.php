@@ -24,7 +24,7 @@ class Timestamp
     protected $timestamp;
 
     /**
-     * @var \Akamai\Open\EdgeGrid\Client\Authentication\string \DateInterval spec
+     * @var string \DateInterval spec
      */
     protected $validFor = 'PT10S';
 

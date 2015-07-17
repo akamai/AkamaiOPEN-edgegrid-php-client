@@ -503,7 +503,7 @@ class Client implements \GuzzleHttp\ClientInterface
     /**
      * Output JSON when verbose mode is turned on
      *
-     * @param array $requests Array of requests captured by {@see GuzzleHttp\MiddleWare::history()}
+     * @param \GuzzleHttp\Psr7\Request $lastRequest The last request
      * @see \Akamai\Open\EdgeGrid\Client::setInstanceVerbose
      */
     protected function verbose($lastRequest)
