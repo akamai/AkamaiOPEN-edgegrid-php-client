@@ -89,18 +89,19 @@
                         ;
                     </li><li>protected <span title="Akamai\Open\EdgeGrid\Client\OptionsHandler">OptionsHandler</span> <a href="#members">$optionsHandler</a>;
                     </li><li>protected <span title="\Akamai\Open\EdgeGrid\Authentication">Authentication</span> <a href="#members">$authentication</a>;
-                    </li><li>protected boolean <a href="#members">$verbose</a> =
+                    </li><li>protected <span title="Akamai\Open\EdgeGrid\bool">bool</span> <a href="#members">$verbose</a> =
                         false;
-                    </li><li>protected boolean <a href="#members">$debug</a> =
+                    </li><li>protected <span title="Akamai\Open\EdgeGrid\bool">bool</span> <a href="#members">$debug</a> =
                         false;
-                    </li><li>protected boolean <a href="#members">$verboseOverride</a> =
+                    </li><li>protected <span title="Akamai\Open\EdgeGrid\bool">bool</span> <a href="#members">$verboseOverride</a> =
                         false;
-                    </li><li>protected boolean <a href="#members">$debugOverride</a> =
+                    </li><li>protected <span title="Akamai\Open\EdgeGrid\bool">bool</span> <a href="#members">$debugOverride</a> =
                         false;
-                    </li><li>protected static boolean <a href="#members">$staticVerbose</a> =
+                    </li><li>protected static <span title="Akamai\Open\EdgeGrid\bool">bool</span> <a href="#members">$staticVerbose</a> =
                         false;
-                    </li><li>protected static boolean <a href="#members">$staticDebug</a> =
+                    </li><li>protected static <span title="Akamai\Open\EdgeGrid\bool">bool</span> <a href="#members">$staticDebug</a> =
                         false;
+                    </li><li>protected static <span title="\Psr\Log\LoggerInterface">LoggerInterface</span> <a href="#members">$logger</a>;
                     </li><li>protected array <a href="#members">$requests</a> =
                         ;
                     </li><li>protected boolean <a href="#members">$history</a> =
@@ -117,9 +118,13 @@
                     </li><li>public $this <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/setTimeout.html">setTimeout</a>()
                     </li><li>public $this <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/setInstanceVerbose.html">setInstanceVerbose</a>()
                     </li><li>public $this <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/setInstanceDebug.html">setInstanceDebug</a>()
+                    </li><li>public static void <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/setLogger.html">setLogger</a>()
+                    </li><li>public static void <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/setSimpleLog.html">setSimpleLog</a>()
                     </li><li>public static void <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/setVerbose.html">setVerbose</a>()
                     </li><li>public static void <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/setDebug.html">setDebug</a>()
                     </li><li>protected HandlerStack|bool <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/getHandlerOption.html">getHandlerOption</a>()
+                    </li><li>protected void <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/log.html">log</a>()
+                    </li><li>public void <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/isLogging.html">isLogging</a>()
                     </li><li>protected void <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/verbose.html">verbose</a>()
                     </li><li>protected void <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/isVerbose.html">isVerbose</a>()
                     </li><li>protected array <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/handleArgs.html">handleArgs</a>()
@@ -147,13 +152,13 @@
         <table class="styled">
           <tr>
             <td>Methods</td>
-            <td class="percent">65.38%</td>
-            <td class="nummeric">17 / 26</td>
+            <td class="percent">63.33%</td>
+            <td class="nummeric">19 / 30</td>
           </tr>
           <tr>
             <td>Lines</td>
-            <td class="percent">90.95%</td>
-            <td class="nummeric">191 / 210</td>
+            <td class="percent">86.94%</td>
+            <td class="nummeric">213 / 245</td>
           </tr>
         </table>
         <h2 id="constants">Constants</h2>
@@ -184,12 +189,12 @@
             <li id="body"><strong>$body</strong>
                 —
                 string</li>
-            <li id="debug">
-              <strong>$debug</strong>
-            </li>
-            <li id="debugOverride">
-              <strong>$debugOverride</strong>
-            </li>
+            <li id="debug"><strong>$debug</strong>
+                —
+                <a title="Akamai\Open\EdgeGrid\bool" href="../classes/Akamai_Open_EdgeGrid_bool.html">Akamai\Open\EdgeGrid\bool</a></li>
+            <li id="debugOverride"><strong>$debugOverride</strong>
+                —
+                <a title="Akamai\Open\EdgeGrid\bool" href="../classes/Akamai_Open_EdgeGrid_bool.html">Akamai\Open\EdgeGrid\bool</a></li>
             <li id="guzzle"><strong>$guzzle</strong>
                 —
                 <a title="\GuzzleHttp\Client" href="../classes/_GuzzleHttp_Client.html">\GuzzleHttp\Client</a></li>
@@ -202,6 +207,9 @@
             <li id="history"><strong>$history</strong>
                 —
                 mixed</li>
+            <li id="logger"><strong>$logger</strong>
+                —
+                <a title="\Psr\Log\LoggerInterface" href="../classes/_Psr_Log_LoggerInterface.html">\Psr\Log\LoggerInterface</a></li>
             <li id="optionsHandler"><strong>$optionsHandler</strong>
                 —
                 <a title="Akamai\Open\EdgeGrid\Client\OptionsHandler" href="../classes/Akamai_Open_EdgeGrid_Client_OptionsHandler.html">Akamai\Open\EdgeGrid\Client\OptionsHandler</a></li>
@@ -211,18 +219,18 @@
             <li id="requests"><strong>$requests</strong>
                 —
                 array</li>
-            <li id="staticDebug">
-              <strong>$staticDebug</strong>
-            </li>
-            <li id="staticVerbose">
-              <strong>$staticVerbose</strong>
-            </li>
-            <li id="verbose">
-              <strong>$verbose</strong>
-            </li>
-            <li id="verboseOverride">
-              <strong>$verboseOverride</strong>
-            </li>
+            <li id="staticDebug"><strong>$staticDebug</strong>
+                —
+                <a title="Akamai\Open\EdgeGrid\bool" href="../classes/Akamai_Open_EdgeGrid_bool.html">Akamai\Open\EdgeGrid\bool</a></li>
+            <li id="staticVerbose"><strong>$staticVerbose</strong>
+                —
+                <a title="Akamai\Open\EdgeGrid\bool" href="../classes/Akamai_Open_EdgeGrid_bool.html">Akamai\Open\EdgeGrid\bool</a></li>
+            <li id="verbose"><strong>$verbose</strong>
+                —
+                <a title="Akamai\Open\EdgeGrid\bool" href="../classes/Akamai_Open_EdgeGrid_bool.html">Akamai\Open\EdgeGrid\bool</a></li>
+            <li id="verboseOverride"><strong>$verboseOverride</strong>
+                —
+                <a title="Akamai\Open\EdgeGrid\bool" href="../classes/Akamai_Open_EdgeGrid_bool.html">Akamai\Open\EdgeGrid\bool</a></li>
           </ul>
         </div>
         <h2 id="methods">Methods</h2>
@@ -242,6 +250,8 @@
             <li id="isVerbose">
               <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/isVerbose.html">isVerbose()</a>
             </li>
+            <li id="log"><a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/log.html">log()</a>
+                — Log something</li>
             <li id="normalizeArgs"><a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/normalizeArgs.html">normalizeArgs()</a>
                 — Normalize __call() arguments</li>
             <li id="normalizePath"><a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/normalizePath.html">normalizePath()</a>
@@ -259,6 +269,9 @@
                 — Factory method to create a client using credentials from `.edgerc`</li>
             <li id="getConfig"><a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/getConfig.html">getConfig()</a>
                 — Get a client configuration option.</li>
+            <li id="isLogging">
+              <a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/isLogging.html">isLogging()</a>
+            </li>
             <li id="request"><a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/request.html">request()</a>
                 — Create and send an HTTP request.</li>
             <li id="requestAsync"><a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/requestAsync.html">requestAsync()</a>
@@ -279,8 +292,12 @@
                 — Print HTTP requests/responses to STDOUT</li>
             <li id="setInstanceVerbose"><a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/setInstanceVerbose.html">setInstanceVerbose()</a>
                 — Print formatted JSON responses to STDOUT</li>
+            <li id="setLogger"><a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/setLogger.html">setLogger()</a>
+                — Set a PSR-3 compatible logger (or use monolog by default)</li>
             <li id="setMaxBodySize"><a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/setMaxBodySize.html">setMaxBodySize()</a>
                 — Set the max body size</li>
+            <li id="setSimpleLog"><a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/setSimpleLog.html">setSimpleLog()</a>
+                — Add logger using a given filename/format</li>
             <li id="setTimeout"><a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/setTimeout.html">setTimeout()</a>
                 — Set the HTTP request timeout</li>
             <li id="setVerbose"><a title="Akamai\Open\EdgeGrid\Client" href="../classes/Akamai_Open_EdgeGrid_Client/setVerbose.html">setVerbose()</a>
