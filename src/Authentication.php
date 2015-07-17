@@ -122,7 +122,7 @@ class Authentication
     protected function makeDataToSign($auth_header)
     {
         $query = '';
-        if ($this->options['query']) {
+        if (isset($this->options['query']) && $this->options['query']) {
             $query .= '?';
             if (is_string($this->options['query'])) {
                 $query .= $this->options['query'];
@@ -152,10 +152,13 @@ class Authentication
     protected function canonicalizeHeaders()
     {
         $canonical = [];
-        $headers = array_combine(
-            array_map('strtolower', array_keys($this->options['headers'])),
-            array_values($this->options['headers'])
-        );
+        $headers = [];
+        if (isset($this->options['headers'])) {
+            $headers = array_combine(
+                array_map('strtolower', array_keys($this->options['headers'])),
+                array_values($this->options['headers'])
+            );
+        }
 
         foreach ($this->headers_to_sign as $key) {
             $key = strtolower($key);
@@ -244,6 +247,16 @@ class Authentication
     {
         $this->httpMethod = $method;
         return $this;
+    }
+
+    /**
+     * Get the request host
+     *
+     * @return string
+     */
+    public function getHost()
+    {
+        return $this->host;
     }
 
     /**
@@ -417,5 +430,47 @@ class Authentication
     {
         $this->auth = compact('client_token', 'client_secret', 'access_token');
         return $this;
+    }
+    
+    public static function createFromEdgeRcFile($section = "default", $path = null)
+    {
+        if ($path === null) {
+            if (isset($_SERVER['HOME']) && file_exists($_SERVER['HOME'] . '/.edgerc')) {
+                $path = $_SERVER['HOME'] . "/.edgerc";
+            } elseif (file_exists('./.edgerc')) {
+                $path = './.edgerc';
+            }
+        }
+
+        $file = !$path ? false : realpath($path);
+        if (!$file) {
+            throw new \Exception("File \"$file\" does not exist!");
+        }
+
+        if (!is_readable($file)) {
+            throw new \Exception("Unable to read .edgerc file!");
+        }
+
+        $ini = parse_ini_file($file, true, INI_SCANNER_RAW);
+        if (!isset($ini[$section])) {
+            throw new \Exception("Section \"$section\" does not exist!");
+        }
+        
+        $auth = new static();
+        $auth->setAuth(
+            $ini[$section]['client_token'],
+            $ini[$section]['client_secret'],
+            $ini[$section]['access_token']
+        );
+        
+        if (isset($ini[$section]['host'])) {
+            $auth->setHost($ini[$section]['host']);
+        }
+        
+        if (isset($ini[$section]['max-size'])) {
+            $auth->setMaxBodySize($ini[$section]['max-size']);
+        }
+        
+        return $auth;
     }
 }

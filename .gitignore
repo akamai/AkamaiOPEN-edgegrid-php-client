@@ -2,7 +2,7 @@
 composer.phar
 vendor/
 build/
-akamai-open-edgegrid-client.phar
+akamai-open-edgegrid-client*.phar
 
 ### IntelliJ ###
 *.iml

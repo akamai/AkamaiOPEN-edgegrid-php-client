@@ -42,7 +42,7 @@ class NonceTest extends \PHPUnit_Framework_TestCase
         }
 
         $nonce = new \Akamai\Open\EdgeGrid\Authentication\Nonce();
-        $closure = function() {
+        $closure = function () {
             return $this->function;
         };
         $tester = $closure->bindTo($nonce, $nonce);

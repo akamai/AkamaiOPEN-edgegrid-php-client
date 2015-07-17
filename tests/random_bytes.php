@@ -22,9 +22,9 @@
 
 /**
  * random_bytes stub
- * 
+ *
  * @see Akamai\Open\EdgeGrid\Tests\Client\Authentication\NonceTest->testMakeNonceRandomBytes()
- * 
+ *
  * @param $size
  * @return string
  */

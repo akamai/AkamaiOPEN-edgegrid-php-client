@@ -41,7 +41,7 @@
           <li class="separator">
             <a title="Akamai\Open\EdgeGrid\Client" href="../../classes/Akamai_Open_EdgeGrid_Client.html">Client</a>
           </li>
-          <li class="separator">verbose</li>
+          <li class="separator">setLogger</li>
         </ul>
       </div>
       <nav class="box">
@@ -56,57 +56,62 @@
             <a href="#parameter">Parameter</a>
           </li>
           <li>
+            <a href="#return">Return</a>
+          </li>
+          <li>
             <a href="#tests">Tests</a>
           </li>
           <li>
-            <a href="../../source/Client.php.html#line511">Source</a>
+            <a href="../../source/Client.php.html#line353">Source</a>
           </li>
         </ul>
       </nav>
       <section>
-        <h1><small>Akamai\Open\EdgeGrid\Client::</small>verbose</h1>
-        <h4>Output JSON when verbose mode is turned on</h4>
+        <h1><small>Akamai\Open\EdgeGrid\Client::</small>setLogger</h1>
+        <h4>Set a PSR-3 compatible logger (or use monolog by default)</h4>
         <p/>
-        <ul/>
         <ul/>
         <h2 id="signature">Signature</h2>
         <div class="styled synopsis">
-          <code>protected function verbose(
-        $lastRequest )
+          <code>public function setLogger([<a title="\Psr\Log\LoggerInterface" href="../../classes/_Psr_Log_LoggerInterface.html">LoggerInterface</a>
+        $logger = null,
+            [
+        $handler = null,
+            [
+        $formatter = null]]] )
             </code>
         </div>
         <h2 id="parameterlist">Parameters</h2>
         <dl class="styled">
-          <dt><code>$lastRequest</code>
+          <dt><code>$logger</code>
+                —
+                object</dt>
+          <dd><br/><br/><br/>      </dd>
+          <dt><code>$handler</code>
                 —
                 </dt>
           <dd/>
+          <dt><code>$formatter</code>
+                —
+                </dt>
+          <dd/>
+        </dl>
+        <h2 id="return">Returns</h2>
+        <dl class="styled">
+          <dt>void</dt>
+          <dd><br/>
+        </dd>
         </dl>
         <h2 id="tests">Test Coverage</h2>
         <div class="styled">
           <h3>Information</h3>
           <ul class="styled">
-            <li>Coverage: 25/27 Lines (92.592592592593%)</li>
-            <li>Tests: 23</li>
-            <li>Passed: 23 (100%)</li>
+            <li>Coverage: 5/13 Lines (38.461538461538%)</li>
+            <li>Tests: 8</li>
+            <li>Passed: 8 (100%)</li>
           </ul>
           <h3>Tests</h3>
           <ul class="styled">
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — Akamai\Open\EdgeGrid\Tests\ClientTest::testMakeAuthHeader with data set #0</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — Akamai\Open\EdgeGrid\Tests\ClientTest::testDefaultTimeout</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — Akamai\Open\EdgeGrid\Tests\ClientTest::testTimeoutOption</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — Akamai\Open\EdgeGrid\Tests\ClientTest::testSetTimeout</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — Akamai\Open\EdgeGrid\Tests\ClientTest::testInstanceVerboseSingle</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — Akamai\Open\EdgeGrid\Tests\ClientTest::testInstanceVerboseMultiple</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — Akamai\Open\EdgeGrid\Tests\ClientTest::testInstanceDebugSingle</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — Akamai\Open\EdgeGrid\Tests\ClientTest::testStaticVerboseSingle</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — Akamai\Open\EdgeGrid\Tests\ClientTest::testStaticVerboseMultiple</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — Akamai\Open\EdgeGrid\Tests\ClientTest::testStaticDebugSingle</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — Akamai\Open\EdgeGrid\Tests\ClientTest::testVerboseOverrideSingle</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — Akamai\Open\EdgeGrid\Tests\ClientTest::testVerboseOverrideMultiple</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — Akamai\Open\EdgeGrid\Tests\ClientTest::testDebugOverrideSingle</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — Akamai\Open\EdgeGrid\Tests\ClientTest::testInstanceDebugOptionSingle</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — Akamai\Open\EdgeGrid\Tests\ClientTest::testNonApiCall</li>
             <li>[ <span class="testresult-PASSED">PASSED</span> ] — Akamai\Open\EdgeGrid\Tests\ClientTest::testLogging with data set #0</li>
             <li>[ <span class="testresult-PASSED">PASSED</span> ] — Akamai\Open\EdgeGrid\Tests\ClientTest::testLogging with data set #1</li>
             <li>[ <span class="testresult-PASSED">PASSED</span> ] — Akamai\Open\EdgeGrid\Tests\ClientTest::testLogging with data set #2</li>

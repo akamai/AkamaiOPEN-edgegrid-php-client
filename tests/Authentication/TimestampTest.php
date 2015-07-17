@@ -24,7 +24,8 @@ namespace Akamai\Open\EdgeGrid\Tests\Client\Authentication;
 class TimestampTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function testTimestampFormat() {
+    public function testTimestampFormat()
+    {
         $timestamp = new \Akamai\Open\EdgeGrid\Authentication\Timestamp();
         $tester = getPrivatePropertyTesterClosure($timestamp);
 
@@ -34,7 +35,8 @@ class TimestampTest extends \PHPUnit_Framework_TestCase
     }
 
 
-    public function testIsValid() {
+    public function testIsValid()
+    {
         $timestamp = new \Akamai\Open\EdgeGrid\Authentication\Timestamp();
         $this->assertTrue($timestamp->isValid());
         $timestamp->setValidFor('PT0S');

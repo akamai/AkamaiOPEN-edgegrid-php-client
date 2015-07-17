@@ -26,8 +26,21 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider createAuthHeaderDataProvider
      */
-    public function testCreateAuthHeader($auth, $body,  $expected, $headers, $headersToSign, $host, $maxBody, $method, $name, $nonce,  $path, $query, $timestamp)
-    {
+    public function testCreateAuthHeader(
+        $auth,
+        $body,
+        $expected,
+        $headers,
+        $headersToSign,
+        $host,
+        $maxBody,
+        $method,
+        $name,
+        $nonce,
+        $path,
+        $query,
+        $timestamp
+    ) {
         $this->setName($name);
         
         $mockTimestamp = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Timestamp::CLASS);
@@ -68,7 +81,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
             'headersToSign' => $testdata['headers_to_sign'],
             'nonce' => $testdata['nonce'],
             'timestamp' => $testdata['timestamp'],
-            'maxBody' => $testdata['max_body'], 
+            'maxBody' => $testdata['max_body'],
         ];
         
         foreach ($testdata['tests'] as $test) {
