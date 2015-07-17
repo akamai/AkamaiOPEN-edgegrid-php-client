@@ -40,12 +40,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         Client::setVerbose(false);
         Client::setDebug(false);
-        $closure = function () {
-            self::$logger = false;
-        };
-        
-        $reset = $closure->bindTo(new Client, new Client);
-        $reset();
     }
     
     /**
@@ -78,7 +72,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ])
         );
         
-        /* @var \GuzzleHttp\Client $client */
         $client->setAuth($options['client_token'], $options['client_secret'], $options['access_token']);
         $client->setMaxBodySize($options['max_body']);
 
@@ -106,6 +99,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $request = $container[0]['request'];
         $headers = $request->getHeaders();
         
+        $this->assertArrayHasKey('Authorization', $headers);
         $this->assertEquals(1, sizeof($headers['Authorization']));
         $this->assertEquals($result, $headers['Authorization'][0]);
     }
@@ -129,8 +123,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             \PHPUnit_Framework_Assert::readAttribute($authentication, 'auth')
         );
         $this->assertEquals(
-            'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
-            \PHPUnit_Framework_Assert::readAttribute($client, 'optionsHandler')->getHost()
+            'https://akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
+            $client->getConfig('base_uri')
         );
         $this->assertEquals(2048, \PHPUnit_Framework_Assert::readAttribute($authentication, 'max_body_size'));
     }
@@ -138,14 +132,12 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function testHostnameWithTrailingSlash()
     {
         $client = new \Akamai\Open\EdgeGrid\Client();
-        $closure = function () {
-            return $this->optionsHandler->getHost();
-        };
-        $tester = $closure->bindTo($client, $client);
-        
         $client->setHost('akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net/');
         
-        $this->assertEquals('akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net', $tester());
+        $this->assertEquals(
+            'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
+            $client->getConfig('headers')['Host']
+        );
     }
 
     public function testDefaultTimeout()
@@ -211,93 +203,32 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('timeout', $client->getConfig());
         $this->assertEquals(Client::DEFAULT_REQUEST_TIMEOUT, $client->getConfig('timeout'));
 
-        $client->setAuth('test', 'test', 'test');
-
         $client->get('/test', ['timeout' => 2]);
         $this->assertEquals(2, end($container)['options']['timeout']);
-
         $this->assertEquals(Client::DEFAULT_REQUEST_TIMEOUT, $client->getConfig('timeout'));
         
         $client->setTimeout(5);
         $client->get('/test');
         
-        $this->assertEquals(Client::DEFAULT_REQUEST_TIMEOUT, $client->getConfig('timeout'));
+        $this->assertEquals(5, $client->getConfig('timeout'));
         $this->assertEquals(5, end($container)['options']['timeout']);
-
-        $client->get('/test', ['timeout' => 2]);
-        $this->assertEquals(2, end($container)['options']['timeout']);
     }
     
-    public function testInstanceVerboseSingle()
+    public function testStaticDebugSingle()
     {
-        $handler = $this->getMockHandler([new Response(200, [], json_encode(['test' => 'data']))]);
+        $container = [];
+        $handler = $this->getMockHandler([new Response(200)], $container);
         $client = new Client(
             [
                 'base_uri' => 'http://example.org',
                 'handler' => $handler,
             ]
         );
-        $client->setAuth('test', 'test', 'test');
-        
-        $client->setInstanceVerbose(true);
-        
-        ob_start();
+
+        Client::setDebug(true);
+
         $client->get('/test');
-        $output = ob_get_clean();
-        
-        $expectedOutput = <<<EOF
-\x1b[36;01m===> [VERBOSE] Response: 
-\x1b[33;01m{
-    "test": "data"
-}\x1b[39;49;00m
-
-EOF;
-        
-        $this->assertEquals($expectedOutput, $output);
-    }
-
-    public function testInstanceVerboseMultiple()
-    {
-        $handler = $this->getMockHandler([
-            new Response(200, [], json_encode(['test' => 'data'])),
-            new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))
-        ]);
-        $client = new Client(
-            [
-                'base_uri' => 'http://example.org',
-                'handler' => $handler,
-            ]
-        );
-        $client->setAuth('test', 'test', 'test');
-
-        $client->setInstanceVerbose(true);
-
-        ob_start();
-        $client->get('/test');
-        $client->get('/test2');
-        $output = ob_get_clean();
-
-        $expectedOutput = <<<EOF
-\x1b[36;01m===> [VERBOSE] Response: 
-\x1b[33;01m{
-    "test": "data"
-}\x1b[39;49;00m
-\x1b[36;01m===> [VERBOSE] Response: 
-\x1b[33;01m{
-    "test": "data2",
-    "0": [
-        "foo",
-        "bar"
-    ],
-    "1": false,
-    "2": null,
-    "3": 123,
-    "4": 0.123
-}\x1b[39;49;00m
-
-EOF;
-
-        $this->assertEquals($expectedOutput, $output);
+        $this->assertEquals(true, is_resource(end($container)['options']['debug']));
     }
     
     public function testInstanceDebugSingle()
@@ -314,147 +245,7 @@ EOF;
 
         $client->setInstanceDebug(true);
         $client->get('/test');
-        $this->assertEquals(true, end($container)['options']['debug']);
-    }
-
-    public function testStaticVerboseSingle()
-    {
-        $handler = $this->getMockHandler([new Response(200, [], json_encode(['test' => 'data']))]);
-        $client = new Client(
-            [
-                'base_uri' => 'http://example.org',
-                'handler' => $handler,
-            ]
-        );
-        $client->setAuth('test', 'test', 'test');
-
-        Client::setVerbose(true);
-
-        ob_start();
-        $client->get('/test');
-        $output = ob_get_clean();
-
-        $expectedOutput = <<<EOF
-\x1b[36;01m===> [VERBOSE] Response: 
-\x1b[33;01m{
-    "test": "data"
-}\x1b[39;49;00m
-
-EOF;
-
-        $this->assertEquals($expectedOutput, $output);
-    }
-
-    public function testStaticVerboseMultiple()
-    {
-        $handler = $this->getMockHandler([
-            new Response(200, [], json_encode(['test' => 'data'])),
-            new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))
-        ]);
-        $client = new Client(
-            [
-                'base_uri' => 'http://example.org',
-                'handler' => $handler,
-            ]
-        );
-        $client->setAuth('test', 'test', 'test');
-
-        Client::setVerbose(true);
-
-        ob_start();
-        $client->get('/test');
-        $client->get('/test2');
-        $output = ob_get_clean();
-
-        $expectedOutput = <<<EOF
-\x1b[36;01m===> [VERBOSE] Response: 
-\x1b[33;01m{
-    "test": "data"
-}\x1b[39;49;00m
-\x1b[36;01m===> [VERBOSE] Response: 
-\x1b[33;01m{
-    "test": "data2",
-    "0": [
-        "foo",
-        "bar"
-    ],
-    "1": false,
-    "2": null,
-    "3": 123,
-    "4": 0.123
-}\x1b[39;49;00m
-
-EOF;
-
-        $this->assertEquals($expectedOutput, $output);
-    }
-
-    public function testStaticDebugSingle()
-    {
-        $container = [];
-        $handler = $this->getMockHandler([new Response(200)], $container);
-        $client = new Client(
-            [
-                'base_uri' => 'http://example.org',
-                'handler' => $handler,
-            ]
-        );
-        $client->setAuth('test', 'test', 'test');
-
-        Client::setDebug(true);
-        
-        $client->get('/test');
-        $this->assertEquals(true, end($container)['options']['debug']);
-    }
-
-    public function testVerboseOverrideSingle()
-    {
-        $handler = $this->getMockHandler([new Response(200, [], json_encode(['test' => 'data']))]);
-        $client = new Client(
-            [
-                'base_uri' => 'http://example.org',
-                'handler' => $handler,
-            ]
-        );
-        $client->setAuth('test', 'test', 'test');
-
-        Client::setVerbose(true);
-        $client->setInstanceVerbose(false);
-
-        ob_start();
-        $client->get('/test');
-        $output = ob_get_clean();
-
-        $expectedOutput = "";
-
-        $this->assertEquals($expectedOutput, $output);
-    }
-
-    public function testVerboseOverrideMultiple()
-    {
-        $handler = $this->getMockHandler([
-            new Response(200, [], json_encode(['test' => 'data'])),
-            new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))
-        ]);
-        $client = new Client(
-            [
-                'base_uri' => 'http://example.org',
-                'handler' => $handler,
-            ]
-        );
-        $client->setAuth('test', 'test', 'test');
-
-        Client::setVerbose(true);
-        $client->setInstanceVerbose(false);
-
-        ob_start();
-        $client->get('/test');
-        $client->get('/test2');
-        $output = ob_get_clean();
-
-        $expectedOutput = "";
-
-        $this->assertEquals($expectedOutput, $output);
+        $this->assertEquals(true, is_resource(end($container)['options']['debug']));
     }
 
     public function testDebugOverrideSingle()
@@ -473,7 +264,7 @@ EOF;
         $client->setInstanceDebug(false);
 
         $client->get('/test');
-        $this->assertEquals(false, end($container)['options']['debug']);
+        $this->assertEquals(false, is_resource(end($container)['options']['debug']));
     }
 
     public function testInstanceDebugOptionSingle()
@@ -489,7 +280,7 @@ EOF;
         $client->setAuth('test', 'test', 'test');
 
         $client->get('/test', ['debug' => true]);
-        $this->assertEquals(true, end($container)['options']['debug']);
+        $this->assertEquals(true, is_resource(end($container)['options']['debug']));
 
         $client = new Client(
             [
@@ -500,7 +291,8 @@ EOF;
         $client->setAuth('test', 'test', 'test');
         $client->setDebug(true);
         $client->get('/test', ['debug' => false]);
-        $this->assertEquals(false, end($container)['options']['debug']);
+        $this->assertEquals(false, is_resource(end($container)['options']['debug']));
+        $this->assertFalse(end($container)['options']['debug']);
 
         $client = new Client(
             [
@@ -511,7 +303,8 @@ EOF;
         $client->setAuth('test', 'test', 'test');
         Client::setDebug(true);
         $client->get('/test', ['debug' => false]);
-        $this->assertEquals(false, end($container)['options']['debug']);
+        $this->assertEquals(false, is_resource(end($container)['options']['debug']));
+        $this->assertFalse(end($container)['options']['debug']);
     }
     
     public function testNonApiCall()
@@ -552,7 +345,7 @@ EOF;
             ]
         );
         
-        $uri = \PHPUnit_Framework_Assert::readAttribute($client, 'guzzle')->getConfig('base_uri');
+        $uri = $client->getConfig('base_uri');
         $this->assertEquals('https', parse_url($uri, PHP_URL_SCHEME));
     }
 
@@ -562,9 +355,9 @@ EOF;
      * @param $expected
      * @dataProvider loggingProvider
      */
-    public function testLogging($method, $response, $path, $expected)
+    public function testLogging($method, $responses, $path, $expected)
     {
-        $handler = $this->getMockHandler([$response]);
+        $handler = $this->getMockHandler($responses);
         $client = new Client(
             [
                 'base_uri' => 'http://example.org',
@@ -572,17 +365,18 @@ EOF;
             ]
         );
 
-        list($fp, $logger) = $this->getMockLocker();
-        $client->setLogger($logger);
+        $logHandler = $this->setLogger($client);
         
         try {
             $client->{$method}($path);
         } catch (\Exception $e) {
         }
-        
-        rewind($fp);
-        $this->assertEquals($expected, fgets($fp));
-        fclose($fp);
+
+        $records = [];
+        foreach ($logHandler->getRecords() as $record) {
+            $records[] = $record['message'];
+        }
+        $this->assertEquals($expected, $records);
     }
     
     public function testLoggingRedirect()
@@ -592,8 +386,6 @@ EOF;
             new Response(200, ['Content-Type' => 'application/json'])
         ]);
         
-        $handler->push(\GuzzleHttp\Middleware::redirect());
-        
         $client = new Client(
             [
                 'base_uri' => 'http://example.org',
@@ -601,17 +393,76 @@ EOF;
             ]
         );
         
-        list($fp, $logger) = $this->getMockLocker();
-        $client::setLogger($logger);
+        $logHandler = $this->setLogger($client);
         
         try {
             $client->get("/redirect");
         } catch (\Exception $e) {
         }
+
+        $records = [];
+        foreach ($logHandler->getRecords() as $record) {
+            $records[] = $record['message'];
+        }
+        $this->assertEquals(["GET /redirect 301 ", "GET /redirected 200 application/json"], $records);
+    }
+    
+    public function testLoggingDefault()
+    {
+        $client = new Client();
+        $client->setLogger();
         
-        rewind($fp);
-        $this->assertEquals("GET /redirected 200 application/json\n", fgets($fp));
-        fclose($fp);
+        $logger = \PHPUnit_Framework_Assert::readAttribute($client, 'logger');
+        $this->assertInstanceOf(
+            \Closure::CLASS,
+            $logger
+        );
+        
+        $reflection = new \ReflectionFunction($logger);
+        $args = $reflection->getParameters();
+        $this->assertTrue(array_shift($args)->isCallable());
+    }
+
+    public function testLoggingRequestHandler()
+    {
+        $handler = $this->getMockHandler([
+            new Response(200, ['Content-Type' => 'application/json'])
+        ]);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+            ]
+        );
+        $logHandler = $this->setLogger($client);
+
+        $client->get("/test", ['handler' => $handler]);
+        $records = [];
+        foreach ($logHandler->getRecords() as $record) {
+            $records[] = $record['message'];
+        }
+        $this->assertEquals(["GET /test 200 application/json"], $records);
+    }
+    
+    public function testSetSimpleLog()
+    {
+        $handler = $this->getMockHandler([
+            new Response(200, ['Content-Type' => 'application/json'])
+        ]);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+
+        $fp = fopen("php://memory", "w+");
+        $client->setSimpleLog($fp, "{method} {target} {code}");
+        $client->get("/test");
+
+        fseek($fp, 0);
+        $this->assertEquals("GET /test 200", fgets($fp));
     }
     
     public function makeAuthHeaderProvider()
@@ -657,50 +508,68 @@ EOF;
         return [
             [
                 'get',
-                new Response(200),
+                [new Response(200)],
                 '/test',
-                "GET /test 200 \n"
+                [
+                    "GET /test 200 "
+                ]
             ],
             [
                 'get',
-                new Response(404),
+                [new Response(404)],
                 '/error',
-                "GET /error 404 \n"
+                [
+                    "GET /error 404 "
+                ]
             ],
             [
                 'post',
-                new Response(500),
+                [new Response(500)],
                 '/error',
-                "POST /error 500 \n"
+                [
+                    "POST /error 500 "
+                ]
             ],
             [
                 'put',
-                new Response(200, ['Content-Type' => 'application/json']),
+                [new Response(200, ['Content-Type' => 'application/json'])],
                 '/test',
-                "PUT /test 200 application/json\n"
+                [
+                    "PUT /test 200 application/json"
+                ]
             ],
             [
                 'options',
-                new Response(405, ['Content-Type' => 'application/json']),
+                [new Response(405, ['Content-Type' => 'application/json'])],
                 '/error',
-                "OPTIONS /error 405 application/json\n"
+                [
+                    "OPTIONS /error 405 application/json"
+                ]
             ],
             [
                 'get',
-                new Response(503, ['Content-Type' => 'text/csv']),
+                [new Response(503, ['Content-Type' => 'text/csv'])],
                 '/error',
-                "GET /error 503 text/csv\n"
+                [
+                    "GET /error 503 text/csv"
+                ]
             ],
             [
                 'get',
-                new Response(301, ['Location' => '/redirect']),
+                [
+                    new Response(301, ['Location' => '/redirect']),
+                    new Response(200)
+                ],
                 '/notthere',
-                "GET /notthere 301 \n",
+                [
+                    "GET /notthere 301 ",
+                    "GET /redirect 200 ",
+                ]
             ]
         ];
     }
 
-    protected function getMockHandler($requests, array &$container = null)
+    public function getMockHandler($requests, array &$container = null)
     {
         $mock = new MockHandler($requests);
         $container = [];
@@ -713,14 +582,14 @@ EOF;
     }
 
     /**
-     * @return array
+     * @return Client
      */
-    protected function getMockLocker()
+    protected function setLogger(Client $client)
     {
-        $fp = fopen('php://memory', 'a+');
-        $streamHandler = new \Monolog\Handler\StreamHandler($fp);
-        $streamHandler->setFormatter(new \Monolog\Formatter\LineFormatter("%message%\n"));
-        $logger = new \Monolog\Logger('Test Logger', [$streamHandler]);
-        return array($fp, $logger);
+        $handler = new \Monolog\Handler\TestHandler();
+        $logger = new \Monolog\Logger("Test Logger", [$handler]);
+        $client->setLogger($logger, "{method} {target} {code} {res_header_content-type}");
+        
+        return $handler;
     }
 }

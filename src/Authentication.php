@@ -40,9 +40,9 @@ class Authentication
     protected $host;
 
     /**
-     * @var array Guzzle options
+     * @var array Guzzle config
      */
-    protected $options = [];
+    protected $config = [];
 
     /**
      * @var string Request path
@@ -122,12 +122,12 @@ class Authentication
     protected function makeDataToSign($auth_header)
     {
         $query = '';
-        if (isset($this->options['query']) && $this->options['query']) {
+        if (isset($this->config['query']) && $this->config['query']) {
             $query .= '?';
-            if (is_string($this->options['query'])) {
-                $query .= $this->options['query'];
+            if (is_string($this->config['query'])) {
+                $query .= $this->config['query'];
             } else {
-                $query .= http_build_query($this->options['query'], null, '&', PHP_QUERY_RFC3986);
+                $query .= http_build_query($this->config['query'], null, '&', PHP_QUERY_RFC3986);
             }
         }
 
@@ -153,10 +153,10 @@ class Authentication
     {
         $canonical = [];
         $headers = [];
-        if (isset($this->options['headers'])) {
+        if (isset($this->config['headers'])) {
             $headers = array_combine(
-                array_map('strtolower', array_keys($this->options['headers'])),
-                array_values($this->options['headers'])
+                array_map('strtolower', array_keys($this->config['headers'])),
+                array_values($this->config['headers'])
             );
         }
 
@@ -193,11 +193,11 @@ class Authentication
      */
     protected function makeContentHash()
     {
-        if (empty($this->options['body'])) {
+        if (empty($this->config['body'])) {
             return '';
         } else {
             // Just substr, it'll return as much as it can
-            return $this->makeBase64Sha256(substr($this->options['body'], 0, $this->max_body_size));
+            return $this->makeBase64Sha256(substr($this->config['body'], 0, $this->max_body_size));
         }
     }
 
@@ -240,7 +240,7 @@ class Authentication
     /**
      * Set request HTTP method
      *
-     * @param mixed $method
+     * @param string $method
      * @return Authentication
      */
     public function setHttpMethod($method)
@@ -291,17 +291,17 @@ class Authentication
     }
 
     /**
-     * Set Guzzle options
+     * Set Guzzle config
      *
      * This is a convenient way to pass in the
      * body/query/headers options
      *
-     * @param mixed $options
+     * @param mixed $config
      * @return Authentication
      */
-    public function setOptions($options)
+    public function setConfig(array $config)
     {
-        $this->options = array_merge($this->options, $options);
+        $this->config = array_merge($this->config, $config);
         return $this;
     }
 
@@ -321,7 +321,7 @@ class Authentication
             parse_str($query, $query_args);
             $query = http_build_query($query_args, null, '&', PHP_QUERY_RFC3986);
         }
-        $this->options['query'] = $query;
+        $this->config['query'] = $query;
         return $this;
     }
 
@@ -333,7 +333,7 @@ class Authentication
      */
     public function setBody($body)
     {
-        $this->options['body'] = $body;
+        $this->config['body'] = $body;
         return $this;
     }
 
@@ -341,11 +341,11 @@ class Authentication
      * Set request headers
      *
      * @param array $headers
-     * @returrn $this
+     * @return $this
      */
     public function setHeaders(array $headers)
     {
-        $this->options['headers'] = $headers;
+        $this->config['headers'] = $headers;
         return $this;
     }
 

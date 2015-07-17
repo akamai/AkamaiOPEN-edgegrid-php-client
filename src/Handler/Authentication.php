@@ -13,7 +13,6 @@
  * @link https://developer.akamai.com
  * @link https://developer.akamai.com/introduction/Client_Auth.html
  */
-
 namespace Akamai\Open\EdgeGrid\Handler;
 
 use Akamai\Open\EdgeGrid\Authentication as Signer;
@@ -23,6 +22,26 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use GuzzleHttp\Middleware;
 
+/**
+ * Akamai {OPEN} EdgeGrid Auth Guzzle Middleware Handler
+ *
+ * @package Akamai {OPEN} EdgeGrid Auth
+ *
+ * @method $this createAuthHeader()
+ * @method $this setHttpMethod($method)
+ * @method $this getHost()
+ * @method $this setHost($host)
+ * @method $this setConfig(array $config)
+ * @method $this setQuery($query, $ensure_encoding = true)
+ * @method $this setBody($body)
+ * @method $this setHeaders(array $headers) *
+ * @method $this setPath($path)
+ * @method $this setTimestamp($timestamp = null)
+ * @method $this setNonce($nonce = null)
+ * @method $this setHeadersToSign($headers_to_sign)
+ * @method $this setMaxBodySize($max_body_size)
+ * @method $this setAuth($client_token, $client_secret, $access_token)
+ */
 class Authentication
 {
     /**
@@ -42,11 +61,11 @@ class Authentication
     {
         return function (
             RequestInterface $request,
-            array $options
+            array $config
         ) use ($handler) {
             if ($request->getUri()->getScheme() !== 'https' ||
                 strpos($request->getUri()->getHost(), 'akamaiapis.net') === false) {
-                return $handler($request, $options);
+                return $handler($request, $config);
             }
 
             if (!$this->signer) {
@@ -62,13 +81,25 @@ class Authentication
 
             $request = $request->withHeader('Authorization', $this->signer->createAuthHeader());
             
-            return $handler($request, $options);
+            return $handler($request, $config);
         };
     }
-    
+
+    /**
+     * Proxy to the underlying signer object
+     *
+     * @param $method
+     * @param $args
+     * @return mixed
+     */
     public function __call($method, $args)
     {
-        return call_user_func_array([$this->signer, $method], $args);
+        $return = call_user_func_array([$this->signer, $method], $args);
+        if ($return == $this->signer) {
+            return $this;
+        }
+        
+        return $return;
     }
     
     public static function createFromEdgeRcFile($section = "default", $file = null)
