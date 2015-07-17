@@ -1,6 +1,6 @@
 <?php
 /**
- * Akamai {OPEN} EdgeGrid Client for PHP
+ * Akamai {OPEN} EdgeGrid Auth for PHP
  *
  * Akamai\Open\EdgeGrid\Client wraps GuzzleHttp\Client
  * providing request authentication/signing for Akamai
@@ -27,9 +27,13 @@ use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
+use Akamai\Open\EdgeGrid\Client\OptionsHandler;
+use Akamai\Open\EdgeGrid\Authentication;
+use Akamai\Open\EdgeGrid\Authentication\Timestamp;
+use Akamai\Open\EdgeGrid\Authentication\Nonce;
 
 /**
- * Class Client
+ * Akamai {OPEN} EdgeGrid Client for PHP
  *
  * Akamai {OPEN} EdgeGrid Client for PHP. Based on
  * [Guzzle](http://guzzlephp.org).
@@ -44,32 +48,6 @@ class Client implements \GuzzleHttp\ClientInterface
     const DEFAULT_REQUEST_TIMEOUT = 10;
 
     /**
-     * @var boolean Print JSON responses to STDOUT
-     */
-    protected static $verbose = false;
-
-    /**
-     * @var boolean Print HTTP request/responses to STDOUT
-     */
-    protected static $debug = false;
-
-    /**
-     * @var array An array of requests
-     */
-    protected static $requests = false;
-
-    /**
-     * @var mixed History middleware to track requests
-     * @see \GuzzleHttp\Middleware::history()
-     */
-    protected static $history = false;
-
-    /**
-     * @var \GuzzleHttp\HandlerStack The handler stack for middleware
-     */
-    protected static $handlerStack = false;
-    
-    /**
      * @var \GuzzleHttp\Client Proxied GuzzleHttp\Client
      */
     protected $guzzle;
@@ -78,21 +56,6 @@ class Client implements \GuzzleHttp\ClientInterface
      * @var array Authentication credentials
      */
     protected $auth = [];
-
-    /**
-     * @var string Akamai {OPEN} API host
-     */
-    protected $host;
-
-    /**
-     * @var int Timeout in seconds
-     */
-    protected $timeout_in_seconds = self::DEFAULT_REQUEST_TIMEOUT;
-
-    /**
-     * @var int Maximum body size for signing
-     */
-    protected $max_body_size = 131072;
 
     /**
      * @var array Request query string
@@ -110,117 +73,65 @@ class Client implements \GuzzleHttp\ClientInterface
     protected $headers = [];
 
     /**
-     * @var array A list of headers to be included in the signature
+     * @var Client\OptionsHandler
      */
-    protected $headers_to_sign = [];
+    protected $optionsHandler;
 
     /**
-     * @var Client\Timestamp Request timestamp
+     * @var \Akamai\Open\EdgeGrid\Authentication
      */
-    protected $timestamp;
+    protected $authentication;
+
+    protected $verbose = false;
+    protected $debug = false;
+    protected $verboseOverride = false;
+    protected $debugOverride = false;
+    protected static $staticVerbose = false;
+    protected static $staticDebug = false;
 
     /**
-     * @var Client\Nonce Requent nonce
+     * @var array An array of requests
      */
-    protected $nonce;
+    protected $requests = [];
 
+    /**
+     * @var mixed History middleware to track requests
+     * @see \GuzzleHttp\Middleware::history()
+     */
+    protected $history = false;
+
+    /**
+     * @var \GuzzleHttp\HandlerStack The handler stack for middleware
+     */
+    protected $handlerStack = false;
+    
     /**
      * \GuzzleHttp\Client-compatible constructor
      *
      * @param array $options Options array
-     * @param Client\Timestamp|null $timestamp inject a timestamp (for testing)
-     * @param Client\Nonce|null $nonce inject a nonce (for testing)
+     * @param OptionsHandler|null $optionsHandler
+     * @param Authentication|null $authentication
      */
-    public function __construct($options = [], Client\Timestamp $timestamp = null, Client\Nonce $nonce = null)
-    {
-        if (isset($options['base_uri']) && strpos($options['base_uri'], '://') === false) {
-            $options['base_uri'] = 'https://' . $options['base_uri'];
+    public function __construct(
+        $options = [],
+        OptionsHandler $optionsHandler = null,
+        Authentication $authentication = null
+    ) {
+        $this->authentication = $authentication;
+        if ($authentication === null) {
+            $this->authentication = new Authentication();
         }
-        
-        if (!isset($options['timeout'])) {
-            $options['timeout'] = $this->timeout_in_seconds;
-        } else {
-            $this->timeout_in_seconds = $options['timeout'];
+
+        $this->optionsHandler = $optionsHandler;
+        if ($optionsHandler === null) {
+            $this->optionsHandler = new OptionsHandler($this->authentication);
         }
-        
+
+        $this->optionsHandler->setAuthentication($this->authentication);
+
+        $options = $this->handleOptions($options);
+
         $this->guzzle = new \GuzzleHttp\Client($options);
-        
-        if (isset($options['base_uri'])) {
-            $this->setHost($options['base_uri']);
-        }
-        
-        $this->timestamp = $timestamp;
-        if ($timestamp === null) {
-            $this->timestamp = new Client\Timestamp;
-        }
-        
-        $this->nonce = $nonce;
-        if ($nonce === null) {
-            $this->nonce = new Client\Nonce();
-        }
-    }
-
-    /**
-     * Set Akamai EdgeGrid Authentication Tokens/Secret
-     *
-     * @param string $client_token
-     * @param string $client_secret
-     * @param string $access_token
-     */
-    public function setAuth($client_token, $client_secret, $access_token)
-    {
-        $this->auth = compact('client_token', 'client_secret', 'access_token');
-    }
-
-    /**
-     * Set Akamai EdgeGrid API host
-     *
-     * @param $host
-     */
-    public function setHost($host)
-    {
-        if (strpos($host, '://') !== false) {
-            $host = parse_url($host, PHP_URL_HOST);
-        }
-        
-        if (substr($host, -1) == '/') {
-            $host = substr($host, 0, -1);
-        }
-        
-        $this->host = $host;
-    }
-
-    /**
-     * Specify the headers to include when signing the request
-     *
-     * This is specified by the API, currently no APIs use this
-     * feature.
-     *
-     * @param array $headers
-     */
-    public function setHeadersToSign(array $headers)
-    {
-        $this->headers_to_sign = $headers;
-    }
-
-    /**
-     * Set the max body size
-     *
-     * @param int $max_body_size
-     */
-    public function setMaxBodySize($max_body_size)
-    {
-        $this->max_body_size = $max_body_size;
-    }
-
-    /**
-     * Set the HTTP request timeout
-     *
-     * @param $timeout_in_seconds
-     */
-    public function setTimeout($timeout_in_seconds)
-    {
-        $this->timeout_in_seconds = $timeout_in_seconds;
     }
 
     /**
@@ -236,100 +147,45 @@ class Client implements \GuzzleHttp\ClientInterface
         // The only method that isn't a request-type method is getConfig
         // Don't create the auth header in that case
         if ($method != 'getConfig') {
-            $options = [];
+            #$options = [];
+
+            list($path, $options, $httpMethod) = $this->handleArgs($method, $args);
+
+            $this->optionsHandler->setPath($path)
+                ->setOptions($options);
             
-            if (!empty($this->auth)) {
-                $httpMethod = str_replace('async', '', $method);
+            $this->authentication->setHttpMethod($httpMethod)
+                ->setHost($this->optionsHandler->getHost())
+                ->setPath($path);
 
-                if ($httpMethod != 'request') {
-                    $path = &$args[0];
-
-                    if (isset($args[1])) {
-                        $options = &$args[1];
-                    } else {
-                        $args[1] = &$options;
-                    }
-                } elseif ($httpMethod == 'send') {
-                    // PSR-7
-                    /**
-                     * @todo Add the request headers/body/auth to the PSR-7 Request
-                     */
-                    throw new \RuntimeException("Not Implemented");
-                } else {
-                    $httpMethod = $args[0];
-                    $path = &$args[1];
-
-                    if (isset($args[2])) {
-                        $options = &$args[2];
-                    } else {
-                        $args[2] = &$options;
-                    }
-                }
-
-                $this->query = isset($options['query']) ? $options['query'] : [];
-                $this->body = isset($options['body']) ? $options['body'] : $this->body;
-                $this->body = isset($options['form_params']) ? http_build_query($options['form_params']) : $this->body;
-                $this->headers = isset($options['headers']) ? $options['headers'] : [];
-
-                if (isset($options['base_uri'])) {
-                    $this->setHost($options['base_uri']);
-                } elseif (isset($this->host)) {
-                    $options['base_uri'] = 'https://' . $this->host;
-                } else {
-                    throw new \Exception("No Host set");
-                }
-
-                if (isset($options['headers']['Host'])) {
-                    $this->setHost($options['headers']['Host']);
-                }
-
-                if ($query = parse_url($path, PHP_URL_QUERY)) {
-                    parse_str($query, $this->query);
-                    $path = str_replace('?' . $query, '', $path);
-                }
-
-                if (strpos($options['base_uri'], 'https://') !== false &&
-                    strpos($options['base_uri'], 'akamaiapis.net') !== false) {
-                    $options['headers']['Authorization'] = $this->createAuthHeader($httpMethod, $path);
-                }
+            if (isset($options['timestamp'])) {
+                $this->authentication->setTimestamp($options['timestamp']);
+            } elseif (!$this->guzzle->getConfig('timestamp')) {
+                $this->authentication->setTimestamp();
             }
-            
-            if (self::$verbose) {
-                self::$requests = [];
-                self::$history = Middleware::history(self::$requests);
-                
-                if (!isset($options['handler'])) {
-                    if ($handler = $this->guzzle->getConfig('handler')) {
-                        $handler->push(self::$history);
-                    } else {
-                        self::$handlerStack = HandlerStack::create();
-                        self::$handlerStack->push(self::$history);
 
-                        $options['handler'] = self::$handlerStack;
-                    }
-                } else {
-                    $options['handler']->push(self::$history);
-                }
+            if (isset($options['nonce'])) {
+                $this->authentication->setNonce($options['nonce']);
             }
-            
-            if (self::$debug) {
-                $options['debug'] = true;
+
+            $options = $this->optionsHandler->getOptions();
+
+            if ($handler = $this->getHandlerOption($options)) {
+                $options['handler'] = $handler;
             }
-            
-            if (!isset($options['timeout'])) {
-                $options['timeout'] = $this->timeout_in_seconds;
-            }
+
+            $options['debug'] = $this->getDebugOption($options);
+
+            $args = $this->normalizeArgs($args, $path, $options, $method);
         }
         
         try {
             $return = call_user_func_array([$this->guzzle, $method], $args);
         } finally {
-            $this->query = [];
-            $this->body = '';
-            $this->headers = [];
+            $this->cleanup();
             
-            if (self::$verbose && isset($httpMethod)) {
-                static::verbose(self::$requests);
+            if (isset($httpMethod)) {
+                $this->verbose();
             }
         }
         
@@ -385,13 +241,108 @@ class Client implements \GuzzleHttp\ClientInterface
     }
 
     /**
+     * Set Akamai {OPEN} Authentication Credentials
+     *
+     * @param $client_token
+     * @param $client_secret
+     * @param $access_token
+     * @return $this
+     */
+    public function setAuth($client_token, $client_secret, $access_token)
+    {
+        $this->authentication->setAuth($client_token, $client_secret, $access_token);
+        
+        return $this;
+    }
+
+    /**
+     * Specify the headers to include when signing the request
+     *
+     * This is specified by the API, currently no APIs use this
+     * feature.
+     *
+     * @param array $headers
+     * @return $this
+     */
+    public function setHeadersToSign(array $headers)
+    {
+        $this->authentication->setHeadersToSign($headers);
+
+        return $this;
+    }
+
+    /**
+     * Set the max body size
+     *
+     * @param int $max_body_size
+     * @return $this
+     */
+    public function setMaxBodySize($max_body_size)
+    {
+        $this->authentication->setMaxBodySize($max_body_size);
+
+        return $this;
+    }
+
+    /**
+     * Set Request Host
+     *
+     * @param $host
+     * @return $this
+     */
+    public function setHost($host)
+    {
+        $this->optionsHandler->setHost($host);
+        
+        return $this;
+    }
+
+    /**
+     * Set the HTTP request timeout
+     *
+     * @param $timeout_in_seconds
+     * @return $this
+     */
+    public function setTimeout($timeout_in_seconds)
+    {
+        $this->optionsHandler->setTimeout($timeout_in_seconds);
+
+        return $this;
+    }
+    /**
+     * Print formatted JSON responses to STDOUT
+     *
+     * @param $enable
+     * @return $this
+     */
+    public function setInstanceVerbose($enable)
+    {
+        $this->verboseOverride = true;
+        $this->verbose = $enable;
+        return $this;
+    }
+
+    /**
+     * Print HTTP requests/responses to STDOUT
+     *
+     * @param $enable
+     * @return $this
+     */
+    public function setInstanceDebug($enable)
+    {
+        $this->debugOverride = true;
+        $this->debug = $enable;
+        return $this;
+    }
+
+    /**
      * Print formatted JSON responses to STDOUT
      *
      * @param $enable
      */
     public static function setVerbose($enable)
     {
-        self::$verbose = $enable;
+        self::$staticVerbose = $enable;
     }
 
     /**
@@ -401,17 +352,55 @@ class Client implements \GuzzleHttp\ClientInterface
      */
     public static function setDebug($enable)
     {
-        self::$debug = $enable;
+        self::$staticDebug = $enable;
     }
 
+    /**
+     * Get handler option
+     *
+     * @param array $options Guzzle options
+     * @return HandlerStack|bool
+     */
+    protected function getHandlerOption($options)
+    {
+        if ($this->isVerbose()) {
+            if (!$this->requests || !$this->history) {
+                $this->requests = [];
+                $this->history = Middleware::history($this->requests);
+            }
+
+            $handler = $this->handlerStack;
+
+            // Is the user passing an handler in for this request?
+            if (isset($options['handler'])) {
+                $handler = $options['handler'];
+            } elseif ($configHandler = $this->guzzle->getConfig('handler')) {
+                $handler = $configHandler;
+            } elseif (!$this->handlerStack) {
+                $handler = HandlerStack::create();
+            }
+
+            $this->handlerStack = $handler;
+            $handler->push($this->history);
+
+            return $handler;
+        }
+
+        return false;
+    }
+    
     /**
      * Output JSON when verbose mode is turned on
      *
      * @param $requests Array of requests captured by {@see GuzzleHttp\MiddleWare::history()}
-     * @see \Akamai\Open\EdgeGrid\Client::setVerbose
+     * @see \Akamai\Open\EdgeGrid\Client::setInstanceVerbose
      */
-    protected function verbose($requests)
+    protected function verbose()
     {
+        if (!$this->isVerbose()) {
+            return;
+        }
+        
         $colors = [
             'red' => "",
             'yellow' => "",
@@ -428,7 +417,7 @@ class Client implements \GuzzleHttp\ClientInterface
             ];
         }
         
-        $lastRequest = end($requests);
+        $lastRequest = end($this->requests);
         echo "{$colors['cyan']}===> [VERBOSE] Response: \n";
         if ($lastRequest['response'] instanceof ResponseInterface) {
             $body = trim($lastRequest['response']->getBody());
@@ -444,163 +433,185 @@ class Client implements \GuzzleHttp\ClientInterface
         }
         echo "{$colors['reset']}\n";
     }
-
-    /**
-     * Create the Authentication header
-     *
-     * @param $method HTTP method
-     * @param $path Request path
-     * @return string
-     * @link https://developer.akamai.com/introduction/Client_Auth.html
-     */
-    protected function createAuthHeader($method, $path)
+    
+    protected function isVerbose()
     {
-        $auth_header =
-            'EG1-HMAC-SHA256 ' .
-            'client_token=' . $this->auth['client_token'] . ';' .
-            'access_token=' . $this->auth['access_token'] . ';' .
-            'timestamp=' . $this->timestamp . ';' .
-            'nonce=' . $this->nonce . ';';
+        if (($this->verboseOverride && !$this->verbose) || (!($this->verboseOverride) && !static::$staticVerbose)) {
+            return false;
+        }
         
-        return $auth_header . 'signature=' . $this->signRequest($method, $path, $this->timestamp, $auth_header);
+        return true;
     }
 
     /**
-     * Returns a signature of the given request, timestamp and auth_header
+     * Sort out path/options/http method args
      *
-     * @param string $method
-     * @param string $path
-     * @param string $timestamp
-     * @param string $auth_header
-     * @return string
+     * Regardless of whether a specific HTTP
+     * method was called, or the generic request()
+     * this will return the path/options/http method
+     *
+     * @param string $method Original method called
+     * @param array $args Original __call() arguments
+     * @return array
      */
-    protected function signRequest($method, $path, $timestamp, $auth_header)
+    protected function handleArgs($method, $args)
     {
-        return $this->makeBase64HmacSha256(
-            $this->makeDataToSign($method, $path, $auth_header),
-            $this->makeSigningKey($timestamp)
-        );
-    }
+        $options = [];
+        $path = '/';
+        $httpMethod = strtolower(str_replace('async', '', $method));
 
-    /**
-     * Returns a string with all data that will be signed
-     *
-     * @param string $method
-     * @param string $path
-     * @param string $auth_header
-     * @return string
-     */
-    protected function makeDataToSign($method, $path, $auth_header)
-    {
-        $query = '';
-        if ($this->query) {
-            $query .= '?';
-            if (is_string($this->query)) {
-                $query .= $this->query;
-            } else {
-                $query .= http_build_query($this->query, null, '&', PHP_QUERY_RFC3986);
+        if ($httpMethod != 'request' && $httpMethod != 'send') {
+            $path = $args[0];
+
+            if (isset($args[1])) {
+                $options = array_merge($this->guzzle->getConfig(), $args[1]);
+            }
+        }
+
+        if ($httpMethod == 'send') {
+            // PSR-7
+            /**
+             * @todo Add the request headers/body/auth to the PSR-7 Request
+             */
+            throw new \RuntimeException("Not Implemented");
+        }
+
+        if ($httpMethod == 'request') {
+            $httpMethod = $args[0];
+            $path = $args[1];
+
+            if (isset($args[2])) {
+                $options = array_merge($this->guzzle->getConfig(), $args[2]);
             }
         }
         
-        $data = implode(
-            "\t",
-            [
-                strtoupper($method),
-                'https',
-                $this->host,
-                $path . $query,
-                $this->canonicalizeHeaders(),
-                (strtoupper($method) == 'POST') ? $this->makeContentHash() : '',
-                $auth_header
-            ]
-        );
+        if ((!isset($options['query']) || empty($options['query'])) && $query = parse_url($path, PHP_URL_QUERY)) {
+            parse_str($query, $options['query']);
+        }
         
-        return $data;
-    }
-
-    /**
-     * Returns headers in normalized form
-     *
-     * @return string
-     */
-    protected function canonicalizeHeaders()
-    {
-        $canonicalized_headers = [];
-        $headers = array_combine(array_map('strtolower', array_keys($this->headers)), array_values($this->headers));
-        
-        foreach ($this->headers_to_sign as $key) {
-            $key = strtolower($key);
-            if (isset($headers[$key])) {
-                if (is_array($headers[$key]) && sizeof($headers[$key]) >= 1) {
-                    $value = trim($headers[$key][0]);
-                } elseif (is_array($headers[$key]) && sizeof($headers[$key]) == 0) {
-                    continue;
-                } else {
-                    $value = trim($headers[$key]);
-                }
-                
-                if (!empty($value)) {
-                    $canonicalized_headers[$key] = preg_replace('/\s+/', ' ', $value);
-                }
+        if ($url = parse_url($path)) {
+            if (isset($url['host'])) {
+                $options['base_uri'] = $url['scheme'] . '://' . $url['host'];
             }
         }
         
-        ksort($canonicalized_headers);
-        $serialized_header = '';
-        foreach ($canonicalized_headers as $key => $value) {
-            $serialized_header .= $key . ':' . $value . "\t";
-        }
+        $path = $this->normalizePath($path);
 
-        return rtrim($serialized_header);
+        return [$path, $options, $httpMethod];
     }
 
     /**
-     * Returns a hash of the HTTP POST body
+     * Normalize __call() arguments
      *
+     * @param array $args Arguments passed to __call()
+     * @param string $path Request Path
+     * @param array $options Guzzle options
+     * @param string $method original method called
+     * @return array
+     */
+    protected function normalizeArgs($args, $path, $options, $method)
+    {
+        $httpMethod = strtolower(str_replace('async', '', $method));
+
+        if ($httpMethod != 'request' && $httpMethod != 'send') { // not ->request() or ->send()
+            $args[0] = $path;
+            $args[1] = $options;
+        }
+        
+        if ($httpMethod == 'send') {
+            throw new \RuntimeException("Not implemented");
+        }
+        
+        if ($httpMethod == 'request') {
+            $args[0] = $method;
+            $args[1] = $path;
+            $args[2] = $options;
+        }
+        
+        return $args;
+    }
+
+    /**
+     * Normalize path
+     *
+     * This returns just the path part of the URL.
+     * Most importantly, it removes any query args
+     * as these are handler by {@see Client->getQueryOption()}
+     *
+     * @param string $path Path to normalize
      * @return string
      */
-    protected function makeContentHash()
+    protected function normalizePath($path)
     {
-        if (empty($this->body)) {
-            return '';
+        return parse_url($path, PHP_URL_PATH);
+    }
+
+    /**
+     * Cleanup for a new request
+     *
+     * @return void
+     */
+    protected function cleanup()
+    {
+        $this->query = [];
+        $this->body = '';
+        $this->headers = [];
+    }
+
+    /**
+     * Handle incoming options
+     *
+     * @param $options
+     * @return mixed
+     */
+    protected function handleOptions($options)
+    {
+        if (isset($options['timestamp']) && $options['timestamp'] instanceof Timestamp) {
+            $this->authentication->setTimestamp($options['timestamp']);
+        }
+
+        if (isset($options['nonce']) && $options['nonce'] instanceof Nonce) {
+            $this->authentication->setNonce($options['nonce']);
+        }
+
+        if (!isset($options['timeout'])) {
+            $options['timeout'] = $this->optionsHandler->getTimeout();
         } else {
-            // Just substr, it'll return as much as it can
-            return $this->makeBase64Sha256(substr($this->body, 0, $this->max_body_size));
+            $this->optionsHandler->setTimeout($options['timeout']);
         }
+        
+        if (isset($options['debug'])) {
+            $this->setInstanceDebug(true);
+        }
+
+        if (isset($options['base_uri'])) {
+            $this->optionsHandler->setHost($options['base_uri']);
+
+            if (strpos($options['base_uri'], '://') === false) {
+                $options['base_uri'] = 'https://' . $options['base_uri'];
+                return $options;
+            }
+            return $options;
+        }
+        return $options;
     }
 
     /**
-     * Creates a signing key based on the secret and timestamp
+     * Handle debug option
      *
-     * @param string $timestamp
-     * @return string
+     * @return bool
      */
-    protected function makeSigningKey($timestamp)
+    protected function getDebugOption($options)
     {
-        return self::makeBase64HmacSha256($timestamp, $this->auth['client_secret']);
-    }
-
-    /**
-     * Returns Base64 encoded HMAC-SHA256 Hash
-     *
-     * @param string $data
-     * @param string $key
-     * @return string
-     */
-    protected function makeBase64HmacSha256($data, $key)
-    {
-        return base64_encode(hash_hmac('sha256', $data, $key, true));
-    }
-
-    /**
-     * Returns Base64 encoded SHA256 Hash
-     *
-     * @param string $data
-     * @return string
-     */
-    protected function makeBase64Sha256($data)
-    {
-        return base64_encode(hash('sha256', $data, true));
+        if (isset($options['debug'])) {
+            return $options['debug'];
+        }
+        
+        if (($this->debugOverride && $this->debug) || (!$this->debugOverride && static::$staticDebug)) {
+            return true;
+        }
+        
+        return false;
     }
 
     /**

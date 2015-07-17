@@ -11,7 +11,7 @@
                 <source type="phploc">
                     <file name="phploc.xml" />
                 </source>
-                 <source type="phpunit">  
+                <source type="phpunit">  
                      <coverage path="coverage/xml" /> 
                      <filter directory="${phpDox.project.source}" />
                 </source>

@@ -56,16 +56,19 @@
             <a href="#parameter">Parameter</a>
           </li>
           <li>
+            <a href="#return">Return</a>
+          </li>
+          <li>
             <a href="#tests">Tests</a>
           </li>
           <li>
-            <a href="../../source/Client.php.html#line180">Source</a>
+            <a href="../../source/Client.php.html#line293">Source</a>
           </li>
         </ul>
       </nav>
       <section>
         <h1><small>Akamai\Open\EdgeGrid\Client::</small>setHost</h1>
-        <h4>Set Akamai EdgeGrid API host</h4>
+        <h4>Set Request Host</h4>
         <p/>
         <ul/>
         <h2 id="signature">Signature</h2>
@@ -81,41 +84,23 @@
                 </dt>
           <dd/>
         </dl>
+        <h2 id="return">Returns</h2>
+        <dl class="styled">
+          <dt>$this</dt>
+          <dd><br/>
+        </dd>
+        </dl>
         <h2 id="tests">Test Coverage</h2>
         <div class="styled">
           <h3>Information</h3>
           <ul class="styled">
-            <li>Coverage: 8/8 Lines (100%)</li>
-            <li>Tests: 25</li>
-            <li>Passed: 25 (100%)</li>
+            <li>Coverage: 2/2 Lines (100%)</li>
+            <li>Tests: 1</li>
+            <li>Passed: 1 (100%)</li>
           </ul>
           <h3>Tests</h3>
           <ul class="styled">
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::simple GET with data set #0</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::GET with querystring with data set #1</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::POST inside limit with data set #2</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::POST too large with data set #3</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::POST length equals max_body with data set #4</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::POST empty body with data set #5</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::POST nil body with data set #6</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::Simple header signing with GET with data set #7</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::Header containing spaces with data set #8</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::Header with leading and interior spaces with data set #9</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::Headers out of order with data set #10</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::Extra header with data set #11</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::PUT test with data set #12</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::GET with query args as option with data set #13</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::testCreateFromEdgeRcDefault</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::testCreateFromEdgeRcTestingSection</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::testCreateFromEdgeRcMultiSection</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::testHostnameWithTrailingSlash</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::testDefaultTimeout</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::testTimeoutOption</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::testSetTimeout</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::testVerboseSingle</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::testVerboseMultiple</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::testDebugSingle</li>
-            <li>[ <span class="testresult-PASSED">PASSED</span> ] — ClientTest::testNonApiCall</li>
+            <li>[ <span class="testresult-PASSED">PASSED</span> ] — Akamai\Open\EdgeGrid\Tests\ClientTest::testHostnameWithTrailingSlash</li>
           </ul>
         </div>
       </section>

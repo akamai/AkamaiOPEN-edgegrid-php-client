@@ -19,6 +19,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+namespace Akamai\Open\EdgeGrid\Tests;
 
 use Akamai\Open\EdgeGrid\Client;
 use GuzzleHttp\Handler\MockHandler;
@@ -33,7 +34,7 @@ use GuzzleHttp\Psr7\Response;
  * @since PHP 5.6
  * @version 1.0
  */
-class ClientTest extends PHPUnit_Framework_TestCase
+class ClientTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
@@ -50,9 +51,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
      */
     public function testMakeAuthHeader($name, $options, $request, $result)
     {
-        if (!isset($_SERVER['IDE_PHPUNIT_CUSTOM_LOADER'])) {
-            $this->setName($name);
-        }
+        //$this->setName($name);
         
         // Mock the response, we don't care about it
         $mock = new MockHandler([new Response(200)]);
@@ -62,18 +61,19 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $handler = HandlerStack::create($mock);
         $handler->push($history);
         
-        $timestamp = $this->prophesize('\Akamai\Open\EdgeGrid\Client\Timestamp');
+        $timestamp = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Timestamp::CLASS);
         $timestamp->__toString()->willReturn($options['timestamp']);
-        $nonce = $this->prophesize('\Akamai\Open\EdgeGrid\Client\Nonce');
+        $timestamp->isValid()->willReturn(true);
+        $nonce = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Nonce::CLASS);
         $nonce->__toString()->willReturn($options['nonce']);
         
         $client = new Client(
-            [
+            array_merge($options, [
                 'base_uri' => $options['base_url'], 
                 'handler' => $handler,
-            ],
-            $timestamp->reveal(),
-            $nonce->reveal()
+                'timestamp' => $timestamp->reveal(),
+                'nonce' => $nonce->reveal()
+            ])
         );
         
         /* @var \GuzzleHttp\Client $client */
@@ -107,109 +107,39 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, sizeof($headers['Authorization']));
         $this->assertEquals($result, $headers['Authorization'][0]);
     }
-
-    public function testMakeNonce()
-    {
-        $nonce = new Client\Nonce;
-        
-        $nonces = [];
-        for ($i = 0; $i < 100; $i++) {
-            $nonces[] = (string) $nonce;
-        }
-
-        $this->assertEquals(100, count(array_unique($nonces)));
-    }
     
-    public function testMakeNonceRandomBytes()
-    {
-        if (!function_exists('random_bytes')) {
-            function random_bytes($size)
-            {
-                return 'random_bytes';
-            }
-        }
-        
-        $nonce = new Client\Nonce;
-        $closure = function() {
-            return $this->function;
-        };
-        $tester = $closure->bindTo($nonce, $nonce);
-
-        $this->assertEquals('random_bytes', $tester());
-    }
-    
+    /**
+     * @dataProvider createFromEdgeRcProvider
+     */
     public function testCreateFromEdgeRcDefault()
     {
         $_SERVER['HOME'] = __DIR__ .'/edgerc';
         $client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile();
-        $closure = function($what) {
-            return $this->{$what};
-        };
-        $tester = $closure->bindTo($client, $client);
+        
+        $clientClosure = getPrivatePropertyTesterClosure($client);
+        $authClosure = getPrivatePropertyTesterClosure($clientClosure('authentication'));
         
         $this->assertInstanceOf('\Akamai\Open\EdgeGrid\Client', $client);
         $this->assertEquals([
             'client_token' => "akab-client-token-xxx-xxxxxxxxxxxxxxxx",
             'client_secret' => "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=",
             'access_token' => "akab-access-token-xxx-xxxxxxxxxxxxxxxx"
-        ], $tester('auth'));
-        $this->assertEquals('akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net', $tester('host'));
-        $this->assertEquals(2048, $tester('max_body_size'));
-    }
-
-    public function testCreateFromEdgeRcTestingSection()
-    {
-        $client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile('testing', __DIR__ . '/edgerc/.edgerc.testing');
-        $closure = function($what) {
-            return $this->{$what};
-        };
-        $tester = $closure->bindTo($client, $client);
-        
-        $this->assertInstanceOf('\Akamai\Open\EdgeGrid\Client', $client);
-        $this->assertEquals([
-            'client_token' => "akab-client-token-xxx-xxxxxxxxxxxxxxxx",
-            'client_secret' => "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=", 
-            'access_token' => "akab-access-token-xxx-xxxxxxxxxxxxxxxx"
-        ], $tester('auth'));
-        $this->assertEquals('akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net', $tester('host'));
-        $this->assertEquals(2048, $tester('max_body_size'));
-    }
-    
-    public function testCreateFromEdgeRcMultiSection()
-    {
-        $client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile('testing', __DIR__ . '/edgerc/.edgerc.default-testing');
-        $closure = function($what) {
-            return $this->{$what};
-        };
-        $tester = $closure->bindTo($client, $client);
-
-        $this->assertInstanceOf('\Akamai\Open\EdgeGrid\Client', $client);
-        $this->assertEquals([
-            'client_token' => "akab-client-token-xxx-xxxxxxxxxxxxxxxx",
-            'client_secret' => "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=",
-            'access_token' => "akab-access-token-xxx-xxxxxxxxxxxxxxxx"
-        ], $tester('auth'));
-        $this->assertEquals('akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net', $tester('host'));
-        $this->assertEquals(2048, $tester('max_body_size'));
-    }
-
-    public function testGetEdgeGridTimestamp() {
-        $timestamp = new Client\Timestamp;
-        
-        $this->assertRegExp('/\A\d{4}[0-1][0-9][0-3][0-9]T[0-2][0-9]:[0-5][0-9]:[0-5][0-9][+]0000\z/', (string) $timestamp);
+        ], $authClosure('auth'));
+        $this->assertEquals('akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net', $clientClosure('optionsHandler')->getHost());
+        $this->assertEquals(2048, $authClosure('max_body_size'));
     }
     
     public function testHostnameWithTrailingSlash()
     {
         $client = new \Akamai\Open\EdgeGrid\Client();
-        $closure = function($what) {
-            return $this->{$what};
+        $closure = function() {
+            return $this->optionsHandler->getHost();
         };
         $tester = $closure->bindTo($client, $client);
         
         $client->setHost('akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net/');
         
-        $this->assertEquals('akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net', $tester('host'));
+        $this->assertEquals('akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net', $tester());
     }
 
     public function testDefaultTimeout()
@@ -305,7 +235,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, end($container)['options']['timeout']);
     }
     
-    public function testVerboseSingle()
+    public function testInstanceVerboseSingle()
     {
         $mock = new MockHandler([new Response(200, [], json_encode(['test' => 'data']))]);
         $handler = HandlerStack::create($mock);
@@ -318,7 +248,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
         );
         $client->setAuth('test', 'test', 'test');
         
-        Client::setVerbose(true);
+        $client->setInstanceVerbose(true);
         
         ob_start();
         $client->get('/test');
@@ -335,7 +265,102 @@ EOF;
         $this->assertEquals($expectedOutput, $output);
     }
 
-    public function testVerboseMultiple()
+    public function testInstanceVerboseMultiple()
+    {
+        $mock = new MockHandler([new Response(200, [], json_encode(['test' => 'data'])), new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))]);
+        $handler = HandlerStack::create($mock);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+
+        $client->setInstanceVerbose(true);
+
+        ob_start();
+        $client->get('/test');
+        $client->get('/test2');
+        $output = ob_get_clean();
+
+        $expectedOutput = <<<EOF
+\x1b[36;01m===> [VERBOSE] Response: 
+\x1b[33;01m{
+    "test": "data"
+}\x1b[39;49;00m
+\x1b[36;01m===> [VERBOSE] Response: 
+\x1b[33;01m{
+    "test": "data2",
+    "0": [
+        "foo",
+        "bar"
+    ],
+    "1": false,
+    "2": null,
+    "3": 123,
+    "4": 0.123
+}\x1b[39;49;00m
+
+EOF;
+
+        $this->assertEquals($expectedOutput, $output);
+    }
+    
+    public function testInstanceDebugSingle()
+    {
+        $mock = new MockHandler([new Response(200)]);
+        $container = [];
+        $history = Middleware::history($container);
+
+        $handler = HandlerStack::create($mock);
+        $handler->push($history);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+
+        $client->setInstanceDebug(true);
+        $client->get('/test');
+        $this->assertEquals(true, end($container)['options']['debug']);
+    }
+
+    public function testStaticVerboseSingle()
+    {
+        $mock = new MockHandler([new Response(200, [], json_encode(['test' => 'data']))]);
+        $handler = HandlerStack::create($mock);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+
+        Client::setVerbose(true);
+
+        ob_start();
+        $client->get('/test');
+        $output = ob_get_clean();
+
+        $expectedOutput = <<<EOF
+\x1b[36;01m===> [VERBOSE] Response: 
+\x1b[33;01m{
+    "test": "data"
+}\x1b[39;49;00m
+
+EOF;
+
+        $this->assertEquals($expectedOutput, $output);
+    }
+
+    public function testStaticVerboseMultiple()
     {
         $mock = new MockHandler([new Response(200, [], json_encode(['test' => 'data'])), new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))]);
         $handler = HandlerStack::create($mock);
@@ -377,8 +402,8 @@ EOF;
 
         $this->assertEquals($expectedOutput, $output);
     }
-    
-    public function testDebugSingle()
+
+    public function testStaticDebugSingle()
     {
         $mock = new MockHandler([new Response(200)]);
         $container = [];
@@ -396,8 +421,127 @@ EOF;
         $client->setAuth('test', 'test', 'test');
 
         Client::setDebug(true);
+        
         $client->get('/test');
         $this->assertEquals(true, end($container)['options']['debug']);
+    }
+
+    public function testVerboseOverrideSingle()
+    {
+        $mock = new MockHandler([new Response(200, [], json_encode(['test' => 'data']))]);
+        $handler = HandlerStack::create($mock);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+
+        Client::setVerbose(true);
+        $client->setInstanceVerbose(false);
+
+        ob_start();
+        $client->get('/test');
+        $output = ob_get_clean();
+
+        $expectedOutput = "";
+
+        $this->assertEquals($expectedOutput, $output);
+    }
+
+    public function testVerboseOverrideMultiple()
+    {
+        $mock = new MockHandler([new Response(200, [], json_encode(['test' => 'data'])), new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))]);
+        $handler = HandlerStack::create($mock);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+
+        Client::setVerbose(true);
+        $client->setInstanceVerbose(false);
+
+        ob_start();
+        $client->get('/test');
+        $client->get('/test2');
+        $output = ob_get_clean();
+
+        $expectedOutput = "";
+
+        $this->assertEquals($expectedOutput, $output);
+    }
+
+    public function testDebugOverrideSingle()
+    {
+        $mock = new MockHandler([new Response(200), new Response(200)]);
+        $container = [];
+        $history = Middleware::history($container);
+
+        $handler = HandlerStack::create($mock);
+        $handler->push($history);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+
+        Client::setDebug(true);
+        $client->setInstanceDebug(false);
+
+        $client->get('/test');
+        $this->assertEquals(false, end($container)['options']['debug']);
+    }
+
+    public function testInstanceDebugOptionSingle()
+    {
+        $mock = new MockHandler([new Response(200), new Response(200), new Response(200)]);
+        $container = [];
+        $history = Middleware::history($container);
+
+        $handler = HandlerStack::create($mock);
+        $handler->push($history);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+
+        $client->get('/test', ['debug' => true]);
+        $this->assertEquals(true, end($container)['options']['debug']);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+        $client->setDebug(true);
+        $client->get('/test', ['debug' => false]);
+        $this->assertEquals(false, end($container)['options']['debug']);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+        Client::setDebug(true);
+        $client->get('/test', ['debug' => false]);
+        $this->assertEquals(false, end($container)['options']['debug']);
     }
     
     public function testNonApiCall()
@@ -417,22 +561,35 @@ EOF;
         );
         
         $response = $client->get('/test');
-        $this->assertInstanceOf(\GuzzleHttp\Psr7\Response::class, $response);
+        $this->assertInstanceOf(\GuzzleHttp\Psr7\Response::CLASS, $response);
         $this->assertEquals('http', end($container)['request']->getUri()->getScheme());
         $this->assertEquals('example.org', end($container)['request']->getUri()->getHost());
         $this->assertArrayNotHasKey('Authentication', end($container)['request']->getHeaders());
         
         $response = $client->get('http://example.com/test');
-        $this->assertInstanceOf(\GuzzleHttp\Psr7\Response::class, $response);
+        $this->assertInstanceOf(\GuzzleHttp\Psr7\Response::CLASS, $response);
         $this->assertEquals('http', end($container)['request']->getUri()->getScheme());
         $this->assertEquals('example.com', end($container)['request']->getUri()->getHost());
         $this->assertArrayNotHasKey('Authentication', end($container)['request']->getHeaders());
 
         $response = $client->get('https://example.net/test');
-        $this->assertInstanceOf(\GuzzleHttp\Psr7\Response::class, $response);
+        $this->assertInstanceOf(\GuzzleHttp\Psr7\Response::CLASS, $response);
         $this->assertEquals('https', end($container)['request']->getUri()->getScheme());
         $this->assertEquals('example.net', end($container)['request']->getUri()->getHost());
         $this->assertArrayNotHasKey('Authentication', end($container)['request']->getHeaders());
+    }
+    
+    public function testForceHttps()
+    {
+        $client = new Client(
+            [
+                'base_uri' => 'example.org'
+            ]
+        );
+        
+        $tester = getPrivatePropertyTesterClosure($client);
+        $uri = $tester('guzzle')->getConfig('base_uri');
+        $this->assertEquals('https', parse_url($uri, PHP_URL_SCHEME));
     }
     
     public function makeAuthHeaderProvider()
@@ -441,13 +598,32 @@ EOF;
         $tests = $testdata['tests'];
         unset($testdata['tests']);
             
-        foreach ($tests as $test) {
+//        foreach ($tests as $test) {
+        $test = end($tests);
             yield [
                 'name' => $test['testName'],
-                'options' => $testdata,
+                'options' => array_merge($testdata, $test['request']),
                 'request' => array_merge(['data' => ""], $test['request']),
                 'result' => $test['expectedAuthorization'],
             ];
-        }
+//        }
+    }
+    
+    public function createFromEdgeRcProvider()
+    {
+        return [
+            [
+                'section' => null,
+                'file' => null,
+            ],
+            [
+                'section' => 'testing',
+                'file' => __DIR__ . '/.edgerc.testing',
+            ],
+            [
+                'section' => 'testing',
+                'file' => __DIR__ . '/.edgerc.default-testing',
+            ]
+        ];
     }
 }

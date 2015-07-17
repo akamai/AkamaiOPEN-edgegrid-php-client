@@ -1,6 +1,5 @@
 ### PHP ###
 composer.phar
-composer.lock
 vendor/
 build/
 akamai-open-edgegrid-client.phar
