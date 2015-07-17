@@ -231,7 +231,7 @@ class OptionsHandler
     /**
      * Set URI scheme
      *
-     * @param $scheme
+     * @param string $scheme
      * @return $this
      */
     public function setScheme($scheme)
@@ -254,7 +254,7 @@ class OptionsHandler
     /**
      * Set host
      *
-     * @param $host
+     * @param string $host
      * @return $this
      */
     public function setHost($host)

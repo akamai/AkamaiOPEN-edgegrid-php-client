@@ -249,9 +249,9 @@ class Client implements \GuzzleHttp\ClientInterface
     /**
      * Set Akamai {OPEN} Authentication Credentials
      *
-     * @param $client_token
-     * @param $client_secret
-     * @param $access_token
+     * @param string $client_token
+     * @param string $client_secret
+     * @param string $access_token
      * @return $this
      */
     public function setAuth($client_token, $client_secret, $access_token)
@@ -293,7 +293,7 @@ class Client implements \GuzzleHttp\ClientInterface
     /**
      * Set Request Host
      *
-     * @param $host
+     * @param string $host
      * @return $this
      */
     public function setHost($host)
@@ -306,7 +306,7 @@ class Client implements \GuzzleHttp\ClientInterface
     /**
      * Set the HTTP request timeout
      *
-     * @param $timeout_in_seconds
+     * @param int $timeout_in_seconds
      * @return $this
      */
     public function setTimeout($timeout_in_seconds)
@@ -319,7 +319,7 @@ class Client implements \GuzzleHttp\ClientInterface
     /**
      * Print formatted JSON responses to STDOUT
      *
-     * @param $enable
+     * @param boolean $enable
      * @return $this
      */
     public function setInstanceVerbose($enable)
@@ -332,7 +332,7 @@ class Client implements \GuzzleHttp\ClientInterface
     /**
      * Print HTTP requests/responses to STDOUT
      *
-     * @param $enable
+     * @param boolean $enable
      * @return $this
      */
     public function setInstanceDebug($enable)
@@ -372,7 +372,7 @@ class Client implements \GuzzleHttp\ClientInterface
     /**
      * Add logger using a given filename/format
      *
-     * @param $filename
+     * @param string $filename
      * @param string $format
      */
     public static function setSimpleLog($filename, $format = "%message%\n")
@@ -391,7 +391,7 @@ class Client implements \GuzzleHttp\ClientInterface
     /**
      * Print formatted JSON responses to STDOUT
      *
-     * @param $enable
+     * @param bool $enable
      */
     public static function setVerbose($enable)
     {
@@ -401,7 +401,7 @@ class Client implements \GuzzleHttp\ClientInterface
     /**
      * Print HTTP requests/responses to STDOUT
      *
-     * @param $enable
+     * @param bool $enable
      */
     public static function setDebug($enable)
     {
@@ -503,7 +503,7 @@ class Client implements \GuzzleHttp\ClientInterface
     /**
      * Output JSON when verbose mode is turned on
      *
-     * @param $requests Array of requests captured by {@see GuzzleHttp\MiddleWare::history()}
+     * @param array $requests Array of requests captured by {@see GuzzleHttp\MiddleWare::history()}
      * @see \Akamai\Open\EdgeGrid\Client::setInstanceVerbose
      */
     protected function verbose($lastRequest)
@@ -671,7 +671,7 @@ class Client implements \GuzzleHttp\ClientInterface
     /**
      * Handle incoming options
      *
-     * @param $options
+     * @param array $options
      * @return mixed
      */
     protected function handleOptions($options)

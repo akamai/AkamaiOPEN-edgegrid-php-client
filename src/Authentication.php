@@ -270,7 +270,7 @@ class Authentication
         $this->host = $host;
         if (strpos($host, '/') !== false || strpos($host, '?') !== false) {
             if (strpos($host, 'http') === false) {
-                $host = 'https://' .$host;
+                $host = 'https://' . $host;
             }
             $url = parse_url($host);
             $this->host = $url['host'];
@@ -328,7 +328,7 @@ class Authentication
     /**
      * Set request body
      *
-     * @param $body
+     * @param string $body
      * return $this;
      */
     public function setBody($body)
