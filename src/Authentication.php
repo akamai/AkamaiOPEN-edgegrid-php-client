@@ -122,7 +122,7 @@ class Authentication
     protected function makeDataToSign($auth_header)
     {
         $query = '';
-        if ($this->options['query']) {
+        if (isset($this->options['query']) && $this->options['query']) {
             $query .= '?';
             if (is_string($this->options['query'])) {
                 $query .= $this->options['query'];
@@ -152,10 +152,13 @@ class Authentication
     protected function canonicalizeHeaders()
     {
         $canonical = [];
-        $headers = array_combine(
-            array_map('strtolower', array_keys($this->options['headers'])),
-            array_values($this->options['headers'])
-        );
+        $headers = [];
+        if (isset($this->options['headers'])) {
+            $headers = array_combine(
+                array_map('strtolower', array_keys($this->options['headers'])),
+                array_values($this->options['headers'])
+            );
+        }
 
         foreach ($this->headers_to_sign as $key) {
             $key = strtolower($key);
