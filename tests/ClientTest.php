@@ -113,10 +113,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider createFromEdgeRcProvider
      */
-    public function testCreateFromEdgeRcDefault()
+    public function testCreateFromEdgeRcDefault($section, $file)
     {
         $_SERVER['HOME'] = __DIR__ .'/edgerc';
-        $client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile();
+        $client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile($section, $file);
         $authentication = \PHPUnit_Framework_Assert::readAttribute($client, 'authentication');
         
         $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Client::CLASS, $client);
@@ -638,12 +638,16 @@ EOF;
                 'file' => null,
             ],
             [
-                'section' => 'testing',
-                'file' => __DIR__ . '/.edgerc.testing',
+                'section' => 'default',
+                'file' => null,
             ],
             [
                 'section' => 'testing',
-                'file' => __DIR__ . '/.edgerc.default-testing',
+                'file' => __DIR__ . '/edgerc/.edgerc.testing',
+            ],
+            [
+                'section' => 'testing',
+                'file' => __DIR__ . '/edgerc/.edgerc.default-testing',
             ]
         ];
     }

@@ -25,10 +25,15 @@ use GuzzleHttp\Psr7\Response;
 
 class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 {
-    public function testCreateFromEdgeRc()
+    /**
+     * @dataProvider createFromEdgeRcProvider
+     */
+    public function testCreateFromEdgeRc($section, $file)
     {
+        $_SERVER['HOME'] = __DIR__ .'/../edgerc';
+        
         $guzzle =  new \GuzzleHttp\Client();
-        $authentication = \Akamai\Open\EdgeGrid\Handler\Authentication::createFromEdgeRcFile();
+        $authentication = \Akamai\Open\EdgeGrid\Handler\Authentication::createFromEdgeRcFile($section, $file);
         $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Handler\Authentication::CLASS, $authentication);
     }
 

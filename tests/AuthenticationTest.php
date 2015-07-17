@@ -290,10 +290,10 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider createFromEdgeRcProvider
      */
-    public function testCreateFromEdgeRcDefault()
+    public function testCreateFromEdgeRcDefault($section, $file)
     {
         $_SERVER['HOME'] = __DIR__ .'/edgerc';
-        $authentication = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile();
+        $authentication = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile($section, $file);
 
         $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Authentication::CLASS, $authentication);
         $this->assertEquals(

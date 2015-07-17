@@ -440,6 +440,10 @@ class Authentication
     
     public static function createFromEdgeRcFile($section = "default", $path = null)
     {
+        if ($section === null) {
+            $section = 'default';
+        }
+        
         if ($path === null) {
             if (isset($_SERVER['HOME']) && file_exists($_SERVER['HOME'] . '/.edgerc')) {
                 $path = $_SERVER['HOME'] . "/.edgerc";
