@@ -52,7 +52,9 @@ class OptionsHandlerTest extends \PHPUnit_Framework_TestCase
     
     public function testGetAuthenticatedOptions()
     {
-        $authentication = new \Akamai\Open\EdgeGrid\Authentication;
+        $_SERVER['HOME'] = __DIR__ . '/../edgerc';
+        
+        $authentication = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile();
         $optionsHandler = new \Akamai\Open\EdgeGrid\Client\OptionsHandler($authentication);
         $optionsHandler->setHost('https://test-akamaiapis.net');
         $options = $optionsHandler->getOptions();
