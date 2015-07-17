@@ -268,7 +268,10 @@ class Authentication
     public function setHost($host)
     {
         $this->host = $host;
-        if (strpos($host, '://') !== false) {
+        if (strpos($host, '/') !== false || strpos($host, '?') !== false) {
+            if (strpos($host, 'http') === false) {
+                $host = 'https://' .$host;
+            }
             $url = parse_url($host);
             $this->host = $url['host'];
 
@@ -277,6 +280,9 @@ class Authentication
             }
             
             if (isset($url['query'])) {
+                if (!isset($url['path'])) { // for example.org?query=string
+                    $this->setPath('/');
+                }
                 $this->setQuery($url['query']);
             }
         }
@@ -444,7 +450,7 @@ class Authentication
 
         $file = !$path ? false : realpath($path);
         if (!$file) {
-            throw new \Exception("File \"$file\" does not exist!");
+            throw new \Exception("File \"$path\" does not exist!");
         }
 
         if (!is_readable($file)) {

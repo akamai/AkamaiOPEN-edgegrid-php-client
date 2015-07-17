@@ -44,7 +44,8 @@ class Authentication
             RequestInterface $request,
             array $options
         ) use ($handler) {
-            if ($request->getUri()->getScheme() !== 'https' || strpos($request->getUri()->getHost(), 'akamaiapis.net') === false) {
+            if ($request->getUri()->getScheme() !== 'https' ||
+                strpos($request->getUri()->getHost(), 'akamaiapis.net') === false) {
                 return $handler($request, $options);
             }
 

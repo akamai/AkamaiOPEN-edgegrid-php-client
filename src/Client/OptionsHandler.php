@@ -72,12 +72,12 @@ class OptionsHandler
      */
     public function getOptions()
     {
+        $this->options = $this->getStandardOptions();
+
         if (!empty($this->authentication)) {
             $this->options = $this->getAuthenticatedOptions();
         }
-
-        $this->options = $this->getStandardOptions();
-
+        
         return $this->options;
     }
 
@@ -91,11 +91,6 @@ class OptionsHandler
     {
         $options = $this->options;
         
-        $options['query'] = $this->getQueryOption($options);
-        $options['body'] = $this->getBodyOption($options);
-        $options['headers'] = $this->getHeadersOption($options);
-        $options['base_uri'] = $this->getHostOption($this->path, $options);
-
         if (strpos($options['base_uri'], 'https://') !== false &&
             strpos($options['base_uri'], 'akamaiapis.net') !== false
         ) {
@@ -116,7 +111,11 @@ class OptionsHandler
     protected function getStandardOptions()
     {
         $options = $this->options;
-        
+
+        $options['query'] = $this->getQueryOption($options);
+        $options['body'] = $this->getBodyOption($options);
+        $options['headers'] = $this->getHeadersOption($options);
+        $options['base_uri'] = $this->getHostOption($this->path, $options);
         $options['timeout'] = $this->getTimeoutOption();
         
         return $options;

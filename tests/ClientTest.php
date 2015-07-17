@@ -41,7 +41,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         Client::setVerbose(false);
         Client::setDebug(false);
         $closure = function () {
-        
             self::$logger = false;
         };
         
@@ -118,21 +117,22 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         $_SERVER['HOME'] = __DIR__ .'/edgerc';
         $client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile();
+        $authentication = \PHPUnit_Framework_Assert::readAttribute($client, 'authentication');
         
-        $clientClosure = getPrivatePropertyTesterClosure($client);
-        $authClosure = getPrivatePropertyTesterClosure($clientClosure('authentication'));
-        
-        $this->assertInstanceOf('\Akamai\Open\EdgeGrid\Client', $client);
-        $this->assertEquals([
-            'client_token' => "akab-client-token-xxx-xxxxxxxxxxxxxxxx",
-            'client_secret' => "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=",
-            'access_token' => "akab-access-token-xxx-xxxxxxxxxxxxxxxx"
-        ], $authClosure('auth'));
+        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Client::CLASS, $client);
+        $this->assertEquals(
+            [
+                'client_token' => "akab-client-token-xxx-xxxxxxxxxxxxxxxx",
+                'client_secret' => "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=",
+                'access_token' => "akab-access-token-xxx-xxxxxxxxxxxxxxxx"
+            ],
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'auth')
+        );
         $this->assertEquals(
             'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
-            $clientClosure('optionsHandler')->getHost()
+            \PHPUnit_Framework_Assert::readAttribute($client, 'optionsHandler')->getHost()
         );
-        $this->assertEquals(2048, $authClosure('max_body_size'));
+        $this->assertEquals(2048, \PHPUnit_Framework_Assert::readAttribute($authentication, 'max_body_size'));
     }
     
     public function testHostnameWithTrailingSlash()
@@ -552,8 +552,7 @@ EOF;
             ]
         );
         
-        $tester = getPrivatePropertyTesterClosure($client);
-        $uri = $tester('guzzle')->getConfig('base_uri');
+        $uri = \PHPUnit_Framework_Assert::readAttribute($client, 'guzzle')->getConfig('base_uri');
         $this->assertEquals('https', parse_url($uri, PHP_URL_SCHEME));
     }
 
@@ -621,15 +620,14 @@ EOF;
         $tests = $testdata['tests'];
         unset($testdata['tests']);
             
-//        foreach ($tests as $test) {
-        $test = end($tests);
+        foreach ($tests as $test) {
             yield [
                 'name' => $test['testName'],
                 'options' => array_merge($testdata, $test['request']),
                 'request' => array_merge(['data' => ""], $test['request']),
                 'result' => $test['expectedAuthorization'],
             ];
-//        }
+        }
     }
     
     public function createFromEdgeRcProvider()

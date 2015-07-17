@@ -733,6 +733,7 @@ class Client implements \GuzzleHttp\ClientInterface
      *
      * @return ResponseInterface
      * @throws GuzzleException
+     * @codeCoverageIgnore
      */
     public function send(RequestInterface $request, array $options = [])
     {
@@ -747,6 +748,7 @@ class Client implements \GuzzleHttp\ClientInterface
      *                                  request and to the transfer.
      *
      * @return PromiseInterface
+     * @codeCoverageIgnore
      */
     public function sendAsync(RequestInterface $request, array $options = [])
     {
@@ -766,6 +768,7 @@ class Client implements \GuzzleHttp\ClientInterface
      *
      * @return ResponseInterface
      * @throws GuzzleException
+     * @codeCoverageIgnore
      */
     public function request($method, $uri, array $options = [])
     {
@@ -785,6 +788,7 @@ class Client implements \GuzzleHttp\ClientInterface
      * @param array $options Request options to apply.
      *
      * @return PromiseInterface
+     * @codeCoverageIgnore
      */
     public function requestAsync($method, $uri, array $options = [])
     {
@@ -801,6 +805,7 @@ class Client implements \GuzzleHttp\ClientInterface
      * @param string|null $option The config option to retrieve.
      *
      * @return mixed
+     * @codeCoverageIgnore
      */
     public function getConfig($option = null)
     {

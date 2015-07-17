@@ -27,11 +27,10 @@ class TimestampTest extends \PHPUnit_Framework_TestCase
     public function testTimestampFormat()
     {
         $timestamp = new \Akamai\Open\EdgeGrid\Authentication\Timestamp();
-        $tester = getPrivatePropertyTesterClosure($timestamp);
 
         $check = \DateTimeImmutable::createFromFormat('Ymd\TH:i:sO', (string) $timestamp, new \DateTimeZone('UTC'));
         $check = $check->setTimezone(new \DateTimeZone('UTC'));
-        $this->assertEquals($check, $tester('timestamp'));
+        $this->assertEquals($check, \PHPUnit_Framework_Assert::readAttribute($timestamp, 'timestamp'));
     }
 
 

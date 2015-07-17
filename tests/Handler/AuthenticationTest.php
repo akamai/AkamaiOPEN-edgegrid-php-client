@@ -97,6 +97,30 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         $this->assertEquals(1, sizeof($headers['Authorization']));
         $this->assertEquals($result, $headers['Authorization'][0]);
     }
+    
+    public function testHandlerChainingNotAuthenticated()
+    {
+        $container = [];
+        $handler = $this->getMockHandler([new Response(200)], $container);
+
+        $auth = new \Akamai\Open\EdgeGrid\Handler\Authentication();
+
+        // Because of PSR-7 immutability the history handler has
+        // to be the last one, otherwise it doesn't get the latest
+        // instance of the Request.
+        $handler->before('history', $auth, "signer");
+
+        $client = new \GuzzleHttp\Client([
+            'base_uri' => 'http://example.org',
+            'handler' => $handler,
+        ]);
+
+        $client->get('/test');
+
+        $this->assertEquals(1, sizeof($container));
+        $request = $container[0]['request'];
+        $this->assertInstanceOf(\Psr\Http\Message\RequestInterface::CLASS, $request);
+    }
 
     /**
      * @expectedException \Exception
@@ -120,6 +144,6 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
             ]
         );
 
-        $client->get("http://example.org/test");
+        $client->get("https://test-akamaiapis.net");
     }
 }
