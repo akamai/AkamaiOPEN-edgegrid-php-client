@@ -22,6 +22,7 @@ namespace Akamai\Open\EdgeGrid;
 
 use Akamai\Open\EdgeGrid\Authentication;
 use Akamai\Open\EdgeGrid\Handler\Authentication as AuthenticationHandler;
+use Akamai\Open\EdgeGrid\Handler\Debug as DebugHandler;
 use Akamai\Open\EdgeGrid\Handler\Verbose as VerboseHandler;
 
 /**
@@ -48,6 +49,11 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
      * @var \Akamai\Open\EdgeGrid\Handler\Verbose
      */
     protected $verboseHandler;
+    
+    /**
+     * @var \Akamai\Open\EdgeGrid\Handler\Debug
+     */
+    protected $debugHandler;
 
     /**
      * @var bool Whether verbose mode is on
@@ -121,23 +127,17 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
             $this->authentication->setNonce($options['nonce']);
         }
 
-        $options['debug'] = $this->getDebugOption($options);
-        
         if (isset($options['handler'])) {
             $options = $this->setAuthenticationHandler($options, $this->authentication);
         }
 
         if ($fp = $this->isVerbose()) {
-            if (isset($options['handler'])) {
-                $handler = $options['handler'];
-                $this->setVerboseHandler($handler, $fp);
-            }
-
-            if (!$this->verboseHandler) {
-                $this->verboseHandler = new VerboseHandler();
-                $handler = $this->getConfig('handler');
-                $this->setVerboseHandler($handler, $fp);
-            }
+            $options = $this->setVerboseHandler($options, $fp);
+        }
+        
+        $options['debug'] = $this->getDebugOption($options);
+        if ($fp = $this->isDebug()) {
+            $options = $this->setDebugHandler($options, $fp);
         }
         
         if ($this->logger && isset($options['handler'])) {
@@ -252,9 +252,9 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
-     * Print formatted JSON responses to STDOUT
+     * Print formatted JSON responses to output
      *
-     * @param boolean $enable
+     * @param bool|resource $enable
      * @return $this
      */
     public function setInstanceVerbose($enable)
@@ -265,9 +265,9 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
-     * Print HTTP requests/responses to STDOUT
+     * Print HTTP requests/responses to output
      *
-     * @param boolean $enable
+     * @param bool|resource $enable
      * @return $this
      */
     public function setInstanceDebug($enable)
@@ -327,7 +327,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     /**
      * Print formatted JSON responses to STDOUT
      *
-     * @param bool $enable
+     * @param bool|resource $enable
      */
     public static function setVerbose($enable)
     {
@@ -337,11 +337,24 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     /**
      * Print HTTP requests/responses to STDOUT
      *
-     * @param bool $enable
+     * @param bool|array $enable
      */
     public static function setDebug($enable)
     {
         self::$staticDebug = $enable;
+    }
+
+    protected function isDebug()
+    {
+        if (($this->debugOverride && !$this->debug) || (!($this->debugOverride) && !static::$staticDebug)) {
+            return false;
+        }
+
+        if ($this->debugOverride && $this->debug) {
+            return $this->debug;
+        }
+
+        return static::$staticDebug;
     }
 
     protected function isVerbose()
@@ -387,13 +400,13 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     protected function getDebugOption($config)
     {
         if (isset($config['debug'])) {
-            return ($config['debug'] === true) ? STDOUT : $config['debug'];
+            return ($config['debug'] === true) ? STDERR : $config['debug'];
         }
         
         if (($this->debugOverride && $this->debug)) {
-            return ($this->debug === true) ? STDOUT : $this->debug;
+            return ($this->debug === true) ? STDERR : $this->debug;
         } elseif ((!$this->debugOverride && static::$staticDebug)) {
-            return (static::$staticDebug === true) ? STDOUT : $this->debug;
+            return (static::$staticDebug === true) ? STDERR : static::$staticDebug;
         }
         
         return false;
@@ -448,22 +461,89 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     /**
      * Add the Verbose handler to the HandlerStack
      *
-     * @param \GuzzleHttp\HandlerStack $handlerStack
+     * @param array $options Guzzle Options
+     * @param bool|resource $fp Stream to write to
+     * @return array
      */
-    protected function setVerboseHandler($handlerStack, $fp = null)
+    protected function setVerboseHandler($options, $fp = null)
+    {
+        try {
+            if (is_bool($fp) || $fp === null) {
+                $fp = ['outputStream' => null, 'errorStream' => null];
+            } elseif (!is_array($fp)) {
+                $fp = ['outputStream' => $fp, 'errorStream' => $fp];
+            }
+
+            $handler = $this->getConfig('handler');
+            // if we have a default handler, and we've already created a VerboseHandler
+            // we can bail out now (or we will add another one to the stack)
+            if ($handler && $this->verboseHandler) {
+                return $options;
+            }
+            
+            if (isset($options['handler'])) {
+                $handler = $options['handler'];
+            }
+
+            if (!$this->verboseHandler) {
+                $this->verboseHandler = new VerboseHandler(array_shift($fp), array_shift($fp));
+            }
+            
+            if (!$handler === null) {
+                $handler = \GuzzleHttp\HandlerStack::create();
+            }
+            
+            $handler->after("allow_redirects", $this->verboseHandler, "verbose");
+        } catch (\InvalidArgumentException $e) {
+            $handlerStack->push($this->verboseHandler, "verbose");
+        }
+        
+        $options['handler'] = $handler;
+        
+        return $options;
+    }
+
+    /**
+     * Add the Debug handler to the HandlerStack
+     *
+     * @param array $options Guzzle Options
+     * @param bool|resource $fp Stream to write to
+     * @return array
+     */
+    protected function setDebugHandler($options, $fp = null)
     {
         try {
             if (is_bool($fp)) {
                 $fp = null;
             }
-            
-            $verboseHandler = new VerboseHandler($fp);
-            $handlerStack->after("allow_redirects", $verboseHandler, "verbose");
+
+            $handler = $this->getConfig('handler');
+            // if we have a default handler, and we've already created a DebugHandler
+            // we can bail out now (or we will add another one to the stack)
+            if ($handler && $this->debugHandler) {
+                return $options;
+            }
+
+            if (isset($options['handler'])) {
+                $handler = $options['handler'];
+            }
+
+            if (!$this->debugHandler) {
+                $this->debugHandler = new DebugHandler($fp);
+            }
+
+            if (!$handler === null) {
+                $handler = \GuzzleHttp\HandlerStack::create();
+            }
+
+            $handler->after("allow_redirects", $this->debugHandler, "debug");
         } catch (\InvalidArgumentException $e) {
-            $handlerStack->push($verboseHandler, "verbose");
+            $handlerStack->push($this->debugHandler, "debug");
         }
         
-        return $this;
+        $options['handler'] = $handler;
+        
+        return $options;
     }
     
     /**

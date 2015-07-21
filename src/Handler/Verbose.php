@@ -22,22 +22,39 @@ namespace Akamai\Open\EdgeGrid\Handler;
  */
 class Verbose
 {
-    protected $fp;
+    protected $outputStream;
+    protected $errorStream;
     
-    public function __construct($resource = null)
+    public function __construct($outputStream = null, $errorStream = null)
     {
-        if (!is_resource($resource) && $resource !== null) {
-            $fp = @fopen($fp, 'a+');
+        if (!is_resource($errorStream) && $errorStream !== null) {
+            $fp = @fopen($errorStream, 'a+');
             if (!$fp) {
-                throw new \Exception("Unable to use resource: " .$resource);
+                throw new \Exception("Unable to use error stream: " .(string) $errorStream);
             }
+            $errorStream = $fp;
         }
         
-        if ($resource === null) {
-            $fp = fopen('php://output', 'a');
+        if (!is_resource($outputStream) && $outputStream !== null) {
+            $fp = @fopen($outputStream, 'a+');
+            if (!$fp) {
+                throw new \Exception("Unable to use output stream: " .(string) $outputStream);
+            }
+            $outputStream = $fp;
+        } elseif ($outputStream !== null && $errorStream === null) {
+            $errorStream = $outputStream;
+        }
+
+        if ($outputStream === null && $errorStream === null) {
+            $errorStream = fopen('php://stderr', 'a');
+        }
+
+        if ($outputStream === null) {
+            $outputStream = fopen('php://output', 'a');
         }
         
-        $this->fp = $fp;
+        $this->outputStream = $outputStream;
+        $this->errorStream = $errorStream;
     }
     
     /**
@@ -75,14 +92,10 @@ class Verbose
                 function (\Psr\Http\Message\ResponseInterface $response) use ($colors) {
                     $statusCode = $response->getStatusCode();
                     if ($statusCode > 299 && $statusCode < 400) {
-                        fputs($this->fp, "{$colors['yellow']}===> [VERBOSE] Redirected: ");
-                        fputs($this->fp, $response->getHeader('Location')[0] . "\n");
+                        fputs($this->outputStream, "{$colors['yellow']}===> [VERBOSE] Redirected: ");
+                        fputs($this->outputStream, $response->getHeader('Location')[0] . "\n");
+                        fputs($this->outputStream, "{$colors['reset']}\n");
                     } else {
-                        if ($statusCode > 399 && $statusCode < 600) {
-                            fputs($this->fp, "{$colors['red']}===> [ERROR] An error occurred: \n");
-                        } else {
-                            fputs($this->fp, "{$colors['cyan']}===> [VERBOSE] Response: \n");
-                        }
                         $body = trim($response->getBody());
                         $result = json_decode($body);
                         if ($result !== null) {
@@ -90,15 +103,23 @@ class Verbose
                         } else {
                             $responseBody = (!empty(trim($body))) ? $body : "No response body returned";
                         }
-                        fputs($this->fp, "{$colors['yellow']}" . $responseBody);
+
+                        if ($statusCode > 399 && $statusCode < 600) {
+                            fputs($this->errorStream, "{$colors['red']}===> [ERROR] An error occurred: \n");
+                            fputs($this->errorStream, "{$colors['yellow']}" . $responseBody);
+                            fputs($this->errorStream, "{$colors['reset']}\n");
+                        } else {
+                            fputs($this->outputStream, "{$colors['cyan']}===> [VERBOSE] Response: \n");
+                            fputs($this->outputStream, "{$colors['yellow']}" . $responseBody);
+                            fputs($this->outputStream, "{$colors['reset']}\n");
+                        }
                     }
-                    fputs($this->fp, "{$colors['reset']}\n");
                     
                     return $response;
                 },
                 function (\Exception $reason) use ($colors) {
-                    fputs($this->fp, "{$colors['red']}===> [ERROR] An error occurred: \n");
-                    fputs($this->fp, "{$colors['yellow']}");
+                    fputs($this->outputStream, "{$colors['red']}===> [ERROR] An error occurred: \n");
+                    fputs($this->outputStream, "{$colors['yellow']}");
 
                     $code = $reason->getCode();
                     if (!empty($code)) {
@@ -107,7 +128,7 @@ class Verbose
 
                     $message = $reason->getMessage();
 
-                    fputs($this->fp, ((!empty($code)) ? $code : "") . $message);
+                    fputs($this->outputStream, ((!empty($code)) ? $code : "") . $message);
 
                     $response = $reason instanceof \GuzzleHttp\Exception\RequestException
                         ? $reason->getResponse()
@@ -116,11 +137,11 @@ class Verbose
                     if ($response instanceof \Psr\Http\Message\ResponseInterface) {
                         $body = $response->getBody()->getContents();
                         if (!empty($body)) {
-                            fputs($this->fp, "\n{$colors['yellow']}" . $body);
+                            fputs($this->outputStream, "\n{$colors['yellow']}" . $body);
                         }
                     }
 
-                    fputs($this->fp, "{$colors['reset']}\n");
+                    fputs($this->outputStream, "{$colors['reset']}\n");
                     
                     return new \GuzzleHttp\Promise\RejectedPromise($reason);
                 }

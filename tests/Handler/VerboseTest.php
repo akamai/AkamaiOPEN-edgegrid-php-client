@@ -58,7 +58,7 @@ EOF;
         $client->setInstanceVerbose(true);
 
         ob_start();
-        $client->get('/test');
+        $client->get('/test1');
         $client->get('/test2');
         $output = ob_get_clean();
 
@@ -349,14 +349,21 @@ EOF;
             ]
         );
 
-        Client::setVerbose(true);
+        $fp = fopen('php://memory', 'a+');
+        Client::setVerbose([STDOUT, $fp]);
 
         ob_start();
         try {
             $client->get('/error');
         } catch (\GuzzleHttp\Exception\ClientException $e) {
         }
-        $output = ob_get_clean();
+        $this->assertEmpty(ob_get_clean());
+
+        fseek($fp, 0);
+        $output = '';
+        do {
+            $output .= fgets($fp);
+        } while (!feof($fp));
 
         $expectedOutput =<<<EOF
 [31;01m===> [ERROR] An error occurred: 
@@ -390,14 +397,21 @@ EOF;
             ]
         );
 
-        Client::setVerbose(true);
+        $fp = fopen('php://memory', 'a+');
+        Client::setVerbose([STDOUT, $fp]);
 
         ob_start();
         try {
             $client->get('/error');
         } catch (\GuzzleHttp\Exception\ClientException $e) {
         }
-        $output = ob_get_clean();
+        $this->assertEmpty(ob_get_clean());
+        
+        fseek($fp, 0);
+        $output = '';
+        do {
+            $output .= fgets($fp);
+        } while (!feof($fp));
 
         $expectedOutput =<<<EOF
 [31;01m===> [ERROR] An error occurred: 
@@ -406,6 +420,65 @@ EOF;
 EOF;
 
         $this->assertEquals($expectedOutput, $output);
+    }
+
+    public function testVerboseMixed()
+    {
+        $handler = $this->getMockHandler([
+            new Response(200, [], json_encode(['test' => 'data'])),
+            new Response(404, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))
+        ]);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+
+        $fp = fopen('php://memory', 'a+');
+        Client::setVerbose(['php://output', $fp]);
+
+        ob_start();
+        try {
+            $client->get('/success');
+            $client->get('/error');
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+        }
+
+        $expectedOutput = <<<EOF
+\x1b[36;01m===> [VERBOSE] Response: 
+\x1b[33;01m{
+    "test": "data"
+}\x1b[39;49;00m
+
+EOF;
+        
+        $this->assertEquals($expectedOutput, ob_get_clean());
+
+        fseek($fp, 0);
+        $output = '';
+        do {
+            $output .= fgets($fp);
+        } while (!feof($fp));
+
+        $expectedError =<<<EOF
+[31;01m===> [ERROR] An error occurred: 
+[33;01m{
+    "test": "data2",
+    "0": [
+        "foo",
+        "bar"
+    ],
+    "1": false,
+    "2": null,
+    "3": 123,
+    "4": 0.123
+}[39;49;00m
+
+EOF;
+
+        $this->assertEquals($expectedError, $output);
     }
 
     public function testVerboseResponseExceptionNoCode()
