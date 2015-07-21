@@ -1,5 +1,12 @@
 #!/bin/sh
 export PATH=vendor/bin:$PATH
+if [[ -z $1 ]]
+then
+    export VERSION=""
+else
+	export VERSION="-$1"
+fi
+
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 cd $DIR && cd ../
 if [[ ! -d "build/phar" ]]
@@ -17,7 +24,7 @@ if (!file_exists(__DIR__ . '/../build/phar')) {
 \$stub = <<<EOF
 <?php
 if (class_exists('Phar')) {
-    Phar::mapPhar('akamai-open-edgegrid-client.phar');
+   Phar::mapPhar('akamai-open-edgegrid-client.phar');
 }
 
 Phar::interceptFileFuncs();
@@ -28,3 +35,5 @@ EOF;
 file_put_contents('build/phar/stub.php', \$stub);" > build/phar/bootstrap.php
 
 php -dphar.readonly=0 ./vendor/bin/box build
+
+mv akamai-open-edgegrid-client.phar "akamai-open-edgegrid-client${VERSION}.phar" 
