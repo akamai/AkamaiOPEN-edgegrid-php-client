@@ -503,14 +503,14 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
                 $handler = $options['handler'];
             }
 
-            if (!$this->verboseHandler) {
-                $this->verboseHandler = new VerboseHandler(array_shift($fp), array_shift($fp));
-            }
-            
             if ($handler === null) {
                 $handler = \GuzzleHttp\HandlerStack::create();
             }
-            
+
+            if (!$this->verboseHandler) {
+                $this->verboseHandler = new VerboseHandler(array_shift($fp), array_shift($fp));
+            }
+
             $handler->after("allow_redirects", $this->verboseHandler, "verbose");
         } catch (\InvalidArgumentException $e) {
             $handler->push($this->verboseHandler, "verbose");
@@ -546,12 +546,12 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
                 $handler = $options['handler'];
             }
 
-            if (!$this->debugHandler) {
-                $this->debugHandler = new DebugHandler($fp);
-            }
-
             if ($handler === null) {
                 $handler = \GuzzleHttp\HandlerStack::create();
+            }
+
+            if (!$this->debugHandler) {
+                $this->debugHandler = new DebugHandler($fp);
             }
 
             $handler->after("allow_redirects", $this->debugHandler, "debug");
