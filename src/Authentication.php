@@ -40,9 +40,9 @@ class Authentication
     protected $host;
 
     /**
-     * @var array Guzzle options
+     * @var array Guzzle config
      */
-    protected $options = [];
+    protected $config = [];
 
     /**
      * @var string Request path
@@ -122,12 +122,12 @@ class Authentication
     protected function makeDataToSign($auth_header)
     {
         $query = '';
-        if (isset($this->options['query']) && $this->options['query']) {
+        if (isset($this->config['query']) && $this->config['query']) {
             $query .= '?';
-            if (is_string($this->options['query'])) {
-                $query .= $this->options['query'];
+            if (is_string($this->config['query'])) {
+                $query .= $this->config['query'];
             } else {
-                $query .= http_build_query($this->options['query'], null, '&', PHP_QUERY_RFC3986);
+                $query .= http_build_query($this->config['query'], null, '&', PHP_QUERY_RFC3986);
             }
         }
 
@@ -153,10 +153,10 @@ class Authentication
     {
         $canonical = [];
         $headers = [];
-        if (isset($this->options['headers'])) {
+        if (isset($this->config['headers'])) {
             $headers = array_combine(
-                array_map('strtolower', array_keys($this->options['headers'])),
-                array_values($this->options['headers'])
+                array_map('strtolower', array_keys($this->config['headers'])),
+                array_values($this->config['headers'])
             );
         }
 
@@ -193,11 +193,11 @@ class Authentication
      */
     protected function makeContentHash()
     {
-        if (empty($this->options['body'])) {
+        if (empty($this->config['body'])) {
             return '';
         } else {
             // Just substr, it'll return as much as it can
-            return $this->makeBase64Sha256(substr($this->options['body'], 0, $this->max_body_size));
+            return $this->makeBase64Sha256(substr($this->config['body'], 0, $this->max_body_size));
         }
     }
 
@@ -240,7 +240,7 @@ class Authentication
     /**
      * Set request HTTP method
      *
-     * @param mixed $method
+     * @param string $method
      * @return Authentication
      */
     public function setHttpMethod($method)
@@ -268,7 +268,10 @@ class Authentication
     public function setHost($host)
     {
         $this->host = $host;
-        if (strpos($host, '://') !== false) {
+        if (strpos($host, '/') !== false || strpos($host, '?') !== false) {
+            if (strpos($host, 'http') === false) {
+                $host = 'https://' . $host;
+            }
             $url = parse_url($host);
             $this->host = $url['host'];
 
@@ -277,6 +280,9 @@ class Authentication
             }
             
             if (isset($url['query'])) {
+                if (!isset($url['path'])) { // for example.org?query=string
+                    $this->setPath('/');
+                }
                 $this->setQuery($url['query']);
             }
         }
@@ -285,17 +291,17 @@ class Authentication
     }
 
     /**
-     * Set Guzzle options
+     * Set Guzzle config
      *
      * This is a convenient way to pass in the
      * body/query/headers options
      *
-     * @param mixed $options
+     * @param mixed $config
      * @return Authentication
      */
-    public function setOptions($options)
+    public function setConfig(array $config)
     {
-        $this->options = array_merge($this->options, $options);
+        $this->config = array_merge($this->config, $config);
         return $this;
     }
 
@@ -315,19 +321,19 @@ class Authentication
             parse_str($query, $query_args);
             $query = http_build_query($query_args, null, '&', PHP_QUERY_RFC3986);
         }
-        $this->options['query'] = $query;
+        $this->config['query'] = $query;
         return $this;
     }
 
     /**
      * Set request body
      *
-     * @param $body
+     * @param string $body
      * return $this;
      */
     public function setBody($body)
     {
-        $this->options['body'] = $body;
+        $this->config['body'] = $body;
         return $this;
     }
 
@@ -335,11 +341,11 @@ class Authentication
      * Set request headers
      *
      * @param array $headers
-     * @returrn $this
+     * @return $this
      */
     public function setHeaders(array $headers)
     {
-        $this->options['headers'] = $headers;
+        $this->config['headers'] = $headers;
         return $this;
     }
 
@@ -434,24 +440,12 @@ class Authentication
     
     public static function createFromEdgeRcFile($section = "default", $path = null)
     {
-        if ($path === null) {
-            if (isset($_SERVER['HOME']) && file_exists($_SERVER['HOME'] . '/.edgerc')) {
-                $path = $_SERVER['HOME'] . "/.edgerc";
-            } elseif (file_exists('./.edgerc')) {
-                $path = './.edgerc';
-            }
+        if ($section === null) {
+            $section = 'default';
         }
 
-        $file = !$path ? false : realpath($path);
-        if (!$file) {
-            throw new \Exception("File \"$file\" does not exist!");
-        }
+        $ini = self::parseEdgeRcFile($path);
 
-        if (!is_readable($file)) {
-            throw new \Exception("Unable to read .edgerc file!");
-        }
-
-        $ini = parse_ini_file($file, true, INI_SCANNER_RAW);
         if (!isset($ini[$section])) {
             throw new \Exception("Section \"$section\" does not exist!");
         }
@@ -472,5 +466,40 @@ class Authentication
         }
         
         return $auth;
+    }
+
+    /**
+     * Parse a .edgerc File
+     *
+     * @param $path
+     * @return array
+     * @throws \Exception
+     */
+    protected static function parseEdgeRcFile($path)
+    {
+        if ($path === null) {
+            if (isset($_SERVER['HOME']) && file_exists($_SERVER['HOME'] . '/.edgerc')) {
+                $path = $_SERVER['HOME'] . "/.edgerc";
+            } elseif (file_exists('./.edgerc')) {
+                $path = './.edgerc';
+            }
+        }
+
+        $file = !$path ? false : realpath($path);
+        if (!$file) {
+            throw new \Exception("File \"$path\" does not exist!");
+        }
+
+        if (!is_readable($file)) {
+            throw new \Exception("Unable to read .edgerc file!");
+        }
+
+        // Handle : assignments in .edgerc files
+        $ini = file_get_contents($file);
+        $ini = str_replace(':', '=', $ini);
+        
+        $ini = parse_ini_string($ini, true, INI_SCANNER_RAW);
+        
+        return $ini;
     }
 }

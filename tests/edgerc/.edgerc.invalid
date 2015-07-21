@@ -1,0 +1,6 @@
+[default]
+host:akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net/
+access_token:akab-access-token-xxx-xxxxxxxxxxxxxxxx
+client_token:akab-client-token-xxx-xxxxxxxxxxxxxxxx
+client_secret:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=
+max-size:2048

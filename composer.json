@@ -27,12 +27,15 @@
     },
     "autoload": {
         "psr-4": {
-            "Akamai\\Open\\EdgeGrid\\": "src/"
+            "Akamai\\Open\\EdgeGrid\\": "src/",
+            "Monolog\\": "src/Monolog"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "GuzzleHttp\\Tests\\": "vendor/guzzlehttp/guzzle/tests"
+            "Akamai\\Open\\EdgeGrid\\Tests\\": "tests",
+            "GuzzleHttp\\Tests\\": "vendor/guzzlehttp/guzzle/tests",
+            "Monolog\\": "tests/Monolog"
         }
     }
 }

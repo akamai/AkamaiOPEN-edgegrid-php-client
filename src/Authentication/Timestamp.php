@@ -24,7 +24,7 @@ class Timestamp
     protected $timestamp;
 
     /**
-     * @var \Akamai\Open\EdgeGrid\Client\Authentication\string \DateInterval spec
+     * @var string \DateInterval spec
      */
     protected $validFor = 'PT10S';
 
@@ -51,7 +51,7 @@ class Timestamp
      * Set how long the current timestamp is considered valid
      *
      * @see \DateInterval
-     * @param $interval
+     * @param string $interval A \DateInterval time spec
      * @return $this
      */
     public function setValidFor($interval)

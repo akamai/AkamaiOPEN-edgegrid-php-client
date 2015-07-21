@@ -67,6 +67,363 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $result);
     }
 
+    public function testDefaultTimestamp()
+    {
+        $authentication = new \Akamai\Open\EdgeGrid\Authentication();
+        $authentication->setAuth("test", "test", "test");
+        $authentication->setHttpMethod("GET");
+        $authentication->setPath("/test");
+        $authentication->setHost("https://example.org");
+        $authentication->createAuthHeader();
+        
+        $this->assertInstanceOf(
+            \Akamai\Open\EdgeGrid\Authentication\Timestamp::CLASS,
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'timestamp')
+        );
+    }
+
+    public function testDefaultNonce()
+    {
+        $authentication = new \Akamai\Open\EdgeGrid\Authentication();
+        $authentication->setAuth("test", "test", "test");
+        $authentication->setHttpMethod("GET");
+        $authentication->setPath("/test");
+        $authentication->setHost("https://example.org");
+        $authentication->createAuthHeader();
+        $authentication->setNonce();
+        
+        $this->assertInstanceOf(
+            \Akamai\Open\EdgeGrid\Authentication\Nonce::CLASS,
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'nonce')
+        );
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Timestamp is invalid. Too old?
+     */
+    public function testTimestampTimeout()
+    {
+        $authentication = new \Akamai\Open\EdgeGrid\Authentication();
+        $authentication->setAuth("test", "test", "test");
+        $authentication->setHttpMethod("GET");
+        $authentication->setPath("/test");
+        $authentication->setHost("https://example.org");
+            
+        $timestamp = new \Akamai\Open\EdgeGrid\Authentication\Timestamp();
+        $timestamp->setValidFor('PT0S');
+        $authentication->setTimestamp($timestamp);
+        sleep(1);
+        $authentication->createAuthHeader();
+    }
+    
+    public function testSignHeadersArray()
+    {
+        $closure = function () {
+        
+            return $this->canonicalizeHeaders();
+        };
+        
+        $authentication = new \Akamai\Open\EdgeGrid\Authentication();
+        $authentication->setAuth("test", "test", "test");
+        $authentication->setHttpMethod("GET");
+        $authentication->setPath("/test");
+        $authentication->setHost("https://example.org");
+        $authentication->setHeaders([
+            'X-Test-1' => ["Value1", "value2"]
+        ]);
+        
+        $authentication->setHeadersToSign(['X-Test-1']);
+        $tester = $closure->bindTo($authentication, $authentication);
+        $this->assertEquals("x-test-1:Value1", $tester());
+
+        $authentication->setHeaders([
+            'X-Test-1' => []
+        ]);
+        $authentication->setHeadersToSign(['X-Test-1']);
+        $this->assertEmpty($tester());
+    }
+    
+    public function testSetHost()
+    {
+        $authentication = new \Akamai\Open\EdgeGrid\Authentication();
+        $authentication->setHost("example.org");
+        $this->assertEquals(
+            "example.org",
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'host')
+        );
+
+        $this->assertNull(\PHPUnit_Framework_Assert::readAttribute($authentication, 'path'));
+        $this->assertArrayNotHasKey('query', \PHPUnit_Framework_Assert::readAttribute($authentication, 'config'));
+
+        $authentication = new \Akamai\Open\EdgeGrid\Authentication();
+        $authentication->setHost("http://example.com");
+        $this->assertEquals(
+            "example.com",
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'host')
+        );
+
+        $this->assertNull(\PHPUnit_Framework_Assert::readAttribute($authentication, 'path'));
+        $this->assertArrayNotHasKey('query', \PHPUnit_Framework_Assert::readAttribute($authentication, 'config'));
+    }
+    
+    public function testSetHostWithPath()
+    {
+        $authentication = new \Akamai\Open\EdgeGrid\Authentication();
+
+        $authentication->setHost("example.net/path");
+        $this->assertEquals(
+            "example.net",
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'host')
+        );
+        $this->assertEquals('/path', \PHPUnit_Framework_Assert::readAttribute($authentication, 'path'));
+        $this->assertArrayNotHasKey('query', \PHPUnit_Framework_Assert::readAttribute($authentication, 'config'));
+
+        $authentication->setHost("http://example.org/newpath");
+        $this->assertEquals(
+            "example.org",
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'host')
+        );
+        $this->assertEquals('/newpath', \PHPUnit_Framework_Assert::readAttribute($authentication, 'path'));
+        $this->assertArrayNotHasKey('query', \PHPUnit_Framework_Assert::readAttribute($authentication, 'config'));
+    }
+    
+    public function testSetHostWithQuery()
+    {
+        $authentication = new \Akamai\Open\EdgeGrid\Authentication();
+        
+        $authentication->setHost("example.net/path?query=string");
+        $this->assertEquals(
+            "example.net",
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'host')
+        );
+        $this->assertEquals('/path', \PHPUnit_Framework_Assert::readAttribute($authentication, 'path'));
+        $this->assertArrayHasKey('query', \PHPUnit_Framework_Assert::readAttribute($authentication, 'config'));
+        $this->assertEquals(
+            'query=string',
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'config')['query']
+        );
+
+        $authentication->setHost("http://example.org/newpath?query=newstring");
+        $this->assertEquals(
+            "example.org",
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'host')
+        );
+        $this->assertEquals('/newpath', \PHPUnit_Framework_Assert::readAttribute($authentication, 'path'));
+        $this->assertArrayHasKey('query', \PHPUnit_Framework_Assert::readAttribute($authentication, 'config'));
+        $this->assertEquals(
+            'query=newstring',
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'config')['query']
+        );
+
+        $authentication->setHost("http://example.org?query=newstring");
+        $this->assertEquals(
+            "example.org",
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'host')
+        );
+        $this->assertEquals('/', \PHPUnit_Framework_Assert::readAttribute($authentication, 'path'));
+        $this->assertArrayHasKey('query', \PHPUnit_Framework_Assert::readAttribute($authentication, 'config'));
+        $this->assertEquals(
+            'query=newstring',
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'config')['query']
+        );
+        
+        $authentication->setHost("http://example.net/?query=string");
+        $this->assertEquals(
+            "example.net",
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'host')
+        );
+        $this->assertEquals('/', \PHPUnit_Framework_Assert::readAttribute($authentication, 'path'));
+        $this->assertArrayHasKey('query', \PHPUnit_Framework_Assert::readAttribute($authentication, 'config'));
+        $this->assertEquals(
+            'query=string',
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'config')['query']
+        );
+    }
+    
+    public function testSetPath()
+    {
+        $authentication = new \Akamai\Open\EdgeGrid\Authentication();
+
+        $authentication->setPath("/path");
+        $this->assertEmpty(
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'host')
+        );
+        $this->assertEquals('/path', \PHPUnit_Framework_Assert::readAttribute($authentication, 'path'));
+        $this->assertArrayNotHasKey('query', \PHPUnit_Framework_Assert::readAttribute($authentication, 'config'));
+
+        $authentication = new \Akamai\Open\EdgeGrid\Authentication();
+        $authentication->setPath("https://example.net/path");
+        $this->assertEquals(
+            "example.net",
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'host')
+        );
+        $this->assertEquals('/path', \PHPUnit_Framework_Assert::readAttribute($authentication, 'path'));
+        $this->assertArrayNotHasKey('query', \PHPUnit_Framework_Assert::readAttribute($authentication, 'config'));
+
+        $authentication = new \Akamai\Open\EdgeGrid\Authentication();
+        $authentication->setPath("/newpath?query=string");
+        $this->assertEmpty(
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'host')
+        );
+        $this->assertEquals('/newpath', \PHPUnit_Framework_Assert::readAttribute($authentication, 'path'));
+        $this->assertArrayHasKey('query', \PHPUnit_Framework_Assert::readAttribute($authentication, 'config'));
+        $this->assertEquals(
+            'query=string',
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'config')['query']
+        );
+
+        $authentication = new \Akamai\Open\EdgeGrid\Authentication();
+        $authentication->setPath("https://example.net/path?query=newstring");
+        $this->assertEquals(
+            "example.net",
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'host')
+        );
+        $this->assertEquals('/path', \PHPUnit_Framework_Assert::readAttribute($authentication, 'path'));
+        $this->assertArrayHasKey('query', \PHPUnit_Framework_Assert::readAttribute($authentication, 'config'));
+        $this->assertEquals(
+            'query=newstring',
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'config')['query']
+        );
+    }
+
+    /**
+     * @dataProvider createFromEdgeRcProvider
+     */
+    public function testCreateFromEdgeRcDefault($section, $file)
+    {
+        $_SERVER['HOME'] = __DIR__ .'/edgerc';
+        $authentication = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile($section, $file);
+
+        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Authentication::CLASS, $authentication);
+        $this->assertEquals(
+            [
+                'client_token' => "akab-client-token-xxx-xxxxxxxxxxxxxxxx",
+                'client_secret' => "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=",
+                'access_token' => "akab-access-token-xxx-xxxxxxxxxxxxxxxx"
+            ],
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'auth')
+        );
+        $this->assertEquals(
+            'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'host')
+        );
+        $this->assertEquals(2048, \PHPUnit_Framework_Assert::readAttribute($authentication, 'max_body_size'));
+    }
+
+    public function testCreateFromEdgeRcUseCwd()
+    {
+        $_SERVER['HOME'] = "/non-existant";
+        $unlink = false;
+        if (!file_exists('./.edgerc')) {
+            touch('./.edgerc');
+            $unlink = true;
+        }
+        
+        try {
+            $auth = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile();
+            $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Authentication::CLASS, $auth);
+        } catch (\Exception $e) {
+            $this->assertEquals('Section "default" does not exist!', $e->getMessage());
+        } finally {
+            if ($unlink) {
+                unlink('./.edgerc');
+            }
+        }
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage File "/non-existant/.edgerc" does not exist!
+     */
+    public function testCreateFromEdgeRcNonExistant()
+    {
+        $auth = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile(null, "/non-existant/.edgerc");
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Unable to read .edgerc file!
+     */
+    public function testCreateFromEdgeRcNonReadable()
+    {
+        $filename = tempnam(sys_get_temp_dir(), '.');
+        touch(tempnam(sys_get_temp_dir(), '.'));
+        chmod($filename, 0000);
+        
+        try {
+            $auth = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile(null, $filename);
+        } finally {
+            chmod($filename, 0777);
+            unlink($filename);
+        }
+    }
+    
+    public function testCreateFromEdgeRcColons()
+    {
+        $file = __DIR__ . '/edgerc/.edgerc.invalid';
+        $authentication = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile(null, $file);
+
+        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Authentication::CLASS, $authentication);
+        $this->assertEquals(
+            [
+                'client_token' => "akab-client-token-xxx-xxxxxxxxxxxxxxxx",
+                'client_secret' => "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=",
+                'access_token' => "akab-access-token-xxx-xxxxxxxxxxxxxxxx"
+            ],
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'auth')
+        );
+        $this->assertEquals(
+            'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'host')
+        );
+        $this->assertEquals(2048, \PHPUnit_Framework_Assert::readAttribute($authentication, 'max_body_size'));
+    }
+    
+    public function testCreateFromEdgeRcColonsWithSpaces()
+    {
+        $file = __DIR__ . '/edgerc/.edgerc.invalid-spaces';
+        $authentication = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile(null, $file);
+
+        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Authentication::CLASS, $authentication);
+        $this->assertEquals(
+            [
+                'client_token' => "akab-client-token-xxx-xxxxxxxxxxxxxxxx",
+                'client_secret' => "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=",
+                'access_token' => "akab-access-token-xxx-xxxxxxxxxxxxxxxx"
+            ],
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'auth')
+        );
+        $this->assertEquals(
+            'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'host')
+        );
+        $this->assertEquals(2048, \PHPUnit_Framework_Assert::readAttribute($authentication, 'max_body_size'));
+    }
+    
+    public function testSetConfig()
+    {
+        $authentication = new \Akamai\Open\EdgeGrid\Authentication();
+        
+        $config = ['test' => 'value'];
+        $authentication->setConfig($config);
+
+        $this->assertEquals($config, \PHPUnit_Framework_Assert::readAttribute($authentication, 'config'));
+        
+        $authentication = new \Akamai\Open\EdgeGrid\Authentication();
+        $authentication->setQuery('query=string');
+        $authentication->setConfig($config);
+        
+        $config['query'] = 'query=string';
+        $this->assertEquals($config, \PHPUnit_Framework_Assert::readAttribute($authentication, 'config'));
+    }
+    
+    public function createFromEdgeRcProvider()
+    {
+        $clientTest = new \Akamai\Open\EdgeGrid\Tests\ClientTest();
+        return $clientTest->createFromEdgeRcProvider();
+    }
+    
     public function createAuthHeaderDataProvider()
     {
         $testdata = json_decode(file_get_contents(__DIR__ . '/testdata.json'), true);

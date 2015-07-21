@@ -21,16 +21,9 @@
 namespace Akamai\Open\EdgeGrid;
 
 use Akamai\Open\EdgeGrid\Authentication;
-use Akamai\Open\EdgeGrid\Authentication\Nonce;
-use Akamai\Open\EdgeGrid\Authentication\Timestamp;
-use Akamai\Open\EdgeGrid\Client\OptionsHandler;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
-use GuzzleHttp\Promise\PromiseInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\UriInterface;
+use Akamai\Open\EdgeGrid\Handler\Authentication as AuthenticationHandler;
+use Akamai\Open\EdgeGrid\Handler\Debug as DebugHandler;
+use Akamai\Open\EdgeGrid\Handler\Verbose as VerboseHandler;
 
 /**
  * Akamai {OPEN} EdgeGrid Client for PHP
@@ -40,7 +33,7 @@ use Psr\Http\Message\UriInterface;
  *
  * @package Akamai {OPEN} EdgeGrid Client
  */
-class Client implements \GuzzleHttp\ClientInterface
+class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
 {
     /**
      * @const int Default Timeout in seconds
@@ -48,47 +41,31 @@ class Client implements \GuzzleHttp\ClientInterface
     const DEFAULT_REQUEST_TIMEOUT = 10;
 
     /**
-     * @var \GuzzleHttp\Client Proxied GuzzleHttp\Client
-     */
-    protected $guzzle;
-
-    /**
-     * @var array Authentication credentials
-     */
-    protected $auth = [];
-
-    /**
-     * @var array Request query string
-     */
-    protected $query = [];
-    
-    /**
-     * @var string Request body
-     */
-    protected $body = '';
-
-    /**
-     * @var array Request headers
-     */
-    protected $headers = [];
-
-    /**
-     * @var Client\OptionsHandler
-     */
-    protected $optionsHandler;
-
-    /**
      * @var \Akamai\Open\EdgeGrid\Authentication
      */
     protected $authentication;
 
     /**
-     * @var bool Whether verbose mode is on
+     * @var \Akamai\Open\EdgeGrid\Handler\Verbose
+     */
+    protected $verboseHandler;
+    
+    /**
+     * @var \Akamai\Open\EdgeGrid\Handler\Debug
+     */
+    protected $debugHandler;
+
+    /**
+     * @var bool|array|resource Whether verbose mode is enabled
+     *
+     * - true - Use STDOUT
+     * - array - output/error streams (different)
+     * - resource - output/error stream (same)
      */
     protected $verbose = false;
 
     /**
-     * @var bool Whether debugging is on
+     * @var bool|resource Whether debugging is enabled
      */
     protected $debug = false;
 
@@ -103,126 +80,79 @@ class Client implements \GuzzleHttp\ClientInterface
     protected $debugOverride = false;
 
     /**
-     * @var bool Whether verbose mode is on
+     * @var bool|array|resource Whether verbose mode is enabled
+     *
+     * - true - Use STDOUT
+     * - array - output/error streams (different)
+     * - resource - output/error stream (same)
      */
     protected static $staticVerbose = false;
 
     /**
-     * @var bool Whether debug mode is on
+     * @var bool|resource Whether debug mode is enabled
      */
     protected static $staticDebug = false;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var \Closure Logging Handler
      */
-    protected static $logger;
+    protected $logger;
 
-    /**
-     * @var array An array of requests
-     */
-    protected $requests = [];
-
-    /**
-     * @var mixed History middleware to track requests
-     * @see \GuzzleHttp\Middleware::history()
-     */
-    protected $history = false;
-
-    /**
-     * @var \GuzzleHttp\HandlerStack The handler stack for middleware
-     */
-    protected $handlerStack = false;
-    
     /**
      * \GuzzleHttp\Client-compatible constructor
      *
-     * @param array $options Options array
-     * @param OptionsHandler|null $optionsHandler
+     * @param array $config Config options array
      * @param Authentication|null $authentication
      */
     public function __construct(
-        $options = [],
-        OptionsHandler $optionsHandler = null,
+        $config = [],
         Authentication $authentication = null
     ) {
-        $this->authentication = $authentication;
-        if ($authentication === null) {
-            $this->authentication = new Authentication();
-        }
+        $config = $this->setAuthenticationHandler($config, $authentication);
+        $config = $this->setBasicOptions($config);
 
-        $this->optionsHandler = $optionsHandler;
-        if ($optionsHandler === null) {
-            $this->optionsHandler = new OptionsHandler($this->authentication);
-        }
-
-        $this->optionsHandler->setAuthentication($this->authentication);
-
-        $options = $this->handleOptions($options);
-
-        $this->guzzle = new \GuzzleHttp\Client($options);
+        parent::__construct($config);
     }
 
     /**
-     * Proxy calls smartly to the \GuzzleHttp\Client
+     * Make an Asynchronous request
      *
      * @param string $method
-     * @param array $args
-     * @return mixed
-     * @throws \Exception
+     * @param string $uri
+     * @param array $options
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function __call($method, $args)
+    public function requestAsync($method, $uri = null, array $options = [])
     {
-        // The only method that isn't a request-type method is getConfig
-        // Don't create the auth header in that case
-        if ($method != 'getConfig') {
-            #$options = [];
+        if (isset($options['timestamp'])) {
+            $this->authentication->setTimestamp($options['timestamp']);
+        } elseif (!$this->getConfig('timestamp')) {
+            $this->authentication->setTimestamp();
+        }
 
-            list($path, $options, $httpMethod) = $this->handleArgs($method, $args);
+        if (isset($options['nonce'])) {
+            $this->authentication->setNonce($options['nonce']);
+        }
 
-            $this->optionsHandler->setPath($path)
-                ->setOptions($options);
-            
-            $this->authentication->setHttpMethod($httpMethod)
-                ->setHost($this->optionsHandler->getHost())
-                ->setPath($path);
+        if (isset($options['handler'])) {
+            $options = $this->setAuthenticationHandler($options, $this->authentication);
+        }
 
-            if (isset($options['timestamp'])) {
-                $this->authentication->setTimestamp($options['timestamp']);
-            } elseif (!$this->guzzle->getConfig('timestamp')) {
-                $this->authentication->setTimestamp();
-            }
-
-            if (isset($options['nonce'])) {
-                $this->authentication->setNonce($options['nonce']);
-            }
-
-            $options = $this->optionsHandler->getOptions();
-
-            if ($handler = $this->getHandlerOption($options)) {
-                $options['handler'] = $handler;
-            }
-
-            $options['debug'] = $this->getDebugOption($options);
-
-            $args = $this->normalizeArgs($args, $path, $options, $method);
+        if ($fp = $this->isVerbose()) {
+            $options = $this->setVerboseHandler($options, $fp);
         }
         
-        try {
-            $return = call_user_func_array([$this->guzzle, $method], $args);
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-            $this->log($e);
-            throw $e;
-        } finally {
-            $this->cleanup();
-            
-            if (isset($httpMethod)) {
-                $lastRequest = end($this->requests);
-                $this->log($lastRequest);
-                $this->verbose($lastRequest);
-            }
+        $options['debug'] = $this->getDebugOption($options);
+        if ($fp = $this->isDebug()) {
+            $options = $this->setDebugHandler($options, $fp);
         }
         
-        return $return;
+        if ($this->logger && isset($options['handler'])) {
+            $this->setLogHandler($options['handler'], $this->logger);
+        }
+
+        return parent::requestAsync($method, $uri, $options);
     }
 
     /**
@@ -233,27 +163,27 @@ class Client implements \GuzzleHttp\ClientInterface
      *
      * @param string $section Credential section to use
      * @param string $path Path to .edgerc credentials file
-     * @param array $options Options to pass to the constructor/guzzle
+     * @param array $config Options to pass to the constructor/guzzle
      * @return \Akamai\Open\EdgeGrid\Client
      */
-    public static function createFromEdgeRcFile($section = 'default', $path = null, $options = [])
+    public static function createFromEdgeRcFile($section = 'default', $path = null, $config = [])
     {
-        $auth = Authentication::createFromEdgeRcFile($section, $path);
+        $auth = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile($section, $path);
         
         if ($host = $auth->getHost()) {
-            $options['base_uri'] = 'https://' .$host;
+            $config['base_uri'] = 'https://' . $host;
         }
         
-        $client = new static($options, null, $auth);
+        $client = new static($config, $auth);
         return $client;
     }
 
     /**
      * Set Akamai {OPEN} Authentication Credentials
      *
-     * @param $client_token
-     * @param $client_secret
-     * @param $access_token
+     * @param string $client_token
+     * @param string $client_secret
+     * @param string $access_token
      * @return $this
      */
     public function setAuth($client_token, $client_secret, $access_token)
@@ -295,12 +225,23 @@ class Client implements \GuzzleHttp\ClientInterface
     /**
      * Set Request Host
      *
-     * @param $host
+     * @param string $host
      * @return $this
      */
     public function setHost($host)
     {
-        $this->optionsHandler->setHost($host);
+        if (substr($host, -1) == '/') {
+            $host = substr($host, 0, -1);
+        }
+        
+        $headers = $this->getConfig('headers');
+        $headers['Host'] = $host;
+        $this->setConfigOption('headers', $headers);
+        
+        if (strpos('/', $host) === false) {
+            $host = 'https://' . $host;
+        }
+        $this->setConfigOption('base_uri', $host);
         
         return $this;
     }
@@ -308,20 +249,20 @@ class Client implements \GuzzleHttp\ClientInterface
     /**
      * Set the HTTP request timeout
      *
-     * @param $timeout_in_seconds
+     * @param int $timeout_in_seconds
      * @return $this
      */
     public function setTimeout($timeout_in_seconds)
     {
-        $this->optionsHandler->setTimeout($timeout_in_seconds);
+        $this->setConfigOption('timeout', $timeout_in_seconds);
 
         return $this;
     }
 
     /**
-     * Print formatted JSON responses to STDOUT
+     * Print formatted JSON responses to output
      *
-     * @param $enable
+     * @param bool|resource $enable
      * @return $this
      */
     public function setInstanceVerbose($enable)
@@ -332,9 +273,9 @@ class Client implements \GuzzleHttp\ClientInterface
     }
 
     /**
-     * Print HTTP requests/responses to STDOUT
+     * Print HTTP requests/responses to output
      *
-     * @param $enable
+     * @param bool|resource $enable
      * @return $this
      */
     public function setInstanceDebug($enable)
@@ -348,52 +289,53 @@ class Client implements \GuzzleHttp\ClientInterface
      * Set a PSR-3 compatible logger (or use monolog by default)
      *
      * @param \Psr\Log\LoggerInterface $logger
-     * @return void
+     * @param string $messageFormat Message format
+     * @return $this
      */
-    public static function setLogger(
+    public function setLogger(
         \Psr\Log\LoggerInterface $logger = null,
-        \Monolog\Handler\HandlerInterface $handler = null,
-        \Monolog\Formatter\FormatterInterface $formatter = null
+        $messageFormat = \GuzzleHttp\MessageFormatter::CLF
     ) {
-        static::$logger = $logger;
-        if (static::$logger === null) {
-            static::$logger = new \Monolog\Logger(self::CLASS . ' Log');
+        if ($logger === null) {
+            $handler = new \Monolog\Handler\ErrorLogHandler(\Monolog\Handler\ErrorLogHandler::SAPI);
+            $handler->setFormatter(new \Monolog\Formatter\LineFormatter("%message%"));
+            $logger = new \Monolog\Logger('HTTP Log', [$handler]);
         }
+     
+        $formatter = new \GuzzleHttp\MessageFormatter($messageFormat);
+        
+        $handler = \GuzzleHttp\Middleware::log($logger, $formatter);
+        $this->logger = $handler;
 
-        if ($handler !== null) {
-            static::$logger->pushHandler($handler);
-        }
-
-        if ($formatter !== null) {
-            foreach (static::$logger->getHandlers() as $handler) {
-                $handler->setFormatter($formatter);
-            }
-        }
+        $handlerStack = $this->getConfig('handler');
+        $this->setLogHandler($handlerStack, $handler);
+        
+        return $this;
     }
 
     /**
      * Add logger using a given filename/format
      *
-     * @param $filename
+     * @param string $filename
      * @param string $format
      */
-    public static function setSimpleLog($filename, $format = "%message%\n")
+    public function setSimpleLog($filename, $format = "{code}")
     {
-        $handler = new \Monolog\Handler\StreamHandler($filename);
-        $handler->setFormatter(new \Monolog\Formatter\LineFormatter($format));
-
-        if (!static::$logger) {
-            self::setLogger(null, $handler);
-            return;
+        if ($this->logger && !($this->logger instanceof \Monolog\Logger)) {
+            return false;
         }
-
-        static::$logger->pushHandler($handler);
+        
+        $handler = new \Monolog\Handler\StreamHandler($filename);
+        $handler->setFormatter(new \Monolog\Formatter\LineFormatter("%message%"));
+        $log = new \Monolog\Logger('HTTP Log', [$handler]);
+        
+        return $this->setLogger($log, $format);
     }
 
     /**
      * Print formatted JSON responses to STDOUT
      *
-     * @param $enable
+     * @param bool|resource $enable
      */
     public static function setVerbose($enable)
     {
@@ -403,7 +345,7 @@ class Client implements \GuzzleHttp\ClientInterface
     /**
      * Print HTTP requests/responses to STDOUT
      *
-     * @param $enable
+     * @param bool|resource $enable
      */
     public static function setDebug($enable)
     {
@@ -411,401 +353,252 @@ class Client implements \GuzzleHttp\ClientInterface
     }
 
     /**
-     * Get handler option
+     * Debugging status for the current request
      *
-     * @param array $options Guzzle options
-     * @return HandlerStack|bool
+     * @return bool|resource
      */
-    protected function getHandlerOption($options)
+    protected function isDebug()
     {
-        if ($this->isVerbose() || $this->isLogging()) {
-            if (!$this->requests || !$this->history) {
-                $this->requests = [];
-                $this->history = Middleware::history($this->requests);
-            }
-
-            $handler = $this->handlerStack;
-
-            // Is the user passing an handler in for this request?
-            if (isset($options['handler'])) {
-                $handler = $options['handler'];
-            } elseif ($configHandler = $this->guzzle->getConfig('handler')) {
-                $handler = $configHandler;
-            } elseif (!$this->handlerStack) {
-                $handler = HandlerStack::create();
-            }
-
-            $this->handlerStack = $handler;
-            $handler->push($this->history);
-
-            return $handler;
+        if (($this->debugOverride && !$this->debug) || (!($this->debugOverride) && !static::$staticDebug)) {
+            return false;
         }
 
-        return false;
+        if ($this->debugOverride && $this->debug) {
+            return $this->debug;
+        }
+
+        return static::$staticDebug;
     }
 
     /**
-     * Log something
+     * Verbose status for the current request
      *
-     * @param \Exception|array $what
-     * @return void
+     * @return array|bool|resource
      */
-    protected function log($what)
-    {
-        if (!static::$logger) {
-            return;
-        }
-
-        if ($what instanceof \GuzzleHttp\Exception\RequestException) {
-            $what = ['request' => $what->getRequest(), 'response' => $what->getResponse()];
-        }
-        
-        if (is_array($what) && isset($what['request'])) {
-            $msg = [];
-            $statusCode = false;
-            
-            if ($what['request'] instanceof RequestInterface) {
-                $msg[] = $what['request']->getMethod();
-                $msg[] = $what['request']->getUri()->getPath();
-            }
-            
-            if (isset($what['response']) && $what['response'] instanceof ResponseInterface) {
-                $statusCode = $what['response']->getStatusCode();
-                ;
-                $header = $what['response']->getHeader('Content-Type');
-                    
-                $msg[] = $statusCode;
-                $msg[] = array_shift($header);
-            }
-            
-            $msg = implode(" ", $msg);
-
-            if ($statusCode) {
-                $type = substr($statusCode, 0, 1);
-                if (in_array($type, [4, 5])) {
-                    static::$logger->error($msg);
-                    return;
-                }
-
-                static::$logger->info($msg);
-                return;
-            }
-            
-            static::$logger->warning($msg);
-        }
-        
-        return;
-    }
-    
-    public function isLogging()
-    {
-        return static::$logger instanceof \Psr\Log\LoggerInterface;
-    }
-    
-    /**
-     * Output JSON when verbose mode is turned on
-     *
-     * @param $requests Array of requests captured by {@see GuzzleHttp\MiddleWare::history()}
-     * @see \Akamai\Open\EdgeGrid\Client::setInstanceVerbose
-     */
-    protected function verbose($lastRequest)
-    {
-        if (!$this->isVerbose()) {
-            return;
-        }
-        
-        $colors = [
-            'red' => "",
-            'yellow' => "",
-            'cyan' => "",
-            'reset' => "",
-        ];
-        
-        if (PHP_SAPI == 'cli') {
-            $colors = [
-                'red' => "\x1b[31;01m",
-                'yellow' => "\x1b[33;01m",
-                'cyan' => "\x1b[36;01m",
-                'reset' => "\x1b[39;49;00m",
-            ];
-        }
-        
-        echo "{$colors['cyan']}===> [VERBOSE] Response: \n";
-        if (isset($lastRequest['response']) && $lastRequest['response'] instanceof ResponseInterface) {
-            $body = trim($lastRequest['response']->getBody());
-            $result = json_decode($body);
-            if ($result !== null) {
-                $response = json_encode($result, JSON_PRETTY_PRINT);
-            } else {
-                $response = $body;
-            }
-            echo "{$colors['yellow']}" . $response;
-        } else {
-            echo "{$colors['red']}No response returned";
-        }
-        echo "{$colors['reset']}\n";
-    }
-    
     protected function isVerbose()
     {
         if (($this->verboseOverride && !$this->verbose) || (!($this->verboseOverride) && !static::$staticVerbose)) {
             return false;
         }
+
+        if ($this->verboseOverride && $this->verbose) {
+            return $this->verbose;
+        }
         
-        return true;
+        return static::$staticVerbose;
     }
 
     /**
-     * Sort out path/options/http method args
+     * Set values on the private \GuzzleHttp\Client->config
      *
-     * Regardless of whether a specific HTTP
-     * method was called, or the generic request()
-     * this will return the path/options/http method
+     * This is a terrible hack, and illustrates why making
+     * anything private makes it difficult to extend, and impossible
+     * when there is no setter.
      *
-     * @param string $method Original method called
-     * @param array $args Original __call() arguments
-     * @return array
-     */
-    protected function handleArgs($method, $args)
-    {
-        $options = [];
-        $path = '/';
-        $httpMethod = strtolower(str_replace('async', '', $method));
-
-        if ($httpMethod != 'request' && $httpMethod != 'send') {
-            $path = $args[0];
-
-            if (isset($args[1])) {
-                $options = array_merge($this->guzzle->getConfig(), $args[1]);
-            }
-        }
-
-        if ($httpMethod == 'send') {
-            // PSR-7
-            /**
-             * @todo Add the request headers/body/auth to the PSR-7 Request
-             */
-            throw new \RuntimeException("Not Implemented");
-        }
-
-        if ($httpMethod == 'request') {
-            $httpMethod = $args[0];
-            $path = $args[1];
-
-            if (isset($args[2])) {
-                $options = array_merge($this->guzzle->getConfig(), $args[2]);
-            }
-        }
-        
-        if ((!isset($options['query']) || empty($options['query'])) && $query = parse_url($path, PHP_URL_QUERY)) {
-            parse_str($query, $options['query']);
-        }
-        
-        if ($url = parse_url($path)) {
-            if (isset($url['host'])) {
-                $options['base_uri'] = $url['scheme'] . '://' . $url['host'];
-            }
-        }
-        
-        $path = $this->normalizePath($path);
-
-        return [$path, $options, $httpMethod];
-    }
-
-    /**
-     * Normalize __call() arguments
-     *
-     * @param array $args Arguments passed to __call()
-     * @param string $path Request Path
-     * @param array $options Guzzle options
-     * @param string $method original method called
-     * @return array
-     */
-    protected function normalizeArgs($args, $path, $options, $method)
-    {
-        $httpMethod = strtolower(str_replace('async', '', $method));
-
-        if ($httpMethod != 'request' && $httpMethod != 'send') { // not ->request() or ->send()
-            $args[0] = $path;
-            $args[1] = $options;
-        }
-        
-        if ($httpMethod == 'send') {
-            throw new \RuntimeException("Not implemented");
-        }
-        
-        if ($httpMethod == 'request') {
-            $args[0] = $method;
-            $args[1] = $path;
-            $args[2] = $options;
-        }
-        
-        return $args;
-    }
-
-    /**
-     * Normalize path
-     *
-     * This returns just the path part of the URL.
-     * Most importantly, it removes any query args
-     * as these are handler by {@see Client->getQueryOption()}
-     *
-     * @param string $path Path to normalize
-     * @return string
-     */
-    protected function normalizePath($path)
-    {
-        return parse_url($path, PHP_URL_PATH);
-    }
-
-    /**
-     * Cleanup for a new request
-     *
+     * @param string $what Config option to set
+     * @param mixed $value Value to set the option to
      * @return void
      */
-    protected function cleanup()
+    protected function setConfigOption($what, $value)
     {
-        $this->query = [];
-        $this->body = '';
-        $this->headers = [];
-    }
+        $closure = function () use ($what, $value) {
+            /* @var $this \GuzzleHttp\Client */
+            $this->config[$what] = $value;
+        };
 
-    /**
-     * Handle incoming options
-     *
-     * @param $options
-     * @return mixed
-     */
-    protected function handleOptions($options)
-    {
-        if (isset($options['timestamp']) && $options['timestamp'] instanceof Timestamp) {
-            $this->authentication->setTimestamp($options['timestamp']);
-        }
-
-        if (isset($options['nonce']) && $options['nonce'] instanceof Nonce) {
-            $this->authentication->setNonce($options['nonce']);
-        }
-
-        if (!isset($options['timeout'])) {
-            $options['timeout'] = $this->optionsHandler->getTimeout();
-        } else {
-            $this->optionsHandler->setTimeout($options['timeout']);
-        }
-        
-        if (isset($options['debug'])) {
-            $this->setInstanceDebug(true);
-        }
-
-        if (isset($options['base_uri'])) {
-            $this->optionsHandler->setHost($options['base_uri']);
-
-            if (strpos($options['base_uri'], '://') === false) {
-                $options['base_uri'] = 'https://' . $options['base_uri'];
-                return $options;
-            }
-            return $options;
-        }
-        return $options;
+        $closure = $closure->bindTo($this, \GuzzleHttp\Client::CLASS);
+        $closure();
     }
 
     /**
      * Handle debug option
      *
-     * @return bool
+     * @return bool|resource
      */
-    protected function getDebugOption($options)
+    protected function getDebugOption($config)
     {
-        if (isset($options['debug'])) {
-            return $options['debug'];
+        if (isset($config['debug'])) {
+            return ($config['debug'] === true) ? STDERR : $config['debug'];
         }
         
-        if (($this->debugOverride && $this->debug) || (!$this->debugOverride && static::$staticDebug)) {
-            return true;
+        if (($this->debugOverride && $this->debug)) {
+            return ($this->debug === true) ? STDERR : $this->debug;
+        } elseif ((!$this->debugOverride && static::$staticDebug)) {
+            return (static::$staticDebug === true) ? STDERR : static::$staticDebug;
         }
         
         return false;
     }
 
     /**
-     * Send an HTTP request.
+     * Set the Authentication Handler
      *
-     * @param RequestInterface $request Request to send
-     * @param array $options Request options to apply to the given
-     *                                  request and to the transfer.
-     *
-     * @return ResponseInterface
-     * @throws GuzzleException
+     * @param array $config
+     * @param Authentication|null $authentication
+     * @return array
      */
-    public function send(RequestInterface $request, array $options = [])
+    protected function setAuthenticationHandler($config, Authentication $authentication = null)
     {
-        return $this->__call(__FUNCTION__, [$request, $options]);
+        $this->setAuthentication($config, $authentication);
+        
+        $authenticationHandler = new AuthenticationHandler();
+        $authenticationHandler->setSigner($this->authentication);
+        if (!isset($config['handler'])) {
+            $config['handler'] = \GuzzleHttp\HandlerStack::create();
+        }
+        try {
+            $config['handler']->before("history", $authenticationHandler, 'authentication');
+        } catch (\InvalidArgumentException $e) {
+            // history middleware not added yet
+            $config['handler']->push($authenticationHandler, 'authentication');
+        }
+        return $config;
     }
 
     /**
-     * Asynchronously send an HTTP request.
+     * Set the Authentication instance
      *
-     * @param RequestInterface $request Request to send
-     * @param array $options Request options to apply to the given
-     *                                  request and to the transfer.
-     *
-     * @return PromiseInterface
+     * @param Authentication|null $authentication
      */
-    public function sendAsync(RequestInterface $request, array $options = [])
+    protected function setAuthentication(array $config, Authentication $authentication = null)
     {
-        return $this->__call(__FUNCTION__, [$request, $options]);
+        $this->authentication = $authentication;
+        if ($authentication === null) {
+            $this->authentication = new Authentication();
+        }
+        
+        if (isset($config['timestamp'])) {
+            $this->authentication->setTimestamp($config['timestamp']);
+        }
+        
+        if (isset($config['nonce'])) {
+            $this->authentication->setNonce($config['nonce']);
+        }
     }
 
     /**
-     * Create and send an HTTP request.
+     * Add the Verbose handler to the HandlerStack
      *
-     * Use an absolute path to override the base path of the client, or a
-     * relative path to append to the base path of the client. The URL can
-     * contain the query string as well.
-     *
-     * @param string $method HTTP method
-     * @param string|UriInterface $uri URI object or string.
-     * @param array $options Request options to apply.
-     *
-     * @return ResponseInterface
-     * @throws GuzzleException
+     * @param array $options Guzzle Options
+     * @param bool|resource|array|null $fp Stream to write to
+     * @return array
      */
-    public function request($method, $uri, array $options = [])
+    protected function setVerboseHandler($options, $fp = null)
     {
-        return $this->__call(__FUNCTION__, [$method, $uri, $options]);
+        try {
+            if (is_bool($fp) || $fp === null) {
+                $fp = ['outputStream' => null, 'errorStream' => null];
+            } elseif (!is_array($fp)) {
+                $fp = ['outputStream' => $fp, 'errorStream' => $fp];
+            }
+
+            $handler = $this->getConfig('handler');
+            // if we have a default handler, and we've already created a VerboseHandler
+            // we can bail out now (or we will add another one to the stack)
+            if ($handler && $this->verboseHandler) {
+                return $options;
+            }
+            
+            if (isset($options['handler'])) {
+                $handler = $options['handler'];
+            }
+
+            if ($handler === null) {
+                $handler = \GuzzleHttp\HandlerStack::create();
+            }
+
+            if (!$this->verboseHandler) {
+                $this->verboseHandler = new VerboseHandler(array_shift($fp), array_shift($fp));
+            }
+
+            $handler->after("allow_redirects", $this->verboseHandler, "verbose");
+        } catch (\InvalidArgumentException $e) {
+            $handler->push($this->verboseHandler, "verbose");
+        }
+        
+        $options['handler'] = $handler;
+        
+        return $options;
     }
 
     /**
-     * Create and send an asynchronous HTTP request.
+     * Add the Debug handler to the HandlerStack
      *
-     * Use an absolute path to override the base path of the client, or a
-     * relative path to append to the base path of the client. The URL can
-     * contain the query string as well. Use an array to provide a URL
-     * template and additional variables to use in the URL template expansion.
-     *
-     * @param string $method HTTP method
-     * @param string|UriInterface $uri URI object or string.
-     * @param array $options Request options to apply.
-     *
-     * @return PromiseInterface
+     * @param array $options Guzzle Options
+     * @param bool|resource|null $fp Stream to write to
+     * @return array
      */
-    public function requestAsync($method, $uri, array $options = [])
+    protected function setDebugHandler($options, $fp = null)
     {
-        return $this->__call(__FUNCTION__, [$method, $uri, $options]);
+        try {
+            if (is_bool($fp)) {
+                $fp = null;
+            }
+
+            $handler = $this->getConfig('handler');
+            // if we have a default handler, and we've already created a DebugHandler
+            // we can bail out now (or we will add another one to the stack)
+            if ($handler && $this->debugHandler) {
+                return $options;
+            }
+
+            if (isset($options['handler'])) {
+                $handler = $options['handler'];
+            }
+
+            if ($handler === null) {
+                $handler = \GuzzleHttp\HandlerStack::create();
+            }
+
+            if (!$this->debugHandler) {
+                $this->debugHandler = new DebugHandler($fp);
+            }
+
+            $handler->after("allow_redirects", $this->debugHandler, "debug");
+        } catch (\InvalidArgumentException $e) {
+            $handler->push($this->debugHandler, "debug");
+        }
+        
+        $options['handler'] = $handler;
+        
+        return $options;
+    }
+    
+    /**
+     * Add the Log handler to the HandlerStack
+     *
+     * @param \GuzzleHttp\HandlerStack $handlerStack
+     * @param callable $logHandler
+     */
+    protected function setLogHandler(\GuzzleHttp\HandlerStack $handlerStack, callable $logHandler)
+    {
+        try {
+            $handlerStack->after("history", $logHandler, "logger");
+        } catch (\InvalidArgumentException $e) {
+            try {
+                $handlerStack->before("allow_redirects", $logHandler, "logger");
+            } catch (\InvalidArgumentException $e) {
+                $handlerStack->push($logHandler, "logger");
+            }
+        }
+        
+        return $this;
     }
 
     /**
-     * Get a client configuration option.
-     *
-     * These options include default request options of the client, a "handler"
-     * (if utilized by the concrete client), and a "base_uri" if utilized by
-     * the concrete client.
-     *
-     * @param string|null $option The config option to retrieve.
-     *
+     * @param $config
      * @return mixed
      */
-    public function getConfig($option = null)
+    protected function setBasicOptions($config)
     {
-        return $this->__call(__FUNCTION__, [$option]);
+        if (!isset($config['timeout'])) {
+            $config['timeout'] = static::DEFAULT_REQUEST_TIMEOUT;
+        }
+
+        if (isset($config['base_uri']) && strpos($config['base_uri'], 'http') === false) {
+            $config['base_uri'] = 'https://' . $config['base_uri'];
+            return $config;
+        }
+        return $config;
     }
 }
