@@ -30,7 +30,7 @@ class Verbose
         if (!is_resource($errorStream) && $errorStream !== null) {
             $fp = @fopen($errorStream, 'a+');
             if (!$fp) {
-                throw new \Exception("Unable to use error stream: " .(string) $errorStream);
+                throw new \Exception("Unable to use error stream: " . (string) $errorStream);
             }
             $errorStream = $fp;
         }
@@ -38,7 +38,7 @@ class Verbose
         if (!is_resource($outputStream) && $outputStream !== null) {
             $fp = @fopen($outputStream, 'a+');
             if (!$fp) {
-                throw new \Exception("Unable to use output stream: " .(string) $outputStream);
+                throw new \Exception("Unable to use output stream: " . (string) $outputStream);
             }
             $outputStream = $fp;
         } elseif ($outputStream !== null && $errorStream === null) {
