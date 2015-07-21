@@ -35,11 +35,7 @@ class DebugTest extends \PHPUnit_Framework_TestCase
         
         $this->assertEmpty(ob_get_clean());
 
-        fseek($fp, 0);
-        $output = '';
-        do {
-            $output .= fgets($fp);
-        } while (!feof($fp));
+        $output = $this->readStreamData($fp);
 
         $expectedOutput = <<<EOF
 [31;01m===> [ERROR] Call to /error failed with a 400 Bad Request result
@@ -77,11 +73,7 @@ EOF;
 
         $this->assertEmpty(ob_get_clean());
 
-        fseek($fp, 0);
-        $output = '';
-        do {
-            $output .= fgets($fp);
-        } while (!feof($fp));
+        $output = $this->readStreamData($fp);
 
         $expectedOutput = <<<EOF
 [31;01m===> [ERROR] Call to /error failed with a 400 Bad Request result
@@ -116,12 +108,8 @@ EOF;
         } catch (\Exception $e) {
         }
         $this->assertEmpty(ob_get_clean());
-        
-        fseek($fp, 0);
-        $output = '';
-        while (!feof($fp)) {
-            $output .= fgets($fp);
-        }
+
+        $output = $this->readStreamData($fp);
 
         $expectedOutput = "";
 
@@ -150,20 +138,12 @@ EOF;
         }
         $this->assertEmpty(ob_get_clean());
 
-        fseek($fp, 0);
-        $output = '';
-        while (!feof($fp)) {
-            $output .= fgets($fp);
-        }
+        $output = $this->readStreamData($fp);
 
         $expectedOutput = "";
         $this->assertEquals($expectedOutput, $output);
 
-        fseek($fp2, 0);
-        $output = '';
-        while (!feof($fp2)) {
-            $output .= fgets($fp2);
-        }
+        $output = $this->readStreamData($fp2);
 
         $expectedOutput = <<<EOF
 [31;01m===> [ERROR] Call to /error failed with a 400 Bad Request result
@@ -217,11 +197,7 @@ EOF;
         }
         $this->assertEmpty(ob_get_clean());
 
-        fseek($fp, 0);
-        $output = '';
-        do {
-            $output .= fgets($fp);
-        } while (!feof($fp));
+        $output = $this->readStreamData($fp);
 
         $expectedOutput = <<<EOF
 [31;01m===> [ERROR] Call to /400 failed with a 400 Bad Request result
@@ -259,10 +235,234 @@ EOF;
 
         $this->assertEquals($expectedOutput, $output);
     }
+    
+    public function testResponseNoDetail()
+    {
+        $handler = $this->getMockHandler([new Response(500, [], json_encode(['nodetail' => 'error info']))]);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+
+        $fp = fopen('php://memory', 'a+');
+        Client::setDebug($fp);
+
+        ob_start();
+        try {
+            $client->get('/error');
+        } catch (\Exception $e) {
+        }
+
+        $this->assertEmpty(ob_get_clean());
+
+        $output = $this->readStreamData($fp);
+
+        $expectedOutput = <<<EOF
+[31;01m===> [ERROR] Call to /error failed with a 500 Internal Server Error result
+===> [ERROR] Problem details:
+{
+    "nodetail": "error info"
+}[39;49;00m
+
+EOF;
+
+        $this->assertEquals($expectedOutput, $output);
+    }
+
+    public function testResponseNoBody()
+    {
+        $handler = $this->getMockHandler([new Response(500, [])]);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+
+        $fp = fopen('php://memory', 'a+');
+        Client::setDebug($fp);
+
+        ob_start();
+        try {
+            $client->get('/error');
+        } catch (\Exception $e) {
+        }
+
+        $this->assertEmpty(ob_get_clean());
+
+        $output = $this->readStreamData($fp);
+
+        $expectedOutput = <<<EOF
+[31;01m===> [ERROR] Call to /error failed with a 500 Internal Server Error result
+===> [ERROR] Problem details:
+No response body returned[39;49;00m
+
+EOF;
+
+        $this->assertEquals($expectedOutput, $output);
+    }
+
+    public function testResponseNoJsonBody()
+    {
+        $handler = $this->getMockHandler([new Response(500, [], "error info")]);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+        $client->setAuth('test', 'test', 'test');
+
+        $fp = fopen('php://memory', 'a+');
+        Client::setDebug($fp);
+
+        ob_start();
+        try {
+            $client->get('/error');
+        } catch (\Exception $e) {
+        }
+
+        $this->assertEmpty(ob_get_clean());
+
+        $output = $this->readStreamData($fp);
+
+        $expectedOutput = <<<EOF
+[31;01m===> [ERROR] Call to /error failed with a 500 Internal Server Error result
+===> [ERROR] Problem details:
+error info[39;49;00m
+
+EOF;
+
+        $this->assertEquals($expectedOutput, $output);
+    }
+    
+    public function testStringResource()
+    {
+        $handler = new \Akamai\Open\EdgeGrid\Handler\Debug('php://stdout');
+        $fp = \PHPUnit_Framework_Assert::readAttribute($handler, 'fp');
+        $this->assertEquals('php://stdout', stream_get_meta_data($fp)['uri']);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Unable to use resource: fake://stream
+     */
+    public function testInvalidStringResource()
+    {
+        $handler = new \Akamai\Open\EdgeGrid\Handler\Debug('fake://stream');
+    }
+
+    public function testDebugResponseExceptionNoCode()
+    {
+        $handler = $this->getMockHandler([
+            new \GuzzleHttp\Exception\RequestException("Error message", new \GuzzleHttp\Psr7\Request('GET', '/test'))
+        ]);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+
+        $fp = fopen('php://memory', 'a+');
+        Client::setDebug($fp);
+
+        ob_start();
+        try {
+            $client->get('/error');
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+        }
+        $this->assertEmpty(ob_get_clean());
+
+        $output = $this->readStreamData($fp);
+        $this->assertEmpty($output);
+    }
+
+    public function testVerboseResponseExceptionWithCode()
+    {
+        $handler = $this->getMockHandler([
+            new \GuzzleHttp\Exception\RequestException(
+                "Error message",
+                new \GuzzleHttp\Psr7\Request('GET', '/test'),
+                new Response(500)
+            )
+        ]);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+
+        $fp = fopen("php://memory", "a+");
+        Client::setDebug($fp);
+
+        ob_start();
+        try {
+            $client->get('/error');
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+        }
+        $this->assertEmpty(ob_get_clean());
+        
+        $output = $this->readStreamData($fp);
+        $this->assertEmpty($output);
+    }
+
+    public function testVerboseResponseExceptionWithBody()
+    {
+        $handler = $this->getMockHandler([
+            new \GuzzleHttp\Exception\RequestException(
+                "Error message",
+                new \GuzzleHttp\Psr7\Request('GET', '/test'),
+                new Response(500, [], json_encode(["errorString" => "An error"]))
+            )
+        ]);
+
+        $client = new Client(
+            [
+                'base_uri' => 'http://example.org',
+                'handler' => $handler,
+            ]
+        );
+
+        $fp = fopen('php://memory', 'a+');
+        Client::setDebug($fp);
+
+        ob_start();
+        try {
+            $client->get('/error');
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+        }
+        $this->assertEmpty(ob_get_clean());
+
+        $output = $this->readStreamData($fp);
+
+        $this->assertEmpty($output);
+    }
 
     public function getMockHandler($request, array &$container = null)
     {
         $client = new \Akamai\Open\EdgeGrid\Tests\ClientTest();
         return $client->getMockHandler($request, $container);
+    }
+    
+    protected function readStreamData($fp)
+    {
+        fseek($fp, 0);
+        $output = '';
+        while (!feof($fp)) {
+            $output .= fgets($fp);
+        }
+        
+        return $output;
     }
 }

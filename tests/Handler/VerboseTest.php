@@ -583,6 +583,56 @@ EOF;
         $this->assertEquals($expectedOutput, $output);
     }
     
+    public function testVerboseSingleStreamString()
+    {
+        $verbose = new \Akamai\Open\EdgeGrid\Handler\Verbose('php://memory');
+        
+        $fp = \PHPUnit_Framework_Assert::readAttribute($verbose, 'outputStream');
+        $fp2 = \PHPUnit_Framework_Assert::readAttribute($verbose, 'errorStream');
+        
+        $this->assertSame($fp, $fp2);
+        $this->assertTrue(stream_get_meta_data($fp)['uri'] == 'php://memory');
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Unable to use output stream: error://stream
+     */
+    public function testVerboseSingleStreamStringInvalid()
+    {
+        $verbose = new \Akamai\Open\EdgeGrid\Handler\Verbose('error://stream');
+    }
+
+    public function testVerboseDualStreamString()
+    {
+        $verbose = new \Akamai\Open\EdgeGrid\Handler\Verbose('php://memory', 'php://temp');
+
+        $fp = \PHPUnit_Framework_Assert::readAttribute($verbose, 'outputStream');
+        $fp2 = \PHPUnit_Framework_Assert::readAttribute($verbose, 'errorStream');
+
+        $this->assertNotSame($fp, $fp2);
+        $this->assertTrue(stream_get_meta_data($fp)['uri'] == 'php://memory');
+        $this->assertTrue(stream_get_meta_data($fp2)['uri'] == 'php://temp');
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Unable to use error stream: error://stream
+     */
+    public function testVerboseDualStreamStringErrorInvalid()
+    {
+        $verbose = new \Akamai\Open\EdgeGrid\Handler\Verbose('php://input', 'error://stream');
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Unable to use output stream: error://stream
+     */
+    public function testVerboseDualStreamStringInvalid()
+    {
+        $verbose = new \Akamai\Open\EdgeGrid\Handler\Verbose('error://stream', 'error://stream2');
+    }
+    
     public function getMockHandler($request, array &$container = null)
     {
         $client = new \Akamai\Open\EdgeGrid\Tests\ClientTest();

@@ -27,10 +27,11 @@ class Verbose
     
     public function __construct($outputStream = null, $errorStream = null)
     {
+        $errorStreamException = null;
         if (!is_resource($errorStream) && $errorStream !== null) {
             $fp = @fopen($errorStream, 'a+');
             if (!$fp) {
-                throw new \Exception("Unable to use error stream: " . (string) $errorStream);
+                $errorStreamException = new \Exception("Unable to use error stream: " . (string) $errorStream);
             }
             $errorStream = $fp;
         }
@@ -41,10 +42,16 @@ class Verbose
                 throw new \Exception("Unable to use output stream: " . (string) $outputStream);
             }
             $outputStream = $fp;
-        } elseif ($outputStream !== null && $errorStream === null) {
+        }
+        
+        if ($errorStreamException instanceof \Exception) {
+            throw $errorStreamException;
+        }
+        
+        if ($outputStream !== null && $errorStream === null) {
             $errorStream = $outputStream;
         }
-
+        
         if ($outputStream === null && $errorStream === null) {
             $errorStream = fopen('php://stderr', 'a');
         }

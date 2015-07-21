@@ -151,4 +151,29 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 
         $client->get("https://test-akamaiapis.net");
     }
+    
+    public function testProxyNonFluent()
+    {
+        $container = [];
+        $handler = $this->getMockHandler([new Response(200)], $container);
+
+        $auth = new \Akamai\Open\EdgeGrid\Handler\Authentication();
+        $auth->setSigner(new \Akamai\Open\EdgeGrid\Authentication());
+        $auth->setHost('test.host');
+        
+        $this->assertEquals('test.host', $auth->getHost());
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Signer not set, make sure to call setSigner first
+     */
+    public function testProxyNoSigner()
+    {
+        $container = [];
+        $handler = $this->getMockHandler([new Response(200)], $container);
+
+        $auth = new \Akamai\Open\EdgeGrid\Handler\Authentication();
+        $auth->setHost('test.host');
+    }
 }

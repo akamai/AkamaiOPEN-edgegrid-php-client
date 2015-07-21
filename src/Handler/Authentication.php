@@ -94,6 +94,10 @@ class Authentication
      */
     public function __call($method, $args)
     {
+        if (!isset($this->signer)) {
+            throw new \Exception("Signer not set, make sure to call setSigner first");
+        }
+        
         $return = call_user_func_array([$this->signer, $method], $args);
         if ($return == $this->signer) {
             return $this;
