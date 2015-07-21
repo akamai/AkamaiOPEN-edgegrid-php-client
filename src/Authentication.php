@@ -494,7 +494,11 @@ class Authentication
             throw new \Exception("Unable to read .edgerc file!");
         }
 
-        $ini = parse_ini_file($file, true, INI_SCANNER_RAW);
+        // Handle : assignments in .edgerc files
+        $ini = file_get_contents($file);
+        $ini = str_replace(':', '=', $ini);
+        
+        $ini = parse_ini_string($ini, true, INI_SCANNER_RAW);
         
         return $ini;
     }

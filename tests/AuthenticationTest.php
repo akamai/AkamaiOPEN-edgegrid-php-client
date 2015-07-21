@@ -359,6 +359,48 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         }
     }
     
+    public function testCreateFromEdgeRcColons()
+    {
+        $file = __DIR__ . '/edgerc/.edgerc.invalid';
+        $authentication = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile(null, $file);
+
+        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Authentication::CLASS, $authentication);
+        $this->assertEquals(
+            [
+                'client_token' => "akab-client-token-xxx-xxxxxxxxxxxxxxxx",
+                'client_secret' => "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=",
+                'access_token' => "akab-access-token-xxx-xxxxxxxxxxxxxxxx"
+            ],
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'auth')
+        );
+        $this->assertEquals(
+            'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'host')
+        );
+        $this->assertEquals(2048, \PHPUnit_Framework_Assert::readAttribute($authentication, 'max_body_size'));
+    }
+    
+    public function testCreateFromEdgeRcColonsWithSpaces()
+    {
+        $file = __DIR__ . '/edgerc/.edgerc.invalid-spaces';
+        $authentication = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile(null, $file);
+
+        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Authentication::CLASS, $authentication);
+        $this->assertEquals(
+            [
+                'client_token' => "akab-client-token-xxx-xxxxxxxxxxxxxxxx",
+                'client_secret' => "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=",
+                'access_token' => "akab-access-token-xxx-xxxxxxxxxxxxxxxx"
+            ],
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'auth')
+        );
+        $this->assertEquals(
+            'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
+            \PHPUnit_Framework_Assert::readAttribute($authentication, 'host')
+        );
+        $this->assertEquals(2048, \PHPUnit_Framework_Assert::readAttribute($authentication, 'max_body_size'));
+    }
+    
     public function testSetConfig()
     {
         $authentication = new \Akamai\Open\EdgeGrid\Authentication();
