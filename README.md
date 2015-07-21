@@ -6,7 +6,7 @@
 
 [Akamai {OPEN} EdgeGrid Authentication]: https://developer.akamai.com/introduction/Client_Auth.html
 
-This library implements the Akamai {OPEN} EdgeGrid Authentication scheme on top of [Guzzle](https://github.com/guzzle/guzzle).
+This library implements the Akamai {OPEN} EdgeGrid Authentication scheme on top of [Guzzle](https://github.com/guzzle/guzzle), as both a drop-in replacement client, and middleware.
 
 For more information visit the [Akamai {OPEN} Developer Community](https://developer.akamai.com).
 
@@ -20,7 +20,12 @@ To install use [`composer`](http://getcomposer.org):
 $ composer require akamai-open/edgegrid-client
 ```
 
-## Usage
+## Client Usage
+
+The `Akamai\Open\EdgeGrid\Client` extends `\GuzzleHttp\Client` and transparently enables you to sign API requests,
+without interfering with other usage - this makes it a drop-in replacement, with the exception that you _must_ call
+`\Akamai\Open\EdgeGrid\Client->setAuth()` (or provide an instance of `\Akamai\Open\EdgeGrid\Authentication` to the
+constructor) prior to making a request to an API.
 
 ```php
 $client = new Akamai\Open\EdgeGrid\Client([
@@ -66,6 +71,79 @@ $client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile('example', '../conf
 // use $client just as you would \Guzzle\Http\Client
 $response = $client->get('/billing-usage/v1/products');
 ```
+
+## Guzzle Middleware
+
+This package provides three different middleware handlers:
+
+- `\Akamai\Open\EdgeGrid\Handler\Authentication` - provides transparent API request signing
+- `\Akamai\Open\EdgeGrid\Handler\Verbose` - easily output (or log) responses
+- `\Akamai\Open\EdgeGrid\Handler\Debug` - easily output (or log) errors
+
+All three can be added transparently when using the `Client`, or added to a standard `\GuzzleHttp\Client`, or by adding them as a handler.
+
+### Transparent Usage
+
+To enable `Authentication` call `Client->setAuthentication()`, or pass in an instance of `\Akamai\EdgeGrid\Authentication`
+to `Client->__construct()`.
+
+To enable `Verbose` call `Client->setInstanceVerbose()` or `Client::setVerbose()` passing in on of `true|resource|[resource output, resource error]. Defaults to `[STDOUT, STDERR]`.
+
+To enable `Debug` call `Client->setInstanceDebug()`, `Client::setDebug()`, or set the `debug` config option with `true|resource`. Defaults to `STDERR`.
+
+### Middleware
+
+#### Authentication Handler
+
+```php
+// Create the Authentication Handler
+$auth = \Akamai\Open\EdgeGrid\Handler\Authentication::createFromEdgeRcFile();
+// or:
+$auth = new \Akamai\Open\EdgeGrid\Handler\Authentication;
+$auth->setAuth($client_token, $client_secret, $access_token);
+
+// Create the handler stack
+$handlerStack = HandlerStack::create();
+
+// Add the Auth handler to the stack
+$handlerStack->push($auth);
+
+// Add the handler to a regular \GuzzleHttp\Client
+$guzzle = new \GuzzleHttp\Client([
+    "handler" => $handlerStack
+]);
+```
+
+#### Verbose Handler
+
+```php
+// Create the handler stack
+$handlerStack = HandlerStack::create();
+
+// Add the Auth handler to the stack
+$handlerStack->push(new \Akamai\Open\EdgeGrid\Handler\Verbose());
+
+// Add the handler to a regular \GuzzleHttp\Client
+$guzzle = new \GuzzleHttp\Client([
+    "handler" => $handlerStack
+]);
+```
+
+### Debug Handler
+
+```php
+// Create the handler stack
+$handlerStack = HandlerStack::create();
+
+// Add the Auth handler to the stack
+$handlerStack->push(new \Akamai\Open\EdgeGrid\Handler\Debug());
+
+// Add the handler to a regular \GuzzleHttp\Client
+$guzzle = new \GuzzleHttp\Client([
+    "handler" => $handlerStack
+]);
+```
+
 
 ## Author
 
