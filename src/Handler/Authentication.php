@@ -16,11 +16,7 @@
 namespace Akamai\Open\EdgeGrid\Handler;
 
 use Akamai\Open\EdgeGrid\Authentication as Signer;
-use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
-use GuzzleHttp\Middleware;
 
 /**
  * Akamai {OPEN} EdgeGrid Auth Guzzle Middleware Handler
