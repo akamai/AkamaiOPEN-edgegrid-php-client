@@ -30,9 +30,9 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
      */
     public function testCreateFromEdgeRc($section, $file)
     {
-        $_SERVER['HOME'] = __DIR__ .'/../edgerc';
-        
-        $guzzle =  new \GuzzleHttp\Client();
+        $_SERVER['HOME'] = __DIR__ . '/../edgerc';
+
+        $guzzle = new \GuzzleHttp\Client();
         $authentication = \Akamai\Open\EdgeGrid\Handler\Authentication::createFromEdgeRcFile($section, $file);
         $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Handler\Authentication::CLASS, $authentication);
     }
@@ -54,7 +54,7 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         $timestamp->isValid()->willReturn(true);
         $nonce = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Nonce::CLASS);
         $nonce->__toString()->willReturn($options['nonce']);
-        
+
         $auth = new \Akamai\Open\EdgeGrid\Handler\Authentication();
         $auth->setSigner();
         $auth->setAuth($options['client_token'], $options['client_secret'], $options['access_token']);
@@ -65,7 +65,7 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         if (isset($options['headers_to_sign'])) {
             $auth->setHeadersToSign($options['headers_to_sign']);
         }
-        
+
         // Because of PSR-7 immutability the history handler has
         // to be the last one, otherwise it doesn't get the latest
         // instance of the Request.
@@ -97,12 +97,12 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         $this->assertEquals(1, sizeof($container));
         $request = $container[0]['request'];
         $headers = $request->getHeaders();
-        
+
         $this->assertArrayHasKey('Authorization', $headers);
         $this->assertEquals(1, sizeof($headers['Authorization']));
         $this->assertEquals($result, $headers['Authorization'][0]);
     }
-    
+
     public function testHandlerChainingNotAuthenticated()
     {
         $container = [];
@@ -151,7 +151,7 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 
         $client->get("https://test-akamaiapis.net");
     }
-    
+
     public function testProxyNonFluent()
     {
         $container = [];
@@ -160,7 +160,7 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         $auth = new \Akamai\Open\EdgeGrid\Handler\Authentication();
         $auth->setSigner(new \Akamai\Open\EdgeGrid\Authentication());
         $auth->setHost('test.host');
-        
+
         $this->assertEquals('test.host', $auth->getHost());
     }
 

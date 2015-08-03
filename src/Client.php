@@ -49,7 +49,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
      * @var \Akamai\Open\EdgeGrid\Handler\Verbose
      */
     protected $verboseHandler;
-    
+
     /**
      * @var \Akamai\Open\EdgeGrid\Handler\Debug
      */
@@ -142,12 +142,12 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
         if ($fp = $this->isVerbose()) {
             $options = $this->setVerboseHandler($options, $fp);
         }
-        
+
         $options['debug'] = $this->getDebugOption($options);
         if ($fp = $this->isDebug()) {
             $options = $this->setDebugHandler($options, $fp);
         }
-        
+
         if ($this->logger && isset($options['handler'])) {
             $this->setLogHandler($options['handler'], $this->logger);
         }
@@ -169,11 +169,11 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     public static function createFromEdgeRcFile($section = 'default', $path = null, $config = [])
     {
         $auth = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile($section, $path);
-        
+
         if ($host = $auth->getHost()) {
             $config['base_uri'] = 'https://' . $host;
         }
-        
+
         $client = new static($config, $auth);
         return $client;
     }
@@ -189,7 +189,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     public function setAuth($client_token, $client_secret, $access_token)
     {
         $this->authentication->setAuth($client_token, $client_secret, $access_token);
-        
+
         return $this;
     }
 
@@ -233,16 +233,16 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
         if (substr($host, -1) == '/') {
             $host = substr($host, 0, -1);
         }
-        
+
         $headers = $this->getConfig('headers');
         $headers['Host'] = $host;
         $this->setConfigOption('headers', $headers);
-        
+
         if (strpos('/', $host) === false) {
             $host = 'https://' . $host;
         }
         $this->setConfigOption('base_uri', $host);
-        
+
         return $this;
     }
 
@@ -301,15 +301,15 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
             $handler->setFormatter(new \Monolog\Formatter\LineFormatter("%message%"));
             $logger = new \Monolog\Logger('HTTP Log', [$handler]);
         }
-     
+
         $formatter = new \GuzzleHttp\MessageFormatter($messageFormat);
-        
+
         $handler = \GuzzleHttp\Middleware::log($logger, $formatter);
         $this->logger = $handler;
 
         $handlerStack = $this->getConfig('handler');
         $this->setLogHandler($handlerStack, $handler);
-        
+
         return $this;
     }
 
@@ -324,11 +324,11 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
         if ($this->logger && !($this->logger instanceof \Monolog\Logger)) {
             return false;
         }
-        
+
         $handler = new \Monolog\Handler\StreamHandler($filename);
         $handler->setFormatter(new \Monolog\Formatter\LineFormatter("%message%"));
         $log = new \Monolog\Logger('HTTP Log', [$handler]);
-        
+
         return $this->setLogger($log, $format);
     }
 
@@ -384,7 +384,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
         if ($this->verboseOverride && $this->verbose) {
             return $this->verbose;
         }
-        
+
         return static::$staticVerbose;
     }
 
@@ -420,13 +420,13 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
         if (isset($config['debug'])) {
             return ($config['debug'] === true) ? STDERR : $config['debug'];
         }
-        
+
         if (($this->debugOverride && $this->debug)) {
             return ($this->debug === true) ? STDERR : $this->debug;
         } elseif ((!$this->debugOverride && static::$staticDebug)) {
             return (static::$staticDebug === true) ? STDERR : static::$staticDebug;
         }
-        
+
         return false;
     }
 
@@ -440,7 +440,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     protected function setAuthenticationHandler($config, Authentication $authentication = null)
     {
         $this->setAuthentication($config, $authentication);
-        
+
         $authenticationHandler = new AuthenticationHandler();
         $authenticationHandler->setSigner($this->authentication);
         if (!isset($config['handler'])) {
@@ -466,11 +466,11 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
         if ($authentication === null) {
             $this->authentication = new Authentication();
         }
-        
+
         if (isset($config['timestamp'])) {
             $this->authentication->setTimestamp($config['timestamp']);
         }
-        
+
         if (isset($config['nonce'])) {
             $this->authentication->setNonce($config['nonce']);
         }
@@ -498,7 +498,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
             if ($handler && $this->verboseHandler) {
                 return $options;
             }
-            
+
             if (isset($options['handler'])) {
                 $handler = $options['handler'];
             }
@@ -515,9 +515,9 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
         } catch (\InvalidArgumentException $e) {
             $handler->push($this->verboseHandler, "verbose");
         }
-        
+
         $options['handler'] = $handler;
-        
+
         return $options;
     }
 
@@ -558,12 +558,12 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
         } catch (\InvalidArgumentException $e) {
             $handler->push($this->debugHandler, "debug");
         }
-        
+
         $options['handler'] = $handler;
-        
+
         return $options;
     }
-    
+
     /**
      * Add the Log handler to the HandlerStack
      *
@@ -581,7 +581,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
                 $handlerStack->push($logHandler, "logger");
             }
         }
-        
+
         return $this;
     }
 

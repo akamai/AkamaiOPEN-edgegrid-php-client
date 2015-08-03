@@ -41,7 +41,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         Client::setVerbose(false);
         Client::setDebug(false);
     }
-    
+
     /**
      * @param $name
      * @param $options
@@ -52,17 +52,17 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function testMakeAuthHeader($name, $options, $request, $result)
     {
         //$this->setName($name);
-        
+
         // Mock the response, we don't care about it
         $container = [];
         $handler = $this->getMockHandler([new Response(200)], $container);
-        
+
         $timestamp = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Timestamp::CLASS);
         $timestamp->__toString()->willReturn($options['timestamp']);
         $timestamp->isValid()->willReturn(true);
         $nonce = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Nonce::CLASS);
         $nonce->__toString()->willReturn($options['nonce']);
-        
+
         $client = new Client(
             array_merge($options, [
                 'base_uri' => $options['base_url'],
@@ -71,7 +71,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 'nonce' => $nonce->reveal()
             ])
         );
-        
+
         $client->setAuth($options['client_token'], $options['client_secret'], $options['access_token']);
         $client->setMaxBodySize($options['max_body']);
 
@@ -85,7 +85,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 $headers[$key] = $value;
             });
         }
-        
+
         $client->request(
             $request['method'],
             $request['path'],
@@ -94,25 +94,25 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 'body' => $request['data'],
             ]
         );
-        
+
         $this->assertEquals(1, sizeof($container));
         $request = $container[0]['request'];
         $headers = $request->getHeaders();
-        
+
         $this->assertArrayHasKey('Authorization', $headers);
         $this->assertEquals(1, sizeof($headers['Authorization']));
         $this->assertEquals($result, $headers['Authorization'][0]);
     }
-    
+
     /**
      * @dataProvider createFromEdgeRcProvider
      */
     public function testCreateFromEdgeRcDefault($section, $file)
     {
-        $_SERVER['HOME'] = __DIR__ .'/edgerc';
+        $_SERVER['HOME'] = __DIR__ . '/edgerc';
         $client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile($section, $file);
         $authentication = \PHPUnit_Framework_Assert::readAttribute($client, 'authentication');
-        
+
         $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Client::CLASS, $client);
         $this->assertEquals(
             [
@@ -128,12 +128,12 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals(2048, \PHPUnit_Framework_Assert::readAttribute($authentication, 'max_body_size'));
     }
-    
+
     public function testHostnameWithTrailingSlash()
     {
         $client = new \Akamai\Open\EdgeGrid\Client();
         $client->setHost('akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net/');
-        
+
         $this->assertEquals(
             'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net',
             $client->getConfig('headers')['Host']
@@ -152,12 +152,12 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 'handler' => $handler,
             ]
         );
-        
+
         $this->assertArrayHasKey('timeout', $client->getConfig());
         $this->assertEquals(Client::DEFAULT_REQUEST_TIMEOUT, $client->getConfig('timeout'));
 
         $client->setAuth('test', 'test', 'test');
-        
+
         $client->get('/test');
         $this->assertEquals(Client::DEFAULT_REQUEST_TIMEOUT, $container[0]['options']['timeout']);
     }
@@ -183,7 +183,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $client->get('/test');
         $this->assertEquals(2, end($container)['options']['timeout']);
-        
+
         $client->get('/test', ['timeout' => 5]);
         $this->assertEquals(5, end($container)['options']['timeout']);
     }
@@ -206,14 +206,14 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $client->get('/test', ['timeout' => 2]);
         $this->assertEquals(2, end($container)['options']['timeout']);
         $this->assertEquals(Client::DEFAULT_REQUEST_TIMEOUT, $client->getConfig('timeout'));
-        
+
         $client->setTimeout(5);
         $client->get('/test');
-        
+
         $this->assertEquals(5, $client->getConfig('timeout'));
         $this->assertEquals(5, end($container)['options']['timeout']);
     }
-    
+
     public function testStaticDebugSingle()
     {
         $container = [];
@@ -230,7 +230,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $client->get('/test');
         $this->assertEquals(true, is_resource(end($container)['options']['debug']));
     }
-    
+
     public function testInstanceDebugSingle()
     {
         $container = [];
@@ -306,7 +306,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(false, is_resource(end($container)['options']['debug']));
         $this->assertFalse(end($container)['options']['debug']);
     }
-    
+
     public function testNonApiCall()
     {
         $container = [];
@@ -317,13 +317,13 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 'handler' => $handler,
             ]
         );
-        
+
         $response = $client->get('/test');
         $this->assertInstanceOf(\GuzzleHttp\Psr7\Response::CLASS, $response);
         $this->assertEquals('http', end($container)['request']->getUri()->getScheme());
         $this->assertEquals('example.org', end($container)['request']->getUri()->getHost());
         $this->assertArrayNotHasKey('Authentication', end($container)['request']->getHeaders());
-        
+
         $response = $client->get('http://example.com/test');
         $this->assertInstanceOf(\GuzzleHttp\Psr7\Response::CLASS, $response);
         $this->assertEquals('http', end($container)['request']->getUri()->getScheme());
@@ -336,7 +336,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('example.net', end($container)['request']->getUri()->getHost());
         $this->assertArrayNotHasKey('Authentication', end($container)['request']->getHeaders());
     }
-    
+
     public function testForceHttps()
     {
         $client = new Client(
@@ -344,7 +344,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 'base_uri' => 'example.org'
             ]
         );
-        
+
         $uri = $client->getConfig('base_uri');
         $this->assertEquals('https', parse_url($uri, PHP_URL_SCHEME));
     }
@@ -366,7 +366,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         );
 
         $logHandler = $this->setLogger($client);
-        
+
         try {
             $client->{$method}($path);
         } catch (\Exception $e) {
@@ -378,23 +378,23 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         }
         $this->assertEquals($expected, $records);
     }
-    
+
     public function testLoggingRedirect()
     {
         $handler = $this->getMockHandler([
             new Response(301, ['Location' => '/redirected']),
             new Response(200, ['Content-Type' => 'application/json'])
         ]);
-        
+
         $client = new Client(
             [
                 'base_uri' => 'http://example.org',
                 'handler' => $handler,
             ]
         );
-        
+
         $logHandler = $this->setLogger($client);
-        
+
         try {
             $client->get("/redirect");
         } catch (\Exception $e) {
@@ -406,18 +406,18 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         }
         $this->assertEquals(["GET /redirect 301 ", "GET /redirected 200 application/json"], $records);
     }
-    
+
     public function testLoggingDefault()
     {
         $client = new Client();
         $client->setLogger();
-        
+
         $logger = \PHPUnit_Framework_Assert::readAttribute($client, 'logger');
         $this->assertInstanceOf(
             \Closure::CLASS,
             $logger
         );
-        
+
         $reflection = new \ReflectionFunction($logger);
         $args = $reflection->getParameters();
         $this->assertTrue(array_shift($args)->isCallable());
@@ -443,7 +443,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         }
         $this->assertEquals(["GET /test 200 application/json"], $records);
     }
-    
+
     public function testSetSimpleLog()
     {
         $handler = $this->getMockHandler([
@@ -464,13 +464,13 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         fseek($fp, 0);
         $this->assertEquals("GET /test 200", fgets($fp));
     }
-    
+
     public function makeAuthHeaderProvider()
     {
         $testdata = json_decode(file_get_contents(__DIR__ . '/testdata.json'), true);
         $tests = $testdata['tests'];
         unset($testdata['tests']);
-            
+
         foreach ($tests as $test) {
             yield [
                 'name' => $test['testName'],
@@ -480,7 +480,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ];
         }
     }
-    
+
     public function createFromEdgeRcProvider()
     {
         return [
@@ -502,7 +502,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ]
         ];
     }
-    
+
     public function loggingProvider()
     {
         return [
@@ -577,7 +577,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $handler = HandlerStack::create($mock);
         $handler->push($history, 'history');
-        
+
         return $handler;
     }
 
@@ -589,7 +589,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $handler = new \Monolog\Handler\TestHandler();
         $logger = new \Monolog\Logger("Test Logger", [$handler]);
         $client->setLogger($logger, "{method} {target} {code} {res_header_content-type}");
-        
+
         return $handler;
     }
 }

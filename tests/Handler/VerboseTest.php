@@ -84,7 +84,7 @@ EOF;
 
         $this->assertEquals($expectedOutput, $output);
     }
-    
+
     public function testStaticVerboseSingle()
     {
         $handler = $this->getMockHandler([new Response(200, [], json_encode(['test' => 'data']))]);
@@ -202,14 +202,14 @@ EOF;
 
         $this->assertEquals($expectedOutput, $output);
     }
-    
+
     public function testVerboseRedirect()
     {
         $handler = $this->getMockHandler([
             new Response(301, ["Location" => "http://example.org/redirected"], json_encode(['test' => 'data'])),
             new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))
         ]);
-        
+
         $client = new Client(
             [
                 'base_uri' => 'http://example.org',
@@ -223,7 +223,7 @@ EOF;
         $client->get('/redirect');
         $output = ob_get_clean();
 
-        $expectedOutput =<<<EOF
+        $expectedOutput = <<<EOF
 [33;01m===> [VERBOSE] Redirected: http://example.org/redirected
 [39;49;00m
 [36;01m===> [VERBOSE] Response: 
@@ -266,7 +266,7 @@ EOF;
         }
         $output = ob_get_clean();
 
-        $expectedOutput =<<<EOF
+        $expectedOutput = <<<EOF
 [36;01m===> [VERBOSE] Response: 
 [33;01mString body[39;49;00m
 
@@ -296,7 +296,7 @@ EOF;
         }
         $output = ob_get_clean();
 
-        $expectedOutput =<<<EOF
+        $expectedOutput = <<<EOF
 [36;01m===> [VERBOSE] Response: 
 [33;01mString body[39;49;00m
 
@@ -327,7 +327,7 @@ EOF;
         }
         $output = ob_get_clean();
 
-        $expectedOutput =<<<EOF
+        $expectedOutput = <<<EOF
 [36;01m===> [VERBOSE] Response: 
 [33;01mNo response body returned[39;49;00m
 
@@ -365,7 +365,7 @@ EOF;
             $output .= fgets($fp);
         } while (!feof($fp));
 
-        $expectedOutput =<<<EOF
+        $expectedOutput = <<<EOF
 [31;01m===> [ERROR] An error occurred: 
 [33;01m{
     "test": "data2",
@@ -406,14 +406,14 @@ EOF;
         } catch (\GuzzleHttp\Exception\ClientException $e) {
         }
         $this->assertEmpty(ob_get_clean());
-        
+
         fseek($fp, 0);
         $output = '';
         do {
             $output .= fgets($fp);
         } while (!feof($fp));
 
-        $expectedOutput =<<<EOF
+        $expectedOutput = <<<EOF
 [31;01m===> [ERROR] An error occurred: 
 [33;01mString body[39;49;00m
 
@@ -453,7 +453,7 @@ EOF;
 }\x1b[39;49;00m
 
 EOF;
-        
+
         $this->assertEquals($expectedOutput, ob_get_clean());
 
         fseek($fp, 0);
@@ -462,7 +462,7 @@ EOF;
             $output .= fgets($fp);
         } while (!feof($fp));
 
-        $expectedError =<<<EOF
+        $expectedError = <<<EOF
 [31;01m===> [ERROR] An error occurred: 
 [33;01m{
     "test": "data2",
@@ -503,7 +503,7 @@ EOF;
         }
         $output = ob_get_clean();
 
-        $expectedOutput =<<<EOF
+        $expectedOutput = <<<EOF
 [31;01m===> [ERROR] An error occurred: 
 [33;01mError message[39;49;00m
 
@@ -538,7 +538,7 @@ EOF;
         }
         $output = ob_get_clean();
 
-        $expectedOutput =<<<EOF
+        $expectedOutput = <<<EOF
 [31;01m===> [ERROR] An error occurred: 
 [33;01m500: Error message[39;49;00m
 
@@ -573,7 +573,7 @@ EOF;
         }
         $output = ob_get_clean();
 
-        $expectedOutput =<<<EOF
+        $expectedOutput = <<<EOF
 [31;01m===> [ERROR] An error occurred: 
 [33;01m500: Error message
 [33;01m{"errorString":"An error"}[39;49;00m
@@ -582,14 +582,14 @@ EOF;
 
         $this->assertEquals($expectedOutput, $output);
     }
-    
+
     public function testVerboseSingleStreamString()
     {
         $verbose = new \Akamai\Open\EdgeGrid\Handler\Verbose('php://memory');
-        
+
         $fp = \PHPUnit_Framework_Assert::readAttribute($verbose, 'outputStream');
         $fp2 = \PHPUnit_Framework_Assert::readAttribute($verbose, 'errorStream');
-        
+
         $this->assertSame($fp, $fp2);
         $this->assertTrue(stream_get_meta_data($fp)['uri'] == 'php://memory');
     }
@@ -632,7 +632,7 @@ EOF;
     {
         $verbose = new \Akamai\Open\EdgeGrid\Handler\Verbose('error://stream', 'error://stream2');
     }
-    
+
     public function getMockHandler($request, array &$container = null)
     {
         $client = new \Akamai\Open\EdgeGrid\Tests\ClientTest();

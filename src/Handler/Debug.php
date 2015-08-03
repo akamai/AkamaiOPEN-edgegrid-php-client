@@ -23,43 +23,44 @@ namespace Akamai\Open\EdgeGrid\Handler;
 class Debug
 {
     protected $fp;
-    
+
     protected static $messages = [
-        403 =>  [
+        403 => [
             "This indicates a problem with authorization.\n",
             "Please ensure that the credentials you created for this script\n",
             "have the necessary permissions in the Luna portal.\n",
         ],
-        400 =>  [
+        400 => [
             "This indicates a problem with authentication or headers.",
             "Please ensure that the .edgerc file is formatted correctly.",
             "If you still have issues, please use gen_edgerc.php to generate the credentials",
         ],
-        401 =>  400,
-        404 =>  [
+        401 => 400,
+        404 => [
             "This means that the page does not exist as requested.\n",
             "Please ensure that the URL you're calling is correctly formatted\n",
             "or look at other examples to make sure yours matches.\n",
         ]
     ];
+
     public function __construct($resource = null)
     {
         $fp = $resource;
-        
+
         if (!is_resource($fp) && $fp !== null) {
             $fp = @fopen($fp, 'a+');
             if (!$fp) {
                 throw new \Exception("Unable to use resource: " . (string) $resource);
             }
         }
-        
+
         if ($fp === null) {
             $fp = fopen('php://stderr', 'a');
         }
-        
+
         $this->fp = $fp;
     }
-    
+
     /**
      * Handle the request/response
      *
@@ -83,7 +84,7 @@ class Debug
                 'reset' => "\x1b[39;49;00m",
             ];
         }
-        
+
         return function (\Psr\Http\Message\RequestInterface $request, array $config) use ($handler, $colors) {
             return $handler($request, $config)->then(
                 function (\Psr\Http\Message\ResponseInterface $response) use ($colors, $request) {
@@ -103,32 +104,32 @@ class Debug
 
                         $out = [];
                         $out[] = "{$colors['red']}===> [ERROR] Call to %s failed with a %s result";
-                        
+
                         if (isset(self::$messages[$statusCode])) {
                             $message = self::$messages[$statusCode];
                             if (is_int($message) && isset(self::$messages[$message])) {
                                 $message = self::$messages[$message];
                             }
-                            
+
                             foreach ($message as $line) {
                                 $out[] = "===> [ERROR] " . $line;
                             }
                         }
-                        
+
                         $out[] = "===> [ERROR] Problem details:";
                         $out[] = $detail;
-                        
+
                         $out = sprintf(
                             implode("\n", $out),
                             $request->getUri()->getPath(),
                             $response->getStatusCode() . ' ' . $response->getReasonPhrase(),
                             $detail
                         );
-                        
+
                         fputs($this->fp, $out);
                         fputs($this->fp, "{$colors['reset']}\n");
                     }
-                    
+
                     return $response;
                 },
                 function (\Exception $reason) {

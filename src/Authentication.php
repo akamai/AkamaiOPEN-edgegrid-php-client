@@ -80,15 +80,15 @@ class Authentication
         if ($this->timestamp === null) {
             $this->setTimestamp();
         }
-        
+
         if (!$this->timestamp->isValid()) {
             throw new \RuntimeException("Timestamp is invalid. Too old?");
         }
-        
+
         if ($this->nonce === null) {
             $this->nonce = new Nonce();
         }
-        
+
         $auth_header =
             'EG1-HMAC-SHA256 ' .
             'client_token=' . $this->auth['client_token'] . ';' .
@@ -278,7 +278,7 @@ class Authentication
             if (isset($url['path'])) {
                 $this->setPath($url['path']);
             }
-            
+
             if (isset($url['query'])) {
                 if (!isset($url['path'])) { // for example.org?query=string
                     $this->setPath('/');
@@ -286,7 +286,7 @@ class Authentication
                 $this->setQuery($url['query']);
             }
         }
-        
+
         return $this;
     }
 
@@ -358,12 +358,12 @@ class Authentication
     public function setPath($path)
     {
         $url = parse_url($path);
-        
+
         $this->path = $url['path'];
         if (isset($url['host'])) {
             $this->setHost($url['host']);
         }
-        
+
         if (isset($url['query'])) {
             $this->setQuery($url['query']);
         }
@@ -437,7 +437,7 @@ class Authentication
         $this->auth = compact('client_token', 'client_secret', 'access_token');
         return $this;
     }
-    
+
     public static function createFromEdgeRcFile($section = "default", $path = null)
     {
         if ($section === null) {
@@ -449,22 +449,22 @@ class Authentication
         if (!isset($ini[$section])) {
             throw new \Exception("Section \"$section\" does not exist!");
         }
-        
+
         $auth = new static();
         $auth->setAuth(
             $ini[$section]['client_token'],
             $ini[$section]['client_secret'],
             $ini[$section]['access_token']
         );
-        
+
         if (isset($ini[$section]['host'])) {
             $auth->setHost($ini[$section]['host']);
         }
-        
+
         if (isset($ini[$section]['max-size'])) {
             $auth->setMaxBodySize($ini[$section]['max-size']);
         }
-        
+
         return $auth;
     }
 
@@ -497,9 +497,9 @@ class Authentication
         // Handle : assignments in .edgerc files
         $ini = file_get_contents($file);
         $ini = str_replace(':', '=', $ini);
-        
+
         $ini = parse_ini_string($ini, true, INI_SCANNER_RAW);
-        
+
         return $ini;
     }
 }

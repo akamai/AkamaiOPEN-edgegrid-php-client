@@ -12,7 +12,7 @@ class DebugTest extends \PHPUnit_Framework_TestCase
     {
         Client::setDebug(false);
     }
-    
+
     public function testInstanceDebug()
     {
         $handler = $this->getMockHandler([new Response(400, [], json_encode(['detail' => 'error info']))]);
@@ -32,7 +32,7 @@ class DebugTest extends \PHPUnit_Framework_TestCase
             $client->get('/error');
         } catch (\Exception $e) {
         }
-        
+
         $this->assertEmpty(ob_get_clean());
 
         $output = $this->readStreamData($fp);
@@ -53,7 +53,7 @@ EOF;
     public function testStaticDebug()
     {
         $handler = $this->getMockHandler([new Response(400, [], json_encode(['detail' => 'error info']))]);
-        
+
         $client = new Client(
             [
                 'base_uri' => 'http://example.org',
@@ -115,7 +115,7 @@ EOF;
 
         $this->assertEquals($expectedOutput, $output);
     }
-    
+
     public function testInstanceOverrideStream()
     {
         $handler = $this->getMockHandler([new Response(400, [], json_encode(['detail' => 'error string']))]);
@@ -125,7 +125,7 @@ EOF;
                 'handler' => $handler,
             ]
         );
-        
+
         $fp = fopen('php://memory', 'a+');
         Client::setDebug($fp);
         $fp2 = fopen('php://memory', 'a+');
@@ -154,7 +154,7 @@ EOF;
 error string[39;49;00m
 
 EOF;
-        
+
         $this->assertEquals($expectedOutput, $output);
     }
 
@@ -166,7 +166,7 @@ EOF;
             new Response(403, [], json_encode(['detail' => 'error message 3'])),
             new Response(404, [], json_encode(['detail' => 'error message 4']))
         ]);
-        
+
         $client = new Client(
             [
                 'base_uri' => 'http://example.org',
@@ -235,7 +235,7 @@ EOF;
 
         $this->assertEquals($expectedOutput, $output);
     }
-    
+
     public function testResponseNoDetail()
     {
         $handler = $this->getMockHandler([new Response(500, [], json_encode(['nodetail' => 'error info']))]);
@@ -342,7 +342,7 @@ EOF;
 
         $this->assertEquals($expectedOutput, $output);
     }
-    
+
     public function testStringResource()
     {
         $handler = new \Akamai\Open\EdgeGrid\Handler\Debug('php://stdout');
@@ -412,7 +412,7 @@ EOF;
         } catch (\GuzzleHttp\Exception\RequestException $e) {
         }
         $this->assertEmpty(ob_get_clean());
-        
+
         $output = $this->readStreamData($fp);
         $this->assertEmpty($output);
     }
@@ -454,7 +454,7 @@ EOF;
         $client = new \Akamai\Open\EdgeGrid\Tests\ClientTest();
         return $client->getMockHandler($request, $container);
     }
-    
+
     protected function readStreamData($fp)
     {
         fseek($fp, 0);
@@ -462,7 +462,7 @@ EOF;
         while (!feof($fp)) {
             $output .= fgets($fp);
         }
-        
+
         return $output;
     }
 }
