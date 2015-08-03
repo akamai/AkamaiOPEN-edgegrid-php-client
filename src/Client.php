@@ -41,6 +41,20 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     const DEFAULT_REQUEST_TIMEOUT = 10;
 
     /**
+     * @var bool|array|resource Whether verbose mode is enabled
+     *
+     * - true - Use STDOUT
+     * - array - output/error streams (different)
+     * - resource - output/error stream (same)
+     */
+    protected static $staticVerbose = false;
+
+    /**
+     * @var bool|resource Whether debug mode is enabled
+     */
+    protected static $staticDebug = false;
+
+    /**
      * @var \Akamai\Open\EdgeGrid\Authentication
      */
     protected $authentication;
@@ -78,20 +92,6 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
      * @var bool Whether to override the static debug setting
      */
     protected $debugOverride = false;
-
-    /**
-     * @var bool|array|resource Whether verbose mode is enabled
-     *
-     * - true - Use STDOUT
-     * - array - output/error streams (different)
-     * - resource - output/error stream (same)
-     */
-    protected static $staticVerbose = false;
-
-    /**
-     * @var bool|resource Whether debug mode is enabled
-     */
-    protected static $staticDebug = false;
 
     /**
      * @var \Closure Logging Handler
@@ -153,29 +153,6 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
         }
 
         return parent::requestAsync($method, $uri, $options);
-    }
-
-    /**
-     * Factory method to create a client using credentials from `.edgerc`
-     *
-     * Automatically checks your HOME directory, and the current working
-     * directory for credentials, if no path is supplied.
-     *
-     * @param string $section Credential section to use
-     * @param string $path Path to .edgerc credentials file
-     * @param array $config Options to pass to the constructor/guzzle
-     * @return \Akamai\Open\EdgeGrid\Client
-     */
-    public static function createFromEdgeRcFile($section = 'default', $path = null, $config = [])
-    {
-        $auth = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile($section, $path);
-
-        if ($host = $auth->getHost()) {
-            $config['base_uri'] = 'https://' . $host;
-        }
-
-        $client = new static($config, $auth);
-        return $client;
     }
 
     /**
@@ -333,13 +310,26 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
-     * Print formatted JSON responses to STDOUT
+     * Factory method to create a client using credentials from `.edgerc`
      *
-     * @param bool|resource $enable
+     * Automatically checks your HOME directory, and the current working
+     * directory for credentials, if no path is supplied.
+     *
+     * @param string $section Credential section to use
+     * @param string $path Path to .edgerc credentials file
+     * @param array $config Options to pass to the constructor/guzzle
+     * @return \Akamai\Open\EdgeGrid\Client
      */
-    public static function setVerbose($enable)
+    public static function createFromEdgeRcFile($section = 'default', $path = null, $config = [])
     {
-        self::$staticVerbose = $enable;
+        $auth = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile($section, $path);
+
+        if ($host = $auth->getHost()) {
+            $config['base_uri'] = 'https://' . $host;
+        }
+
+        $client = new static($config, $auth);
+        return $client;
     }
 
     /**
@@ -350,6 +340,36 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     public static function setDebug($enable)
     {
         self::$staticDebug = $enable;
+    }
+
+    /**
+     * Print formatted JSON responses to STDOUT
+     *
+     * @param bool|resource $enable
+     */
+    public static function setVerbose($enable)
+    {
+        self::$staticVerbose = $enable;
+    }
+
+    /**
+     * Handle debug option
+     *
+     * @return bool|resource
+     */
+    protected function getDebugOption($config)
+    {
+        if (isset($config['debug'])) {
+            return ($config['debug'] === true) ? STDERR : $config['debug'];
+        }
+
+        if (($this->debugOverride && $this->debug)) {
+            return ($this->debug === true) ? STDERR : $this->debug;
+        } elseif ((!$this->debugOverride && static::$staticDebug)) {
+            return (static::$staticDebug === true) ? STDERR : static::$staticDebug;
+        }
+
+        return false;
     }
 
     /**
@@ -389,45 +409,24 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
-     * Set values on the private \GuzzleHttp\Client->config
+     * Set the Authentication instance
      *
-     * This is a terrible hack, and illustrates why making
-     * anything private makes it difficult to extend, and impossible
-     * when there is no setter.
-     *
-     * @param string $what Config option to set
-     * @param mixed $value Value to set the option to
-     * @return void
+     * @param Authentication|null $authentication
      */
-    protected function setConfigOption($what, $value)
+    protected function setAuthentication(array $config, Authentication $authentication = null)
     {
-        $closure = function () use ($what, $value) {
-            /* @var $this \GuzzleHttp\Client */
-            $this->config[$what] = $value;
-        };
-
-        $closure = $closure->bindTo($this, \GuzzleHttp\Client::CLASS);
-        $closure();
-    }
-
-    /**
-     * Handle debug option
-     *
-     * @return bool|resource
-     */
-    protected function getDebugOption($config)
-    {
-        if (isset($config['debug'])) {
-            return ($config['debug'] === true) ? STDERR : $config['debug'];
+        $this->authentication = $authentication;
+        if ($authentication === null) {
+            $this->authentication = new Authentication();
         }
 
-        if (($this->debugOverride && $this->debug)) {
-            return ($this->debug === true) ? STDERR : $this->debug;
-        } elseif ((!$this->debugOverride && static::$staticDebug)) {
-            return (static::$staticDebug === true) ? STDERR : static::$staticDebug;
+        if (isset($config['timestamp'])) {
+            $this->authentication->setTimestamp($config['timestamp']);
         }
 
-        return false;
+        if (isset($config['nonce'])) {
+            $this->authentication->setNonce($config['nonce']);
+        }
     }
 
     /**
@@ -456,69 +455,42 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
-     * Set the Authentication instance
-     *
-     * @param Authentication|null $authentication
+     * @param $config
+     * @return mixed
      */
-    protected function setAuthentication(array $config, Authentication $authentication = null)
+    protected function setBasicOptions($config)
     {
-        $this->authentication = $authentication;
-        if ($authentication === null) {
-            $this->authentication = new Authentication();
+        if (!isset($config['timeout'])) {
+            $config['timeout'] = static::DEFAULT_REQUEST_TIMEOUT;
         }
 
-        if (isset($config['timestamp'])) {
-            $this->authentication->setTimestamp($config['timestamp']);
+        if (isset($config['base_uri']) && strpos($config['base_uri'], 'http') === false) {
+            $config['base_uri'] = 'https://' . $config['base_uri'];
+            return $config;
         }
-
-        if (isset($config['nonce'])) {
-            $this->authentication->setNonce($config['nonce']);
-        }
+        return $config;
     }
 
     /**
-     * Add the Verbose handler to the HandlerStack
+     * Set values on the private \GuzzleHttp\Client->config
      *
-     * @param array $options Guzzle Options
-     * @param bool|resource|array|null $fp Stream to write to
-     * @return array
+     * This is a terrible hack, and illustrates why making
+     * anything private makes it difficult to extend, and impossible
+     * when there is no setter.
+     *
+     * @param string $what Config option to set
+     * @param mixed $value Value to set the option to
+     * @return void
      */
-    protected function setVerboseHandler($options, $fp = null)
+    protected function setConfigOption($what, $value)
     {
-        try {
-            if (is_bool($fp) || $fp === null) {
-                $fp = ['outputStream' => null, 'errorStream' => null];
-            } elseif (!is_array($fp)) {
-                $fp = ['outputStream' => $fp, 'errorStream' => $fp];
-            }
+        $closure = function () use ($what, $value) {
+            /* @var $this \GuzzleHttp\Client */
+            $this->config[$what] = $value;
+        };
 
-            $handler = $this->getConfig('handler');
-            // if we have a default handler, and we've already created a VerboseHandler
-            // we can bail out now (or we will add another one to the stack)
-            if ($handler && $this->verboseHandler) {
-                return $options;
-            }
-
-            if (isset($options['handler'])) {
-                $handler = $options['handler'];
-            }
-
-            if ($handler === null) {
-                $handler = \GuzzleHttp\HandlerStack::create();
-            }
-
-            if (!$this->verboseHandler) {
-                $this->verboseHandler = new VerboseHandler(array_shift($fp), array_shift($fp));
-            }
-
-            $handler->after("allow_redirects", $this->verboseHandler, "verbose");
-        } catch (\InvalidArgumentException $e) {
-            $handler->push($this->verboseHandler, "verbose");
-        }
-
-        $options['handler'] = $handler;
-
-        return $options;
+        $closure = $closure->bindTo($this, \GuzzleHttp\Client::CLASS);
+        $closure();
     }
 
     /**
@@ -586,19 +558,47 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
-     * @param $config
-     * @return mixed
+     * Add the Verbose handler to the HandlerStack
+     *
+     * @param array $options Guzzle Options
+     * @param bool|resource|array|null $fp Stream to write to
+     * @return array
      */
-    protected function setBasicOptions($config)
+    protected function setVerboseHandler($options, $fp = null)
     {
-        if (!isset($config['timeout'])) {
-            $config['timeout'] = static::DEFAULT_REQUEST_TIMEOUT;
+        try {
+            if (is_bool($fp) || $fp === null) {
+                $fp = ['outputStream' => null, 'errorStream' => null];
+            } elseif (!is_array($fp)) {
+                $fp = ['outputStream' => $fp, 'errorStream' => $fp];
+            }
+
+            $handler = $this->getConfig('handler');
+            // if we have a default handler, and we've already created a VerboseHandler
+            // we can bail out now (or we will add another one to the stack)
+            if ($handler && $this->verboseHandler) {
+                return $options;
+            }
+
+            if (isset($options['handler'])) {
+                $handler = $options['handler'];
+            }
+
+            if ($handler === null) {
+                $handler = \GuzzleHttp\HandlerStack::create();
+            }
+
+            if (!$this->verboseHandler) {
+                $this->verboseHandler = new VerboseHandler(array_shift($fp), array_shift($fp));
+            }
+
+            $handler->after("allow_redirects", $this->verboseHandler, "verbose");
+        } catch (\InvalidArgumentException $e) {
+            $handler->push($this->verboseHandler, "verbose");
         }
 
-        if (isset($config['base_uri']) && strpos($config['base_uri'], 'http') === false) {
-            $config['base_uri'] = 'https://' . $config['base_uri'];
-            return $config;
-        }
-        return $config;
+        $options['handler'] = $handler;
+
+        return $options;
     }
 }
