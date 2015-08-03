@@ -44,7 +44,7 @@ class Authentication
      * @var \Akamai\Open\EdgeGrid\Authentication
      */
     protected $signer;
-    
+
     public function setSigner(\Akamai\Open\EdgeGrid\Authentication $auth = null)
     {
         $this->signer = $auth;
@@ -52,7 +52,7 @@ class Authentication
             $this->signer = new Signer();
         }
     }
-    
+
     public function __invoke(callable $handler)
     {
         return function (
@@ -60,14 +60,15 @@ class Authentication
             array $config
         ) use ($handler) {
             if ($request->getUri()->getScheme() !== 'https' ||
-                strpos($request->getUri()->getHost(), 'akamaiapis.net') === false) {
+                strpos($request->getUri()->getHost(), 'akamaiapis.net') === false
+            ) {
                 return $handler($request, $config);
             }
 
             if (!$this->signer) {
                 throw new \Exception("You must call setSigner before trying to sign a request");
             }
-            
+
             $this->signer->setHttpMethod($request->getMethod())
                 ->setHost($request->getUri()->getHost())
                 ->setPath($request->getUri()->getPath())
@@ -76,7 +77,7 @@ class Authentication
                 ->setBody($request->getBody()->getContents());
 
             $request = $request->withHeader('Authorization', $this->signer->createAuthHeader());
-            
+
             return $handler($request, $config);
         };
     }
@@ -93,21 +94,21 @@ class Authentication
         if (!isset($this->signer)) {
             throw new \Exception("Signer not set, make sure to call setSigner first");
         }
-        
+
         $return = call_user_func_array([$this->signer, $method], $args);
         if ($return == $this->signer) {
             return $this;
         }
-        
+
         return $return;
     }
-    
+
     public static function createFromEdgeRcFile($section = "default", $file = null)
     {
         $signer = Signer::createFromEdgeRcFile($section, $file);
         $auth = new static();
         $auth->setSigner($signer);
-        
+
         return $auth;
     }
 }

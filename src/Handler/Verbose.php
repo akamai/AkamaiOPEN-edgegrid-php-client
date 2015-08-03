@@ -24,7 +24,7 @@ class Verbose
 {
     protected $outputStream;
     protected $errorStream;
-    
+
     public function __construct($outputStream = null, $errorStream = null)
     {
         $errorStreamException = null;
@@ -35,7 +35,7 @@ class Verbose
             }
             $errorStream = $fp;
         }
-        
+
         if (!is_resource($outputStream) && $outputStream !== null) {
             $fp = @fopen($outputStream, 'a+');
             if (!$fp) {
@@ -43,15 +43,15 @@ class Verbose
             }
             $outputStream = $fp;
         }
-        
+
         if ($errorStreamException instanceof \Exception) {
             throw $errorStreamException;
         }
-        
+
         if ($outputStream !== null && $errorStream === null) {
             $errorStream = $outputStream;
         }
-        
+
         if ($outputStream === null && $errorStream === null) {
             $errorStream = fopen('php://stderr', 'a');
         }
@@ -59,11 +59,11 @@ class Verbose
         if ($outputStream === null) {
             $outputStream = fopen('php://output', 'a');
         }
-        
+
         $this->outputStream = $outputStream;
         $this->errorStream = $errorStream;
     }
-    
+
     /**
      * Handle the request/response
      *
@@ -87,14 +87,14 @@ class Verbose
                 'reset' => "\x1b[39;49;00m",
             ];
         }
-        
+
         return function (
             \Psr\Http\Message\RequestInterface $request,
             array $config
         ) use (
             $handler,
             $colors
-) {
+        ) {
             return $handler($request, $config)->then(
                 function (\Psr\Http\Message\ResponseInterface $response) use ($colors) {
                     $statusCode = $response->getStatusCode();
@@ -121,7 +121,7 @@ class Verbose
                             fputs($this->outputStream, "{$colors['reset']}\n");
                         }
                     }
-                    
+
                     return $response;
                 },
                 function (\Exception $reason) use ($colors) {
@@ -149,7 +149,7 @@ class Verbose
                     }
 
                     fputs($this->outputStream, "{$colors['reset']}\n");
-                    
+
                     return new \GuzzleHttp\Promise\RejectedPromise($reason);
                 }
             );
