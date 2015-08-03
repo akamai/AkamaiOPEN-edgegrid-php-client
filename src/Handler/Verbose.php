@@ -23,6 +23,7 @@ namespace Akamai\Open\EdgeGrid\Handler;
 class Verbose
 {
     protected $outputStream;
+
     protected $errorStream;
 
     public function __construct($outputStream = null, $errorStream = null)

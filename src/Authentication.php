@@ -100,144 +100,6 @@ class Authentication
     }
 
     /**
-     * Returns a signature of the given request, timestamp and auth_header
-     *
-     * @param string $auth_header
-     * @return string
-     */
-    protected function signRequest($auth_header)
-    {
-        return $this->makeBase64HmacSha256(
-            $this->makeDataToSign($auth_header),
-            $this->makeSigningKey()
-        );
-    }
-
-    /**
-     * Returns a string with all data that will be signed
-     *
-     * @param string $auth_header
-     * @return string
-     */
-    protected function makeDataToSign($auth_header)
-    {
-        $query = '';
-        if (isset($this->config['query']) && $this->config['query']) {
-            $query .= '?';
-            if (is_string($this->config['query'])) {
-                $query .= $this->config['query'];
-            } else {
-                $query .= http_build_query($this->config['query'], null, '&', PHP_QUERY_RFC3986);
-            }
-        }
-
-        $data = [
-            strtoupper($this->httpMethod),
-            'https',
-            $this->host,
-            $this->path . $query,
-            $this->canonicalizeHeaders(),
-            (strtoupper($this->httpMethod) == 'POST') ? $this->makeContentHash() : '',
-            $auth_header
-        ];
-
-        return implode("\t", $data);
-    }
-
-    /**
-     * Returns headers in normalized form
-     *
-     * @return string
-     */
-    protected function canonicalizeHeaders()
-    {
-        $canonical = [];
-        $headers = [];
-        if (isset($this->config['headers'])) {
-            $headers = array_combine(
-                array_map('strtolower', array_keys($this->config['headers'])),
-                array_values($this->config['headers'])
-            );
-        }
-
-        foreach ($this->headers_to_sign as $key) {
-            $key = strtolower($key);
-            if (isset($headers[$key])) {
-                if (is_array($headers[$key]) && sizeof($headers[$key]) >= 1) {
-                    $value = trim($headers[$key][0]);
-                } elseif (is_array($headers[$key]) && sizeof($headers[$key]) == 0) {
-                    continue;
-                } else {
-                    $value = trim($headers[$key]);
-                }
-
-                if (!empty($value)) {
-                    $canonical[$key] = preg_replace('/\s+/', ' ', $value);
-                }
-            }
-        }
-
-        ksort($canonical);
-        $serialized_header = '';
-        foreach ($canonical as $key => $value) {
-            $serialized_header .= $key . ':' . $value . "\t";
-        }
-
-        return rtrim($serialized_header);
-    }
-
-    /**
-     * Returns a hash of the HTTP POST body
-     *
-     * @return string
-     */
-    protected function makeContentHash()
-    {
-        if (empty($this->config['body'])) {
-            return '';
-        } else {
-            // Just substr, it'll return as much as it can
-            return $this->makeBase64Sha256(substr($this->config['body'], 0, $this->max_body_size));
-        }
-    }
-
-    /**
-     * Creates a signing key based on the secret and timestamp
-     *
-     * @return string
-     */
-    protected function makeSigningKey()
-    {
-        $key = self::makeBase64HmacSha256((string) ($this->timestamp), $this->auth['client_secret']);
-        return $key;
-    }
-
-    /**
-     * Returns Base64 encoded HMAC-SHA256 Hash
-     *
-     * @param string $data
-     * @param string $key
-     * @return string
-     */
-    protected function makeBase64HmacSha256($data, $key)
-    {
-        $hash = base64_encode(hash_hmac('sha256', (string) $data, $key, true));
-        return $hash;
-    }
-
-    /**
-     * Returns Base64 encoded SHA256 Hash
-     *
-     * @param string $data
-     * @return string
-     */
-    protected function makeBase64Sha256($data)
-    {
-        $hash = base64_encode(hash('sha256', (string) $data, true));
-        return $hash;
-    }
-
-    /**
      * Set request HTTP method
      *
      * @param string $method
@@ -466,6 +328,144 @@ class Authentication
         }
 
         return $auth;
+    }
+
+    /**
+     * Returns headers in normalized form
+     *
+     * @return string
+     */
+    protected function canonicalizeHeaders()
+    {
+        $canonical = [];
+        $headers = [];
+        if (isset($this->config['headers'])) {
+            $headers = array_combine(
+                array_map('strtolower', array_keys($this->config['headers'])),
+                array_values($this->config['headers'])
+            );
+        }
+
+        foreach ($this->headers_to_sign as $key) {
+            $key = strtolower($key);
+            if (isset($headers[$key])) {
+                if (is_array($headers[$key]) && sizeof($headers[$key]) >= 1) {
+                    $value = trim($headers[$key][0]);
+                } elseif (is_array($headers[$key]) && sizeof($headers[$key]) == 0) {
+                    continue;
+                } else {
+                    $value = trim($headers[$key]);
+                }
+
+                if (!empty($value)) {
+                    $canonical[$key] = preg_replace('/\s+/', ' ', $value);
+                }
+            }
+        }
+
+        ksort($canonical);
+        $serialized_header = '';
+        foreach ($canonical as $key => $value) {
+            $serialized_header .= $key . ':' . $value . "\t";
+        }
+
+        return rtrim($serialized_header);
+    }
+
+    /**
+     * Returns Base64 encoded HMAC-SHA256 Hash
+     *
+     * @param string $data
+     * @param string $key
+     * @return string
+     */
+    protected function makeBase64HmacSha256($data, $key)
+    {
+        $hash = base64_encode(hash_hmac('sha256', (string) $data, $key, true));
+        return $hash;
+    }
+
+    /**
+     * Returns Base64 encoded SHA256 Hash
+     *
+     * @param string $data
+     * @return string
+     */
+    protected function makeBase64Sha256($data)
+    {
+        $hash = base64_encode(hash('sha256', (string) $data, true));
+        return $hash;
+    }
+
+    /**
+     * Returns a hash of the HTTP POST body
+     *
+     * @return string
+     */
+    protected function makeContentHash()
+    {
+        if (empty($this->config['body'])) {
+            return '';
+        } else {
+            // Just substr, it'll return as much as it can
+            return $this->makeBase64Sha256(substr($this->config['body'], 0, $this->max_body_size));
+        }
+    }
+
+    /**
+     * Returns a string with all data that will be signed
+     *
+     * @param string $auth_header
+     * @return string
+     */
+    protected function makeDataToSign($auth_header)
+    {
+        $query = '';
+        if (isset($this->config['query']) && $this->config['query']) {
+            $query .= '?';
+            if (is_string($this->config['query'])) {
+                $query .= $this->config['query'];
+            } else {
+                $query .= http_build_query($this->config['query'], null, '&', PHP_QUERY_RFC3986);
+            }
+        }
+
+        $data = [
+            strtoupper($this->httpMethod),
+            'https',
+            $this->host,
+            $this->path . $query,
+            $this->canonicalizeHeaders(),
+            (strtoupper($this->httpMethod) == 'POST') ? $this->makeContentHash() : '',
+            $auth_header
+        ];
+
+        return implode("\t", $data);
+    }
+
+    /**
+     * Creates a signing key based on the secret and timestamp
+     *
+     * @return string
+     */
+    protected function makeSigningKey()
+    {
+        $key = self::makeBase64HmacSha256((string) ($this->timestamp), $this->auth['client_secret']);
+        return $key;
+    }
+
+    /**
+     * Returns a signature of the given request, timestamp and auth_header
+     *
+     * @param string $auth_header
+     * @return string
+     */
+    protected function signRequest($auth_header)
+    {
+        return $this->makeBase64HmacSha256(
+            $this->makeDataToSign($auth_header),
+            $this->makeSigningKey()
+        );
     }
 
     /**

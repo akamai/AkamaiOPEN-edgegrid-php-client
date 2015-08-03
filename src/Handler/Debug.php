@@ -22,8 +22,6 @@ namespace Akamai\Open\EdgeGrid\Handler;
  */
 class Debug
 {
-    protected $fp;
-
     protected static $messages = [
         403 => [
             "This indicates a problem with authorization.\n",
@@ -42,6 +40,8 @@ class Debug
             "or look at other examples to make sure yours matches.\n",
         ]
     ];
+
+    protected $fp;
 
     public function __construct($resource = null)
     {
