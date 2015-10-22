@@ -15,7 +15,6 @@
       "exclude": [
         "Tests",
         "tests",
-        "bin",
         "fabpot",
         "doctrine",
         "phine",
@@ -44,5 +43,5 @@
   "git-version": "package_version",
   "output": "akamai-open-edgegrid-client.phar",
   "stub": "build/phar/stub.php",
-  "shebang": false
+  "shebang": "#!/usr/bin/env php"
 }
