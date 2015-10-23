@@ -70,6 +70,8 @@ class Authentication
                 throw new HandlerException("Signer not set, make sure to call setSigner first");
             }
 
+            $request->getBody()->rewind();
+
             $this->signer->setHttpMethod($request->getMethod())
                 ->setHost($request->getUri()->getHost())
                 ->setPath($request->getUri()->getPath())
