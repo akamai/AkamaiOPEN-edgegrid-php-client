@@ -613,7 +613,7 @@ EOF;
     }
 
     /**
-     * @expectedException \Exception
+     * @expectedException \Akamai\Open\EdgeGrid\Exception\HandlerException\IOException
      * @expectedExceptionMessage Unable to use output stream: error://stream
      */
     public function testVerboseSingleStreamStringInvalid()
@@ -634,7 +634,7 @@ EOF;
     }
 
     /**
-     * @expectedException \Exception
+     * @expectedException \Akamai\Open\EdgeGrid\Exception\HandlerException\IOException
      * @expectedExceptionMessage Unable to use error stream: error://stream
      */
     public function testVerboseDualStreamStringErrorInvalid()
@@ -643,7 +643,7 @@ EOF;
     }
 
     /**
-     * @expectedException \Exception
+     * @expectedException \Akamai\Open\EdgeGrid\Exception\HandlerException\IOException
      * @expectedExceptionMessage Unable to use output stream: error://stream
      */
     public function testVerboseDualStreamStringInvalid()
