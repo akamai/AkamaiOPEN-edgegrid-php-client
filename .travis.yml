@@ -1,15 +1,14 @@
 language: php
-
 php:
-  - 5.5
-  - 5.6
-  - 7.0
-  - hhvm
-
+- 5.5
+- 5.6
+- 7.0
+- hhvm
 sudo: false
-
 install: travis_retry composer install --no-interaction --prefer-source
-
 script: phpunit
-
-after_script: wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover build/coverage/coverage.clover
+after_script: wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload
+  --format=php-clover build/coverage/coverage.clover
+notifications:
+  slack:
+    secure: iICr/FzdFTh9qq+k3uUHuygnrE7hyJtsHNxkcHQeL1pFucgd5G+nruLqrP3gxBnOAt1hMPZ8kW7N/SK/l09VHDSqiQFEzPlUv/tkFH3cm4TSyVa9Z+2p/OgB5Z2qd1J24X5H+c1tj1fqnKgXuM5WyBVdwR5V2wyquqNlwQx7S+WpwXztoNg2DJghxOq8NOQ50R+2FroZ4YUzkBN3Fq8ksPl3yREY0/wuxUu72O0b+GWiectSVcBjCRchnovy3HssH+fjzHbowCVVKZalzOpD+sx5hYcATDKU5U7qHDKsUlB3mhwkRYeLEmFFPfTmPQ8znn0nSH2zR+DQXuZ7SqDdBFClCQdkaUtTkFzKW146GnryfTDl0eQFmaQPAUVkZTTAL9HPgJszbS50FvDVjsHqpMkhUaB5ZfvlaFobRrdob8HOFTJ9MOD+l0hzX9a/y7uPpeLAqoRH4OiprWPh8AFG069SKaiIzkRDD7l89TA7l3KSeR8rrGGp79tB6PwKjTzBhF9UN7Iw8rDgY6KCEolxFxyaYXi3HaMybKKSt+i86G/ZLFqIvZpp2bgz/D+jY/HuP92PL3rIoBUHDNRLq+YROC0sJ3emPCi2w/BPPZvk1co1g0fIjPrLoNygJr8M6AJjYJo9IcMZTgRSmk8BcyeVPkxLoPmrGIss29CqIb8U7+M=
