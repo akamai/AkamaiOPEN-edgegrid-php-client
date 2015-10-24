@@ -15,6 +15,8 @@
  */
 namespace Akamai\Open\EdgeGrid\Handler;
 
+use Akamai\Open\EdgeGrid\Exception\HandlerException\IOException;
+
 /**
  * Verbose Response Guzzle Middleware Handler
  *
@@ -32,7 +34,7 @@ class Verbose
         if (!is_resource($errorStream) && $errorStream !== null) {
             $fp = @fopen($errorStream, 'a+');
             if (!$fp) {
-                $errorStreamException = new \Exception("Unable to use error stream: " . (string) $errorStream);
+                $errorStreamException = new IOException("Unable to use error stream: " . (string) $errorStream);
             }
             $errorStream = $fp;
         }
@@ -40,7 +42,7 @@ class Verbose
         if (!is_resource($outputStream) && $outputStream !== null) {
             $fp = @fopen($outputStream, 'a+');
             if (!$fp) {
-                throw new \Exception("Unable to use output stream: " . (string) $outputStream);
+                throw new IOException("Unable to use output stream: " . (string) $outputStream);
             }
             $outputStream = $fp;
         }
