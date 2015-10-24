@@ -35,6 +35,8 @@ use Akamai\Open\EdgeGrid\Handler\Verbose as VerboseHandler;
  */
 class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
 {
+    const VERSION = "0.4.0-dev";
+
     /**
      * @const int Default Timeout in seconds
      */
@@ -110,6 +112,8 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     ) {
         $config = $this->setAuthenticationHandler($config, $authentication);
         $config = $this->setBasicOptions($config);
+        $config['headers']['User-Agent'] = 'Akamai-Open-Edgegrid-PHP/' .
+            self::VERSION . ' ' . \GuzzleHttp\default_user_agent();
 
         parent::__construct($config);
     }
