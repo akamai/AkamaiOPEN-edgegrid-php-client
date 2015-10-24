@@ -152,6 +152,12 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
             $this->setLogHandler($options['handler'], $this->logger);
         }
 
+        $query = parse_url($uri, PHP_URL_QUERY);
+        if (!empty($query)) {
+            $uri = substr($uri, 0, ((strlen($query)+1)) * -1);
+            parse_str($query, $options['query']);
+        }
+
         return parent::requestAsync($method, $uri, $options);
     }
 
