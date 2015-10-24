@@ -69,6 +69,8 @@ class Authentication
                 throw new \Exception("You must call setSigner before trying to sign a request");
             }
 
+            $request->getBody()->rewind();
+
             $this->signer->setHttpMethod($request->getMethod())
                 ->setHost($request->getUri()->getHost())
                 ->setPath($request->getUri()->getPath())

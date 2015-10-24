@@ -48,13 +48,12 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
         $client->get('/test');
         $output = ob_get_clean();
 
-        $expectedOutput = <<<EOF
-\x1b[36;01m===> [VERBOSE] Response: 
-\x1b[33;01m{
-    "test": "data"
-}\x1b[39;49;00m
-
-EOF;
+        $expectedOutput = hex2bin(
+            '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333' .
+            'b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b' .
+            '33363b30316d3d3d3d3e205b564552424f53455d20526573706f6e73653a200a1b5b33333b3' .
+            '0316d7b0a202020202274657374223a202264617461220a7d1b5b33393b34393b30306d0a'
+        );
 
         $this->assertEquals($expectedOutput, $output);
     }
@@ -80,25 +79,19 @@ EOF;
         $client->get('/test2');
         $output = ob_get_clean();
 
-        $expectedOutput = <<<EOF
-\x1b[36;01m===> [VERBOSE] Response: 
-\x1b[33;01m{
-    "test": "data"
-}\x1b[39;49;00m
-\x1b[36;01m===> [VERBOSE] Response: 
-\x1b[33;01m{
-    "test": "data2",
-    "0": [
-        "foo",
-        "bar"
-    ],
-    "1": false,
-    "2": null,
-    "3": 123,
-    "4": 0.123
-}\x1b[39;49;00m
-
-EOF;
+        $expectedOutput = hex2bin(
+            '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333' .
+            'b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b' .
+            '33363b30316d3d3d3d3e205b564552424f53455d20526573706f6e73653a200a1b5b33333b3' .
+            '0316d7b0a202020202274657374223a202264617461220a7d1b5b33393b34393b30306d0a1b' .
+            '5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333b3' .
+            '0316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b33' .
+            '363b30316d3d3d3d3e205b564552424f53455d20526573706f6e73653a200a1b5b33333b303' .
+            '16d7b0a202020202274657374223a20226461746132222c0a202020202230223a205b0a2020' .
+            '20202020202022666f6f222c0a202020202020202022626172220a202020205d2c0a2020202' .
+            '02231223a2066616c73652c0a202020202232223a206e756c6c2c0a202020202233223a2031' .
+            '32332c0a202020202234223a20302e3132330a7d1b5b33393b34393b30306d0a'
+        );
 
         $this->assertEquals($expectedOutput, $output);
     }
@@ -119,13 +112,12 @@ EOF;
         $client->get('/test');
         $output = ob_get_clean();
 
-        $expectedOutput = <<<EOF
-\x1b[36;01m===> [VERBOSE] Response: 
-\x1b[33;01m{
-    "test": "data"
-}\x1b[39;49;00m
-
-EOF;
+        $expectedOutput = hex2bin(
+            '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333' .
+            'b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b' .
+            '33363b30316d3d3d3d3e205b564552424f53455d20526573706f6e73653a200a1b5b33333b3' .
+            '0316d7b0a202020202274657374223a202264617461220a7d1b5b33393b34393b30306d0a'
+        );
 
         $this->assertEquals($expectedOutput, $output);
     }
@@ -150,25 +142,19 @@ EOF;
         $client->get('/test2');
         $output = ob_get_clean();
 
-        $expectedOutput = <<<EOF
-\x1b[36;01m===> [VERBOSE] Response: 
-\x1b[33;01m{
-    "test": "data"
-}\x1b[39;49;00m
-\x1b[36;01m===> [VERBOSE] Response: 
-\x1b[33;01m{
-    "test": "data2",
-    "0": [
-        "foo",
-        "bar"
-    ],
-    "1": false,
-    "2": null,
-    "3": 123,
-    "4": 0.123
-}\x1b[39;49;00m
-
-EOF;
+        $expectedOutput = hex2bin(
+            '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333' .
+            'b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b' .
+            '33363b30316d3d3d3d3e205b564552424f53455d20526573706f6e73653a200a1b5b33333b3' .
+            '0316d7b0a202020202274657374223a202264617461220a7d1b5b33393b34393b30306d0a1b' .
+            '5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333b3' .
+            '0316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b33' .
+            '363b30316d3d3d3d3e205b564552424f53455d20526573706f6e73653a200a1b5b33333b303' .
+            '16d7b0a202020202274657374223a20226461746132222c0a202020202230223a205b0a2020' .
+            '20202020202022666f6f222c0a202020202020202022626172220a202020205d2c0a2020202' .
+            '02231223a2066616c73652c0a202020202232223a206e756c6c2c0a202020202233223a2031' .
+            '32332c0a202020202234223a20302e3132330a7d1b5b33393b34393b30306d0a'
+        );
 
         $this->assertEquals($expectedOutput, $output);
     }
@@ -241,23 +227,19 @@ EOF;
         $client->get('/redirect');
         $output = ob_get_clean();
 
-        $expectedOutput = <<<EOF
-[33;01m===> [VERBOSE] Redirected: http://example.org/redirected
-[39;49;00m
-[36;01m===> [VERBOSE] Response: 
-[33;01m{
-    "test": "data2",
-    "0": [
-        "foo",
-        "bar"
-    ],
-    "1": false,
-    "2": null,
-    "3": 123,
-    "4": 0.123
-}[39;49;00m
-
-EOF;
+        $expectedOutput = hex2bin(
+            '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333' .
+            'b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b' .
+            '33363b30316d3d3d3d3e205b564552424f53455d20526564697265637465643a20687474703' .
+            'a2f2f6578616d706c652e6f72672f726564697265637465641b5b33393b34393b30306d0a1b' .
+            '5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333b3' .
+            '0316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b33' .
+            '363b30316d3d3d3d3e205b564552424f53455d20526573706f6e73653a200a1b5b33333b303' .
+            '16d7b0a202020202274657374223a20226461746132222c0a202020202230223a205b0a2020' .
+            '20202020202022666f6f222c0a202020202020202022626172220a202020205d2c0a2020202' .
+            '02231223a2066616c73652c0a202020202232223a206e756c6c2c0a202020202233223a2031' .
+            '32332c0a202020202234223a20302e3132330a7d1b5b33393b34393b30306d0a'
+        );
 
         $this->assertEquals($expectedOutput, $output);
     }
@@ -284,11 +266,12 @@ EOF;
         }
         $output = ob_get_clean();
 
-        $expectedOutput = <<<EOF
-[36;01m===> [VERBOSE] Response: 
-[33;01mString body[39;49;00m
-
-EOF;
+        $expectedOutput = hex2bin(
+            '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333' .
+            'b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b' .
+            '33363b30316d3d3d3d3e205b564552424f53455d20526573706f6e73653a200a1b5b33333b3' .
+            '0316d537472696e6720626f64791b5b33393b34393b30306d0a'
+        );
 
         $this->assertEquals($expectedOutput, $output);
     }
@@ -314,11 +297,12 @@ EOF;
         }
         $output = ob_get_clean();
 
-        $expectedOutput = <<<EOF
-[36;01m===> [VERBOSE] Response: 
-[33;01mString body[39;49;00m
-
-EOF;
+        $expectedOutput = hex2bin(
+            '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333' .
+            'b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b' .
+            '33363b30316d3d3d3d3e205b564552424f53455d20526573706f6e73653a200a1b5b33333b3' .
+            '0316d537472696e6720626f64791b5b33393b34393b30306d0a'
+        );
 
         $this->assertEquals($expectedOutput, $output);
     }
@@ -345,11 +329,13 @@ EOF;
         }
         $output = ob_get_clean();
 
-        $expectedOutput = <<<EOF
-[36;01m===> [VERBOSE] Response: 
-[33;01mNo response body returned[39;49;00m
-
-EOF;
+        $expectedOutput = hex2bin(
+            '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333' .
+            'b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b' .
+            '33363b30316d3d3d3d3e205b564552424f53455d20526573706f6e73653a200a1b5b33333b3' .
+            '0316d4e6f20726573706f6e736520626f64792072657475726e65641b5b33393b34393b3030' .
+            '6d0a'
+        );
 
         $this->assertEquals($expectedOutput, $output);
     }
@@ -368,7 +354,7 @@ EOF;
         );
 
         $fp = fopen('php://memory', 'a+');
-        Client::setVerbose([STDOUT, $fp]);
+        Client::setVerbose([$fp, $fp]);
 
         ob_start();
         try {
@@ -383,21 +369,9 @@ EOF;
             $output .= fgets($fp);
         } while (!feof($fp));
 
-        $expectedOutput = <<<EOF
-[31;01m===> [ERROR] An error occurred: 
-[33;01m{
-    "test": "data2",
-    "0": [
-        "foo",
-        "bar"
-    ],
-    "1": false,
-    "2": null,
-    "3": 123,
-    "4": 0.123
-}[39;49;00m
-
-EOF;
+        $expectedOutput = hex2bin(
+            '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b33313b30316d3d3d3d3e205b4552524f525d20416e206572726f72206f636375727265643a200a1b5b33333b30316d7b0a202020202274657374223a20226461746132222c0a202020202230223a205b0a202020202020202022666f6f222c0a202020202020202022626172220a202020205d2c0a202020202231223a2066616c73652c0a202020202232223a206e756c6c2c0a202020202233223a203132332c0a202020202234223a20302e3132330a7d1b5b33393b34393b30306d0a'
+        );
 
         $this->assertEquals($expectedOutput, $output);
     }
@@ -416,7 +390,7 @@ EOF;
         );
 
         $fp = fopen('php://memory', 'a+');
-        Client::setVerbose([STDOUT, $fp]);
+        Client::setVerbose($fp);
 
         ob_start();
         try {
@@ -431,11 +405,9 @@ EOF;
             $output .= fgets($fp);
         } while (!feof($fp));
 
-        $expectedOutput = <<<EOF
-[31;01m===> [ERROR] An error occurred: 
-[33;01mString body[39;49;00m
-
-EOF;
+        $expectedOutput = hex2bin(
+            '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b33313b30316d3d3d3d3e205b4552524f525d20416e206572726f72206f636375727265643a200a1b5b33333b30316d537472696e6720626f64791b5b33393b34393b30306d0a'
+        );
 
         $this->assertEquals($expectedOutput, $output);
     }
@@ -464,15 +436,13 @@ EOF;
         } catch (\GuzzleHttp\Exception\ClientException $e) {
         }
 
-        $expectedOutput = <<<EOF
-\x1b[36;01m===> [VERBOSE] Response: 
-\x1b[33;01m{
-    "test": "data"
-}\x1b[39;49;00m
+        $output = ob_get_clean();
 
-EOF;
+        $expectedOutput = hex2bin(
+            '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b33363b30316d3d3d3d3e205b564552424f53455d20526573706f6e73653a200a1b5b33333b30316d7b0a202020202274657374223a202264617461220a7d1b5b33393b34393b30306d0a1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a'
+        );
 
-        $this->assertEquals($expectedOutput, ob_get_clean());
+        $this->assertEquals($expectedOutput, $output);
 
         fseek($fp, 0);
         $output = '';
@@ -480,21 +450,14 @@ EOF;
             $output .= fgets($fp);
         } while (!feof($fp));
 
-        $expectedError = <<<EOF
-[31;01m===> [ERROR] An error occurred: 
-[33;01m{
-    "test": "data2",
-    "0": [
-        "foo",
-        "bar"
-    ],
-    "1": false,
-    "2": null,
-    "3": 123,
-    "4": 0.123
-}[39;49;00m
-
-EOF;
+        $expectedError = hex2bin(
+            '1b5b33313b30316d3d3d3d3e205b4552524f525d20416e206572726f72206f6363757272656' .
+            '43a200a1b5b33333b30316d7b0a202020202274657374223a20226461746132222c0a202020' .
+            '202230223a205b0a202020202020202022666f6f222c0a202020202020202022626172220a2' .
+            '02020205d2c0a202020202231223a2066616c73652c0a202020202232223a206e756c6c2c0a' .
+            '202020202233223a203132332c0a202020202234223a20302e3132330a7d1b5b33393b34393' .
+            'b30306d0a'
+        );
 
         $this->assertEquals($expectedError, $output);
     }
@@ -521,11 +484,12 @@ EOF;
         }
         $output = ob_get_clean();
 
-        $expectedOutput = <<<EOF
-[31;01m===> [ERROR] An error occurred: 
-[33;01mError message[39;49;00m
-
-EOF;
+        $expectedOutput = hex2bin(
+            '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333' .
+            'b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b' .
+            '33313b30316d3d3d3d3e205b4552524f525d20416e206572726f72206f636375727265643a2' .
+            '00a1b5b33333b30316d4572726f72206d6573736167651b5b33393b34393b30306d0a'
+        );
 
         $this->assertEquals($expectedOutput, $output);
     }
@@ -556,11 +520,13 @@ EOF;
         }
         $output = ob_get_clean();
 
-        $expectedOutput = <<<EOF
-[31;01m===> [ERROR] An error occurred: 
-[33;01m500: Error message[39;49;00m
-
-EOF;
+        $expectedOutput = hex2bin(
+            '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333' .
+            'b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b' .
+            '33313b30316d3d3d3d3e205b4552524f525d20416e206572726f72206f636375727265643a2' .
+            '00a1b5b33333b30316d3530303a204572726f72206d6573736167651b5b33393b34393b3030' .
+            '6d0a'
+        );
 
         $this->assertEquals($expectedOutput, $output);
     }
@@ -591,12 +557,13 @@ EOF;
         }
         $output = ob_get_clean();
 
-        $expectedOutput = <<<EOF
-[31;01m===> [ERROR] An error occurred: 
-[33;01m500: Error message
-[33;01m{"errorString":"An error"}[39;49;00m
-
-EOF;
+        $expectedOutput = hex2bin(
+            '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333' .
+            'b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b' .
+            '33313b30316d3d3d3d3e205b4552524f525d20416e206572726f72206f636375727265643a2' .
+            '00a1b5b33333b30316d3530303a204572726f72206d6573736167650a1b5b33333b30316d7b' .
+            '226572726f72537472696e67223a22416e206572726f72227d1b5b33393b34393b30306d0a'
+        );
 
         $this->assertEquals($expectedOutput, $output);
     }
