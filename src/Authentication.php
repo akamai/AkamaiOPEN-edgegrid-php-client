@@ -16,6 +16,8 @@ namespace Akamai\Open\EdgeGrid;
 
 use Akamai\Open\EdgeGrid\Authentication\Nonce;
 use Akamai\Open\EdgeGrid\Authentication\Timestamp;
+use Akamai\Open\EdgeGrid\Exception\ConfigException;
+use Akamai\Open\EdgeGrid\Exception\SignerException\InvalidSignDataException;
 
 /**
  * Akamai {OPEN} EdgeGrid Request Signer
@@ -82,7 +84,7 @@ class Authentication
         }
 
         if (!$this->timestamp->isValid()) {
-            throw new \RuntimeException("Timestamp is invalid. Too old?");
+            throw new InvalidSignDataException("Timestamp is invalid. Too old?");
         }
 
         if ($this->nonce === null) {
@@ -309,7 +311,7 @@ class Authentication
         $ini = self::parseEdgeRcFile($path);
 
         if (!isset($ini[$section])) {
-            throw new \Exception("Section \"$section\" does not exist!");
+            throw new ConfigException("Section \"$section\" does not exist!");
         }
 
         $auth = new static();
@@ -487,11 +489,11 @@ class Authentication
 
         $file = !$path ? false : realpath($path);
         if (!$file) {
-            throw new \Exception("File \"$path\" does not exist!");
+            throw new ConfigException("Path to .edgerc file \"$path\" does not exist!");
         }
 
         if (!is_readable($file)) {
-            throw new \Exception("Unable to read .edgerc file!");
+            throw new ConfigException("Unable to read .edgerc file!");
         }
 
         // Handle : assignments in .edgerc files

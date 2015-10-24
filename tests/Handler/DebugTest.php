@@ -369,7 +369,7 @@ EOF;
     }
 
     /**
-     * @expectedException \Exception
+     * @expectedException \Akamai\Open\EdgeGrid\Exception\HandlerException\IOException
      * @expectedExceptionMessage Unable to use resource: fake://stream
      */
     public function testInvalidStringResource()

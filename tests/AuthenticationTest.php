@@ -99,7 +99,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Exception
+     * @expectedException \Akamai\Open\EdgeGrid\Exception\SignerException\InvalidSignDataException
      * @expectedExceptionMessage Timestamp is invalid. Too old?
      */
     public function testTimestampTimeout()
@@ -311,6 +311,10 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2048, \PHPUnit_Framework_Assert::readAttribute($authentication, 'max_body_size'));
     }
 
+    /**
+     * @expectedException \Akamai\Open\EdgeGrid\Exception\ConfigException
+     * @expectedExceptionMessage Section "default" does not exist!
+     */
     public function testCreateFromEdgeRcUseCwd()
     {
         $_SERVER['HOME'] = "/non-existant";
@@ -323,8 +327,6 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         try {
             $auth = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile();
             $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Authentication::CLASS, $auth);
-        } catch (\Exception $e) {
-            $this->assertEquals('Section "default" does not exist!', $e->getMessage());
         } finally {
             if ($unlink) {
                 unlink('./.edgerc');
@@ -333,8 +335,8 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage File "/non-existant/.edgerc" does not exist!
+     * @expectedException \Akamai\Open\EdgeGrid\Exception\ConfigException
+     * @expectedExceptionMessage Path to .edgerc file "/non-existant/.edgerc" does not exist!
      */
     public function testCreateFromEdgeRcNonExistant()
     {
@@ -342,7 +344,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Exception
+     * @expectedException \Akamai\Open\EdgeGrid\Exception\ConfigException
      * @expectedExceptionMessage Unable to read .edgerc file!
      */
     public function testCreateFromEdgeRcNonReadable()
