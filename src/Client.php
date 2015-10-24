@@ -125,35 +125,18 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
      */
     public function requestAsync($method, $uri = null, array $options = [])
     {
-        if (isset($options['timestamp'])) {
-            $this->authentication->setTimestamp($options['timestamp']);
-        } elseif (!$this->getConfig('timestamp')) {
-            $this->authentication->setTimestamp();
-        }
-
-        if (isset($options['nonce'])) {
-            $this->authentication->setNonce($options['nonce']);
-        }
-
-        if (isset($options['handler'])) {
-            $options = $this->setAuthenticationHandler($options, $this->authentication);
-        }
-
-        if ($fp = $this->isVerbose()) {
-            $options = $this->setVerboseHandler($options, $fp);
-        }
-
-        $options['debug'] = $this->getDebugOption($options);
-        if ($fp = $this->isDebug()) {
-            $options = $this->setDebugHandler($options, $fp);
-        }
-
-        if ($this->logger && isset($options['handler'])) {
-            $this->setLogHandler($options['handler'], $this->logger);
-        }
+        $options = $this->setRequestOptions($options);
 
         return parent::requestAsync($method, $uri, $options);
     }
+
+    public function sendAsync(\Psr\Http\Message\RequestInterface $request, array $options = [])
+    {
+        $this->setRequestOptions($options);
+
+        return parent::sendAsync($request, $options);
+    }
+
 
     /**
      * Set Akamai {OPEN} Authentication Credentials
@@ -446,6 +429,9 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
             $config['handler'] = \GuzzleHttp\HandlerStack::create();
         }
         try {
+            if (!($config['handler'] instanceof \GuzzleHttp\HandlerStack)) {
+                $config['handler'] = \GuzzleHttp\HandlerStack::create($config['handler']);
+            }
             $config['handler']->before("history", $authenticationHandler, 'authentication');
         } catch (\InvalidArgumentException $e) {
             // history middleware not added yet
@@ -599,6 +585,42 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
 
         $options['handler'] = $handler;
 
+        return $options;
+    }
+
+    /**
+     * @param array $options
+     * @return array
+     */
+    protected function setRequestOptions(array $options)
+    {
+        if (isset($options['timestamp'])) {
+            $this->authentication->setTimestamp($options['timestamp']);
+        } elseif (!$this->getConfig('timestamp')) {
+            $this->authentication->setTimestamp();
+        }
+
+        if (isset($options['nonce'])) {
+            $this->authentication->setNonce($options['nonce']);
+        }
+
+        if (isset($options['handler'])) {
+            $options = $this->setAuthenticationHandler($options, $this->authentication);
+        }
+
+        if ($fp = $this->isVerbose()) {
+            $options = $this->setVerboseHandler($options, $fp);
+        }
+
+        $options['debug'] = $this->getDebugOption($options);
+        if ($fp = $this->isDebug()) {
+            $options = $this->setDebugHandler($options, $fp);
+        }
+
+        if ($this->logger && isset($options['handler'])) {
+            $this->setLogHandler($options['handler'], $this->logger);
+            return $options;
+        }
         return $options;
     }
 }

@@ -105,6 +105,68 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param $name
+     * @param $options
+     * @param $request
+     * @param $result
+     * @dataProvider makeAuthHeaderProvider
+     */
+    public function testMakeAuthHeaderPsr7($name, $options, $request, $result)
+    {
+        //$this->setName($name);
+
+        // Mock the response, we don't care about it
+        $container = [];
+        $handler = $this->getMockHandler([new Response(200)], $container);
+
+        $timestamp = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Timestamp::CLASS);
+        $timestamp->__toString()->willReturn($options['timestamp']);
+        $timestamp->isValid()->willReturn(true);
+        $nonce = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Nonce::CLASS);
+        $nonce->__toString()->willReturn($options['nonce']);
+
+        $client = new Client(
+            array_merge($options, [
+                'base_uri' => $options['base_url'],
+                'handler' => $handler,
+                'timestamp' => $timestamp->reveal(),
+                'nonce' => $nonce->reveal()
+            ])
+        );
+
+        $client->setAuth($options['client_token'], $options['client_secret'], $options['access_token']);
+        $client->setMaxBodySize($options['max_body']);
+
+        if (isset($options['headers_to_sign'])) {
+            $client->setHeadersToSign($options['headers_to_sign']);
+        }
+
+        $headers = array();
+        if (isset($request['headers'])) {
+            array_walk_recursive($request['headers'], function ($value, $key) use (&$headers) {
+                $headers[$key] = $value;
+            });
+        }
+
+        $request = new \GuzzleHttp\Psr7\Request(
+            $request['method'],
+            $request['path'],
+            $headers,
+            $request['data']
+        );
+
+        $client->send($request);
+
+        $this->assertEquals(1, sizeof($container));
+        $request = $container[0]['request'];
+        $headers = $request->getHeaders();
+
+        $this->assertArrayHasKey('Authorization', $headers);
+        $this->assertEquals(1, sizeof($headers['Authorization']));
+        $this->assertEquals($result, $headers['Authorization'][0]);
+    }
+
+    /**
      * @dataProvider createFromEdgeRcProvider
      */
     public function testCreateFromEdgeRcDefault($section, $file)
