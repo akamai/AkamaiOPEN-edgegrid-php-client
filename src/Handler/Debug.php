@@ -15,6 +15,8 @@
  */
 namespace Akamai\Open\EdgeGrid\Handler;
 
+use Akamai\Open\EdgeGrid\Exception\HandlerException\IOException;
+
 /**
  * Debug Response Guzzle Middleware Handler
  *
@@ -50,7 +52,7 @@ class Debug
         if (!is_resource($fp) && $fp !== null) {
             $fp = @fopen($fp, 'a+');
             if (!$fp) {
-                throw new \Exception("Unable to use resource: " . (string) $resource);
+                throw new IOException("Unable to use resource: " . (string) $resource);
             }
         }
 

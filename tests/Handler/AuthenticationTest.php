@@ -128,8 +128,8 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage You must call setSigner before trying to sign a request
+     * @expectedException \Akamai\Open\EdgeGrid\Exception\HandlerException
+     * @expectedExceptionMessage Signer not set, make sure to call setSigner first
      */
     public function testRequireSetSignerCall()
     {
