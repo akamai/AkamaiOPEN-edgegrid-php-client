@@ -20,6 +20,18 @@ To install use [`composer`](http://getcomposer.org):
 $ composer require akamai-open/edgegrid-client
 ```
 
+### Alternative (single file) Install
+
+Alternatively, download the PHAR file from the [releases](https://github.com/akamai-open/AkamaiOPEN-edgegrid-php/releases/releases) page.
+
+To use it, you just include it inside your code:
+
+```php
+include 'akamai-open-edgegrid-client.phar';
+
+// Library is ready to use
+```
+
 ## Client Usage
 
 The `Akamai\Open\EdgeGrid\Client` extends `\GuzzleHttp\Client` and transparently enables you to sign API requests,
@@ -71,6 +83,54 @@ $client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile('example', '../conf
 // use $client just as you would \Guzzle\Http\Client
 $response = $client->get('/billing-usage/v1/products');
 ```
+
+## Command Line Interface
+
+To aid in testing, exploration, and debugging, this library features a CLI that mimics [httpie](http://httpie.org) and provides a limited facsimile of it's capabilities as documented here.
+
+If you install via composer, the CLI tool is available as `vendor/bin/http`, or you can simply execute the PHAR file.
+
+```sh
+# Composer installed
+$ ./vendor/bin/http --help
+
+# For Windows
+> php ./vendor/bin/http --help
+
+# PHAR download
+php akamai-open-edgegrid-client.phar --help
+```
+
+We recommend that you either use the composer installed binary, or that you make the phar file executable:
+
+```sh
+chmod u+x akamai-open-edgegrid-client.phar
+```
+
+### Arguments
+
+Arguments are similar to `httpie`:
+
+- `--auth-type={edgegrid,basic,digest}` — Set the authentication type (default: none)
+- `--auth user:` or `--a user:` — Set the `.edgerc` section to use. Unlike `httpie-edgegrid` the `:` is optional
+
+You can also specify an HTTP method (`HEAD|GET|POST|PUT|DELETE` - case-insensitive).
+
+Finally, you can easily specify headers and JSON body fields, using the following syntaxes:
+
+- `Header-Name:value` — Headers and values are `:` separated
+- `jsonKey=value` — Sends `{"jsonKey": "value"}` in the `POST` or `PUT` body. This will also automatically set the `Content-Type` and `Accept` headers to `application/json`.
+- `jsonKey:=[1,2,3]` — Allows you to specify raw JSON data, sending `{"jsonKey": [1, 2, 3]}` in the body.
+
+### Limitations
+
+- `httpie` will not follow redirects by defaults, currently redirects are _always_ followed
+- You cannot pipe body data in via `STDIN`
+- You cannot send `multipart/application/x-www-form-urlencoded` (form) data, or `multipart/mime` (file upload) data
+- Client certs are not supported
+- Server certs cannot be verified
+- Output cannot be customized, all HTTP and body data (request and response) is shown
+- Responses are not syntax highlighted (although JSON is formatted)
 
 ## Guzzle Middleware
 
@@ -143,7 +203,6 @@ $guzzle = new \GuzzleHttp\Client([
     "handler" => $handlerStack
 ]);
 ```
-
 
 ## Author
 
