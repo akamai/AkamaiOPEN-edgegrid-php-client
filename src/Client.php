@@ -35,6 +35,8 @@ use Akamai\Open\EdgeGrid\Handler\Verbose as VerboseHandler;
  */
 class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
 {
+    const VERSION = "0.4.0";
+
     /**
      * @const int Default Timeout in seconds
      */
@@ -110,6 +112,8 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     ) {
         $config = $this->setAuthenticationHandler($config, $authentication);
         $config = $this->setBasicOptions($config);
+        $config['headers']['User-Agent'] = 'Akamai-Open-Edgegrid-PHP/' .
+            self::VERSION . ' ' . \GuzzleHttp\default_user_agent();
 
         parent::__construct($config);
     }
@@ -125,35 +129,24 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
      */
     public function requestAsync($method, $uri = null, array $options = [])
     {
-        if (isset($options['timestamp'])) {
-            $this->authentication->setTimestamp($options['timestamp']);
-        } elseif (!$this->getConfig('timestamp')) {
-            $this->authentication->setTimestamp();
-        }
+        $options = $this->setRequestOptions($options);
 
-        if (isset($options['nonce'])) {
-            $this->authentication->setNonce($options['nonce']);
-        }
-
-        if (isset($options['handler'])) {
-            $options = $this->setAuthenticationHandler($options, $this->authentication);
-        }
-
-        if ($fp = $this->isVerbose()) {
-            $options = $this->setVerboseHandler($options, $fp);
-        }
-
-        $options['debug'] = $this->getDebugOption($options);
-        if ($fp = $this->isDebug()) {
-            $options = $this->setDebugHandler($options, $fp);
-        }
-
-        if ($this->logger && isset($options['handler'])) {
-            $this->setLogHandler($options['handler'], $this->logger);
+        $query = parse_url($uri, PHP_URL_QUERY);
+        if (!empty($query)) {
+            $uri = substr($uri, 0, ((strlen($query)+1)) * -1);
+            parse_str($query, $options['query']);
         }
 
         return parent::requestAsync($method, $uri, $options);
     }
+
+    public function sendAsync(\Psr\Http\Message\RequestInterface $request, array $options = [])
+    {
+        $options = $this->setRequestOptions($options);
+
+        return parent::sendAsync($request, $options);
+    }
+
 
     /**
      * Set Akamai {OPEN} Authentication Credentials
@@ -446,6 +439,9 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
             $config['handler'] = \GuzzleHttp\HandlerStack::create();
         }
         try {
+            if (!($config['handler'] instanceof \GuzzleHttp\HandlerStack)) {
+                $config['handler'] = \GuzzleHttp\HandlerStack::create($config['handler']);
+            }
             $config['handler']->before("history", $authenticationHandler, 'authentication');
         } catch (\InvalidArgumentException $e) {
             // history middleware not added yet
@@ -598,6 +594,43 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
         }
 
         $options['handler'] = $handler;
+
+        return $options;
+    }
+
+    /**
+     * @param array $options
+     * @return array
+     */
+    protected function setRequestOptions(array $options)
+    {
+        if (isset($options['timestamp'])) {
+            $this->authentication->setTimestamp($options['timestamp']);
+        } elseif (!$this->getConfig('timestamp')) {
+            $this->authentication->setTimestamp();
+        }
+
+        if (isset($options['nonce'])) {
+            $this->authentication->setNonce($options['nonce']);
+        }
+
+        if (isset($options['handler'])) {
+            $options = $this->setAuthenticationHandler($options, $this->authentication);
+        }
+
+        if ($fp = $this->isVerbose()) {
+            $options = $this->setVerboseHandler($options, $fp);
+        }
+
+        $options['debug'] = $this->getDebugOption($options);
+        if ($fp = $this->isDebug()) {
+            $options = $this->setDebugHandler($options, $fp);
+        }
+
+        if ($this->logger && isset($options['handler'])) {
+            $this->setLogHandler($options['handler'], $this->logger);
+            return $options;
+        }
 
         return $options;
     }

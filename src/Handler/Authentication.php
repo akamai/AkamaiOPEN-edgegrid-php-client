@@ -16,6 +16,7 @@
 namespace Akamai\Open\EdgeGrid\Handler;
 
 use Akamai\Open\EdgeGrid\Authentication as Signer;
+use Akamai\Open\EdgeGrid\Exception\HandlerException;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -66,8 +67,10 @@ class Authentication
             }
 
             if (!$this->signer) {
-                throw new \Exception("You must call setSigner before trying to sign a request");
+                throw new HandlerException("Signer not set, make sure to call setSigner first");
             }
+
+            $request->getBody()->rewind();
 
             $this->signer->setHttpMethod($request->getMethod())
                 ->setHost($request->getUri()->getHost())
@@ -92,7 +95,7 @@ class Authentication
     public function __call($method, $args)
     {
         if (!isset($this->signer)) {
-            throw new \Exception("Signer not set, make sure to call setSigner first");
+            throw new HandlerException("Signer not set, make sure to call setSigner first");
         }
 
         $return = call_user_func_array([$this->signer, $method], $args);

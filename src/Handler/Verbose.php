@@ -15,6 +15,8 @@
  */
 namespace Akamai\Open\EdgeGrid\Handler;
 
+use Akamai\Open\EdgeGrid\Exception\HandlerException\IOException;
+
 /**
  * Verbose Response Guzzle Middleware Handler
  *
@@ -32,7 +34,7 @@ class Verbose
         if (!is_resource($errorStream) && $errorStream !== null) {
             $fp = @fopen($errorStream, 'a+');
             if (!$fp) {
-                $errorStreamException = new \Exception("Unable to use error stream: " . (string) $errorStream);
+                $errorStreamException = new IOException("Unable to use error stream: " . (string) $errorStream);
             }
             $errorStream = $fp;
         }
@@ -40,7 +42,7 @@ class Verbose
         if (!is_resource($outputStream) && $outputStream !== null) {
             $fp = @fopen($outputStream, 'a+');
             if (!$fp) {
-                throw new \Exception("Unable to use output stream: " . (string) $outputStream);
+                throw new IOException("Unable to use output stream: " . (string) $outputStream);
             }
             $outputStream = $fp;
         }
@@ -96,21 +98,19 @@ class Verbose
             $handler,
             $colors
         ) {
+            fputs($this->outputStream, "{$colors['cyan']}===> [VERBOSE] Request: \n");
+            fputs($this->outputStream, "{$colors['yellow']}" . $this->getBody($request));
+            fputs($this->outputStream, "{$colors['reset']}\n");
+
             return $handler($request, $config)->then(
                 function (\Psr\Http\Message\ResponseInterface $response) use ($colors) {
                     $statusCode = $response->getStatusCode();
                     if ($statusCode > 299 && $statusCode < 400) {
-                        fputs($this->outputStream, "{$colors['yellow']}===> [VERBOSE] Redirected: ");
-                        fputs($this->outputStream, $response->getHeader('Location')[0] . "\n");
+                        fputs($this->outputStream, "{$colors['cyan']}===> [VERBOSE] Redirected: ");
+                        fputs($this->outputStream, $response->getHeader('Location')[0]);
                         fputs($this->outputStream, "{$colors['reset']}\n");
                     } else {
-                        $body = trim($response->getBody());
-                        $result = json_decode($body);
-                        if ($result !== null) {
-                            $responseBody = json_encode($result, JSON_PRETTY_PRINT);
-                        } else {
-                            $responseBody = (!empty(trim($body))) ? $body : "No response body returned";
-                        }
+                        $responseBody = $this->getBody($response);
 
                         if ($statusCode > 399 && $statusCode < 600) {
                             fputs($this->errorStream, "{$colors['red']}===> [ERROR] An error occurred: \n");
@@ -155,5 +155,23 @@ class Verbose
                 }
             );
         };
+    }
+
+    protected function getBody(\Psr\Http\Message\MessageInterface $message)
+    {
+        $body = trim($message->getBody());
+
+        if ($message->getBody()->getSize() == 0 || empty($body)) {
+            if ($message instanceof \Psr\Http\Message\ResponseInterface) {
+                return "No response body returned";
+            }
+            return "No request body sent";
+        }
+        $result = json_decode($body);
+        if ($result !== null) {
+            return json_encode($result, JSON_PRETTY_PRINT);
+        }
+
+        return $body;
     }
 }
