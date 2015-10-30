@@ -23,47 +23,41 @@ namespace Akamai\Open\EdgeGrid;
 class Cli
 {
     /**
-     * @var CLImate
+     * @var \League\CLImate\CLImate
      */
     protected $climate;
 
     public function __construct()
     {
         $this->climate = new \League\CLImate\CLImate();
-        $this->climate->description("Akamai {OPEN} Edgegrid Auth for PHP Client");
     }
 
     public function run()
     {
-        $this->parseArguments();
-        $this->executeCommand();
+        if ($this->parseArguments()) {
+            $this->executeCommand();
+        }
     }
 
     protected function parseArguments()
     {
-        $args = [
-            'help' => [
-                'longPrefix' => 'help',
-                'prefix' => 'h',
-                'description' => 'Show this help output',
-                'noValue' => true
-            ],
-            'auth-type' => [
-                'longPrefix' => 'auth-type',
-                'prefix' => 'a',
-                'description' => "{basic, digest, edgegrid}"
-            ],
-            'auth' => [
-                'longPrefix' => 'auth',
-                'prefix' => 'a',
-                'description' => '.edgerc section name, or user[:password]'
-            ],
-        ];
+        $args = $this->getNamedArgs();
 
         $this->climate->arguments->add($args);
 
         if ($_SERVER['argc'] == 1) {
             $this->help();
+            return false;
+        }
+
+        if ($this->climate->arguments->defined('help')) {
+            $this->help();
+            return;
+        }
+
+        if ($this->climate->arguments->defined('version')) {
+            echo $this->version();
+            return;
         }
 
         try {
@@ -83,6 +77,8 @@ class Cli
             $this->climate->arguments->parse($_SERVER['argv']);
         } catch (\Exception $e) {
         }
+
+        return true;
     }
 
     protected function executeCommand()
@@ -95,26 +91,16 @@ class Cli
             'DELETE'
         ];
 
-        if ($this->climate->arguments->get('help')) {
-            $this->help();
-        }
-
         \Akamai\Open\EdgeGrid\Client::setDebug(true);
         \Akamai\Open\EdgeGrid\Client::setVerbose(true);
 
         $args = $this->climate->arguments->all();
-        do {
-            $last = array_pop($args);
-        } while ($last->value() == null);
-
-        $url = $last->value();
-
         $client = new Client();
 
         if ($this->climate->arguments->defined('auth-type')) {
             $auth = $this->climate->arguments->get('auth');
             if ($this->climate->arguments->get('auth-type') == 'edgegrid' ||
-                (!$this->climate->arguments->defined('auth-type') && $url{0} == ':')) {
+                (!$this->climate->arguments->defined('auth-type'))) {
                 $section = 'default';
                 if ($this->climate->arguments->defined('auth')) {
                     $section = (substr($auth, -1) == ':') ? substr($auth, 0, -1) : $auth;
@@ -125,6 +111,7 @@ class Cli
             if (in_array($this->climate->arguments->get('auth-type'), ['basic', 'digest'])) {
                 if (!$this->climate->arguments->defined('auth') || $this->climate->arguments->get('auth') === null) {
                     $this->help();
+                    return;
                 }
 
                 $auth = [
@@ -142,54 +129,197 @@ class Cli
         }
 
         $method = 'GET';
-
-        if ($url{0} == ':') {
-            $url = substr($url, 1);
-        }
-
         $options = [];
         $body = [];
 
         foreach ($args as $arg) {
-            if (strpos($arg->name(), 'arg-') !== false) {
-                if (in_array(strtoupper($arg->value()), $methods)) {
-                    $method = $arg->value();
-                    continue;
-                }
-
-                $matches = [];
-                if (preg_match('/^(?<key>.*?):=(?<value>.*?)$/', $arg->value(), $matches)) {
-                    $body[$matches['key']] = json_decode($matches['value']);
-                    continue;
-                }
-
-                if (preg_match('/^(?<header>.*?):(?<value>.*?)$/', $arg->value(), $matches)) {
-                    $options['headers'][$matches['header']] = $matches['value'];
-                    continue;
-                }
-
-                if (preg_match('/^(?<key>.*?)=(?<value>.*?)$/', $arg->value(), $matches)) {
-                    $body[$matches['key']] = $matches['value'];
-                }
+            $value = $arg->value();
+            if (empty($value) || is_bool($value) || $arg->longPrefix()) {
+                continue;
             }
+
+            if (in_array(strtoupper($value), $methods)) {
+                $method = $arg->value();
+                continue;
+            }
+
+            if (!isset($url) && preg_match('@^(http(s?)://|:).*$@', trim($value))) {
+                $url = $value;
+
+                if ($url{0} == ':') {
+                    $url = substr($url, 1);
+                }
+
+                continue;
+            }
+
+            $matches = [];
+            if (preg_match('/^(?<key>.*?):=(?<file>@?)(?<value>.*?)$/', $value, $matches)) {
+                if (!$value = $this->getArgValue($matches)) {
+                    return false;
+                }
+
+                $body[$matches['key']] = json_decode($value);
+                continue;
+            }
+
+            if (preg_match('/^(?<header>.*?):(?<value>.*?)$/', $value, $matches)
+                && !preg_match('@^http(s?)://@', $value)) {
+                $options['headers'][$matches['header']] = $matches['value'];
+                continue;
+            }
+
+            if (preg_match('/^(?<key>.*?)=(?<file>@?)(?<value>.*?)$/', $value, $matches)) {
+                if (!$value = $this->getArgValue($matches)) {
+                    return false;
+                }
+
+                $body[$matches['key']] = $matches['value'];
+                continue;
+            }
+
+            if (!isset($url)) {
+                $url = $value;
+                continue;
+            }
+
+            $this->help();
+            $this->climate->error("Unknown argument: " . $value);
+
+            return false;
         }
 
-        if (sizeof($body)) {
+        $stdin = '';
+        $fp = fopen('php://stdin', 'r');
+        if ($fp) {
+            stream_set_blocking($fp, false);
+            $stdin = fgets($fp);
+            if (!empty(trim($stdin))) {
+                while (!feof($fp)) {
+                    $stdin .= fgets($fp);
+                }
+                fclose($fp);
+            }
+            $stdin = rtrim($stdin);
+        }
+
+        if (!empty($stdin) && !empty($body)) {
+            $this->help();
+            $this->climate->error(
+                "error: Request body (from stdin or a file) and request data (key=value) cannot be mixed."
+            );
+            return;
+        }
+
+        if (!empty($stdin)) {
+            $body = $stdin;
+        }
+
+        if (sizeof($body) && !$this->climate->arguments->defined('form')) {
             if (!isset($options['headers']['Content-Type'])) {
                 $options['headers']['Content-Type'] = 'application/json';
             }
             if (!isset($options['headers']['Accept'])) {
                 $options['headers']['Accept'] = 'application/json';
             }
-            $options['body'] = json_encode($body);
+            $options['body'] = (!is_string($body)) ? json_encode($body) : $body;
         }
 
-        $client->request($method, $url, $options);
+        if (sizeof($body) && $this->climate->arguments->defined('form')) {
+            if (!isset($options['headers']['Content-Type'])) {
+                $options['headers']['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
+            }
+
+            $options['body'] = (!is_string($body)) ? http_build_query($body, null, null, PHP_QUERY_RFC1738) : $body;
+        }
+
+        $options['allow_redirects'] = false;
+        if ($this->climate->arguments->defined('follow')) {
+            $options['allow_redirects'] = true;
+        }
+
+        return $client->request($method, $url, $options);
     }
 
     public function help()
     {
-        $this->climate->usage($_SERVER['argv']);
-        exit;
+        $arguments = new \League\CLImate\Argument\Manager();
+        $arguments->description("Akamai {OPEN} Edgegrid Auth for PHP Client (v" .Client::VERSION. ')');
+        $arguments->add($this->getNamedArgs());
+        $arguments->usage($this->climate, $_SERVER['argv']);
+        return;
+    }
+
+    public function version()
+    {
+        return Client::VERSION;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getNamedArgs()
+    {
+        $args = [
+            'help' => [
+                'longPrefix' => 'help',
+                'prefix' => 'h',
+                'description' => 'Show this help output',
+                'noValue' => true
+            ],
+            'auth-type' => [
+                'longPrefix' => 'auth-type',
+                'description' => "{basic, digest, edgegrid}"
+            ],
+            'auth' => [
+                'longPrefix' => 'auth',
+                'prefix' => 'a',
+                'description' => '.edgerc section name, or user[:password]'
+            ],
+            'json' => [
+                'longPrefix' => 'json',
+                'prefix' => 'j',
+                'description' => '(default) Data items from the command line are serialized as a JSON object.',
+                'noValue' => true
+            ],
+            'follow' => [
+                'longPrefix' => 'follow',
+                'description' => 'Set this flag if redirects are allowed',
+                'noValue' => true
+            ],
+            'form' => [
+                'longPrefix' => 'form',
+                'prefix' => 'f',
+                'description' => 'Data items from the command line are serialized as form fields',
+                'noValue' => true
+            ],
+            'version' => [
+                'longPrefix' => 'version',
+                'description' => 'Show version',
+                'noValue' => true
+            ],
+            'METHOD' => [
+                'description' => 'HTTP Method (default: GET)'
+            ],
+            'URL' => [
+                'required' => true,
+            ]
+        ];
+
+        return $args;
+    }
+
+    protected function getArgValue($matches)
+    {
+        $value = $matches['value'];
+        if (!empty($matches['file'])) {
+            if (!file_exists($matches['value']) || !is_readable($matches['value'])) {
+                $this->climate->error("Unable to read input file: " . $matches['value']);
+                return false;
+            }
+            $value = file_get_contents($matches['value']);
+        }
+
+        return $value;
     }
 }
