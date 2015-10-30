@@ -124,9 +124,7 @@ Finally, you can easily specify headers and JSON body fields, using the followin
 
 ### Limitations
 
-- `httpie` will not follow redirects by defaults, currently redirects are _always_ followed
-- You cannot pipe body data in via `STDIN`
-- You cannot send `multipart/application/x-www-form-urlencoded` (form) data, or `multipart/mime` (file upload) data
+- You cannot send `multipart/mime` (file upload) data
 - Client certs are not supported
 - Server certs cannot be verified
 - Output cannot be customized, all HTTP and body data (request and response) is shown
