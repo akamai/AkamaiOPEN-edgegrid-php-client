@@ -22,7 +22,6 @@ if (!file_exists(__DIR__ . '/../build/phar')) {
 }
 
 \$stub = <<<EOF
-#!/usr/bin/env php
 <?php
 if (class_exists('Phar')) {
    Phar::mapPhar('akamai-open-edgegrid-client.phar');
@@ -42,4 +41,3 @@ file_put_contents('build/phar/stub.php', \$stub);" > build/phar/bootstrap.php
 php -dphar.readonly=0 ./vendor/bin/box build
 
 mv akamai-open-edgegrid-client.phar "akamai-open-edgegrid-client${VERSION}.phar"
-chmod +x "akamai-open-edgegrid-client${VERSION}.phar"

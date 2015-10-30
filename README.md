@@ -101,12 +101,6 @@ $ ./vendor/bin/http --help
 php akamai-open-edgegrid-client.phar --help
 ```
 
-We recommend that you either use the composer installed binary, or that you make the phar file executable:
-
-```sh
-chmod u+x akamai-open-edgegrid-client.phar
-```
-
 ### Arguments
 
 Arguments are similar to `httpie`:
