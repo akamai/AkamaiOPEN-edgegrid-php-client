@@ -35,12 +35,12 @@ use Akamai\Open\EdgeGrid\Handler\Verbose as VerboseHandler;
  */
 class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
 {
-    const VERSION = "0.4.2";
+    const VERSION = "0.4.3";
 
     /**
      * @const int Default Timeout in seconds
      */
-    const DEFAULT_REQUEST_TIMEOUT = 10;
+    const DEFAULT_REQUEST_TIMEOUT = 300;
 
     /**
      * @var bool|array|resource Whether verbose mode is enabled
