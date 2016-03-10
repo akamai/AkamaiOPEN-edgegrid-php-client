@@ -155,7 +155,7 @@ $auth = new \Akamai\Open\EdgeGrid\Handler\Authentication;
 $auth->setAuth($client_token, $client_secret, $access_token);
 
 // Create the handler stack
-$handlerStack = HandlerStack::create();
+$handlerStack = \GuzzleHttp\HandlerStack::create();
 
 // Add the Auth handler to the stack
 $handlerStack->push($auth);
