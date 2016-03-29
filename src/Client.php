@@ -45,7 +45,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     /**
      * @var bool|array|resource Whether verbose mode is enabled
      *
-     * - true - Use STDOUT
+     * - true - Use STDERR
      * - array - output/error streams (different)
      * - resource - output/error stream (same)
      */
@@ -353,13 +353,13 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     protected function getDebugOption($config)
     {
         if (isset($config['debug'])) {
-            return ($config['debug'] === true) ? STDERR : $config['debug'];
+            return ($config['debug'] === true) ? fopen('php://stderr', 'a') : $config['debug'];
         }
 
         if (($this->debugOverride && $this->debug)) {
-            return ($this->debug === true) ? STDERR : $this->debug;
+            return ($this->debug === true) ? fopen('php://stderr', 'a') : $this->debug;
         } elseif ((!$this->debugOverride && static::$staticDebug)) {
-            return (static::$staticDebug === true) ? STDERR : static::$staticDebug;
+            return (static::$staticDebug === true) ? fopen('php://stderr', 'a') : static::$staticDebug;
         }
 
         return false;
