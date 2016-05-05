@@ -44,7 +44,7 @@ class Authentication
     /**
      * @var array Guzzle config
      */
-    protected $config = [];
+    protected $config = array();
 
     /**
      * @var string Request path
@@ -69,7 +69,7 @@ class Authentication
     /**
      * @var array A list of headers to be included in the signature
      */
-    protected $headers_to_sign = [];
+    protected $headers_to_sign = array();
 
     /**
      * Create the Authentication header
@@ -181,7 +181,7 @@ class Authentication
     public function setQuery($query, $ensure_encoding = true)
     {
         if (is_string($query) && $ensure_encoding) {
-            $query_args = [];
+            $query_args = array();
             parse_str($query, $query_args);
             $query = http_build_query($query_args, null, '&', PHP_QUERY_RFC3986);
         }
@@ -232,6 +232,11 @@ class Authentication
             $this->setQuery($url['query']);
         }
         return $this;
+    }
+
+    public function getPath()
+    {
+        return $this->path;
     }
 
     /**
@@ -339,8 +344,8 @@ class Authentication
      */
     protected function canonicalizeHeaders()
     {
-        $canonical = [];
-        $headers = [];
+        $canonical = array();
+        $headers = array();
         if (isset($this->config['headers'])) {
             $headers = array_combine(
                 array_map('strtolower', array_keys($this->config['headers'])),
@@ -432,7 +437,7 @@ class Authentication
             }
         }
 
-        $data = [
+        $data = array(
             strtoupper($this->httpMethod),
             'https',
             $this->host,
@@ -440,7 +445,7 @@ class Authentication
             $this->canonicalizeHeaders(),
             (strtoupper($this->httpMethod) == 'POST') ? $this->makeContentHash() : '',
             $auth_header
-        ];
+        );
 
         return implode("\t", $data);
     }
