@@ -19,7 +19,7 @@ namespace Akamai\Open\EdgeGrid\Authentication;
 class Timestamp
 {
     /**
-     * @var \DateTimeImmutable Signing Timestamp
+     * @var \DateTime Signing Timestamp
      */
     protected $timestamp;
 
