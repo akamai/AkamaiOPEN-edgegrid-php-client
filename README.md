@@ -212,7 +212,7 @@ require_once 'src/Exception/SignerException/InvalidSignDataException.php';
 
 Once you have done this, you can create the header value by calling the appropriate [`\Akamai\Open\Edgegrid\Authentication::set*()` methods](https://akamai-open.github.io/AkamaiOPEN-edgegrid-php/classes/Akamai_Open_EdgeGrid_Authentication.html#methods). For example, using it with the built-in streams HTTP client might look like the following:
 
-```
+```php
 $auth = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile('default', '/.edgerc');
 $auth->setHttpMethod('GET');
 $auth->setPath('/diagnostic-tools/v1/locations');
