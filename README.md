@@ -12,7 +12,7 @@ For more information visit the [Akamai {OPEN} Developer Community](https://devel
 
 ## Installation
 
-This library requires PHP 5.5+, or HHVM 3.5+.
+This library requires PHP 5.5+, or HHVM 3.5+ to be used with the built-in Guzzle HTTP client.
 
 To install use [`composer`](http://getcomposer.org):
 
@@ -194,6 +194,41 @@ $handlerStack->push(new \Akamai\Open\EdgeGrid\Handler\Debug());
 $guzzle = new \GuzzleHttp\Client([
     "handler" => $handlerStack
 ]);
+```
+
+### Using PHP 5.3 (not recommended)
+
+> PHP 5.3 has been EOL since August 14th, 2014, and has **known** security vulnerabilities, therefore we do not recommend using it. However, we understand that many actively supported LTS distributions are still shipping with PHP 5.3, and therefore we are providing the following information.
+
+It is possible to use the request signer on it's own, without Guzzle, making it possible to use with PHP 5.3+. To do so you _cannot_ use the autoloader or the phar release. You must [download the source as `zip` or `tar.gz` file](https://github.com/akamai-open/AkamaiOPEN-edgegrid-php/releases) and include all the files yourself:
+
+```php
+require_once 'src/Authentication.php';
+require_once 'src/Authentication/Timestamp.php';
+require_once 'src/Authentication/Nonce.php';
+require_once 'src/Exception/ConfigException.php';
+require_once 'src/Exception/SignerException/InvalidSignDataException.php';
+```
+
+Once you have done this, you can create the header value by calling the appropriate [`\Akamai\Open\Edgegrid\Authentication::set*()` methods](https://akamai-open.github.io/AkamaiOPEN-edgegrid-php/classes/Akamai_Open_EdgeGrid_Authentication.html#methods). For example, using it with the built-in streams HTTP client might look like the following:
+
+```
+$auth = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile('default', '/.edgerc');
+$auth->setHttpMethod('GET');
+$auth->setPath('/diagnostic-tools/v1/locations');
+
+$context = array(
+	'http' => array(
+		'header' => array(
+			'Authorization: ' . $auth->createAuthHeader(),
+			'Content-Type: application/json'
+		)
+	)
+);
+
+$context = stream_context_create($context);
+
+$response = json_decode(file_get_contents('https://' . $auth->getHost() . $auth->getPath(), null, $context));
 ```
 
 ## Author
