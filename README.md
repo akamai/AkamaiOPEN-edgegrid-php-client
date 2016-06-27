@@ -22,7 +22,7 @@ $ composer require akamai-open/edgegrid-client
 
 ### Alternative (single file) Install
 
-Alternatively, download the PHAR file from the [releases](https://github.com/akamai-open/AkamaiOPEN-edgegrid-php/releases/releases) page.
+Alternatively, download the PHAR file from the [releases](https://github.com/akamai-open/AkamaiOPEN-edgegrid-php/releases) page.
 
 To use it, you just include it inside your code:
 
