@@ -1,9 +1,15 @@
 language: php
 php:
-- 5.5
-- 5.6
-- 7.0
-- hhvm
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+  - nightly
+  - hhvm
+matrix:
+  allow_failures:
+    - php: hhvm
+    - php: nightly
 sudo: false
 install: travis_retry composer install --no-interaction --prefer-source
 script: phpunit
