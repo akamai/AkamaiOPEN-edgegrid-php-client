@@ -251,6 +251,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals('/path', \PHPUnit_Framework_Assert::readAttribute($authentication, 'path'));
         $this->assertArrayNotHasKey('query', \PHPUnit_Framework_Assert::readAttribute($authentication, 'config'));
+        $this->assertEmpty($authentication->getQuery());
 
         $authentication = new \Akamai\Open\EdgeGrid\Authentication();
         $authentication->setPath("https://example.net/path");
@@ -260,6 +261,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals('/path', \PHPUnit_Framework_Assert::readAttribute($authentication, 'path'));
         $this->assertArrayNotHasKey('query', \PHPUnit_Framework_Assert::readAttribute($authentication, 'config'));
+        $this->assertEmpty($authentication->getQuery());
 
         $authentication = new \Akamai\Open\EdgeGrid\Authentication();
         $authentication->setPath("/newpath?query=string");
@@ -272,6 +274,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
             'query=string',
             \PHPUnit_Framework_Assert::readAttribute($authentication, 'config')['query']
         );
+        $this->assertEquals('query=string', $authentication->getQuery());
 
         $authentication = new \Akamai\Open\EdgeGrid\Authentication();
         $authentication->setPath("https://example.net/path?query=newstring");
@@ -285,6 +288,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
             'query=newstring',
             \PHPUnit_Framework_Assert::readAttribute($authentication, 'config')['query']
         );
+        $this->assertEquals('query=newstring', $authentication->getQuery());
     }
 
     /**
@@ -418,6 +422,26 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 
         $config['query'] = 'query=string';
         $this->assertEquals($config, \PHPUnit_Framework_Assert::readAttribute($authentication, 'config'));
+    }
+
+    public function testSetQuery()
+    {
+        $authentication = new \Akamai\Open\EdgeGrid\Authentication();
+        $authentication->setQuery('query=string');
+        $this->assertEquals('query=string', $authentication->getQuery());
+
+        $authentication->setQuery(['query' => 'string']);
+        $authentication->getQuery('query=string', $authentication->getQuery());
+    }
+
+    public function testSetQueryEncoding()
+    {
+        $authentication = new \Akamai\Open\EdgeGrid\Authentication();
+        $authentication->setQuery('query=string%20with%20spaces');
+        $this->assertEquals('query=string%20with%20spaces', $authentication->getQuery());
+
+        $authentication->setQuery('query=string+with+spaces');
+        $this->assertEquals('query=string%20with%20spaces', $authentication->getQuery());
     }
 
     public function createFromEdgeRcProvider()

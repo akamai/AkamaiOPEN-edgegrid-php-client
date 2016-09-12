@@ -114,13 +114,11 @@ class Authentication
     }
 
     /**
-     * Get the request host
-     *
      * @return string
      */
-    public function getHost()
+    public function getHttpMethod()
     {
-        return $this->host;
+        return $this->httpMethod;
     }
 
     /**
@@ -155,6 +153,16 @@ class Authentication
     }
 
     /**
+     * Get the request host
+     *
+     * @return string
+     */
+    public function getHost()
+    {
+        return $this->host;
+    }
+
+    /**
      * Set Guzzle config
      *
      * This is a convenient way to pass in the
@@ -167,6 +175,14 @@ class Authentication
     {
         $this->config = array_merge($this->config, $config);
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getConfig()
+    {
+        return $this->config;
     }
 
     /**
@@ -190,6 +206,14 @@ class Authentication
     }
 
     /**
+     * @return string
+     */
+    public function getQuery()
+    {
+        return isset($this->config['query']) ? $this->config['query'] : '';
+    }
+
+    /**
      * Set request body
      *
      * @param string $body
@@ -202,6 +226,14 @@ class Authentication
     }
 
     /**
+     * @return string
+     */
+    public function getBody()
+    {
+        return isset($this->config['body']) ? $this->config['body'] : '';
+    }
+
+    /**
      * Set request headers
      *
      * @param array $headers
@@ -211,6 +243,14 @@ class Authentication
     {
         $this->config['headers'] = $headers;
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHeaders()
+    {
+        return isset($this->config['header']) ? $this->config['header'] : [];
     }
 
     /**
@@ -234,6 +274,9 @@ class Authentication
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getPath()
     {
         return $this->path;
