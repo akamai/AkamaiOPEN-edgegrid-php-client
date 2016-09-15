@@ -206,7 +206,9 @@ It is possible to use the request signer on it's own, without Guzzle, making it 
 require_once 'src/Authentication.php';
 require_once 'src/Authentication/Timestamp.php';
 require_once 'src/Authentication/Nonce.php';
+require_once 'src/Exception.php';
 require_once 'src/Exception/ConfigException.php';
+require_once 'src/Exception/SignerException.php';
 require_once 'src/Exception/SignerException/InvalidSignDataException.php';
 ```
 
