@@ -1,6 +1,6 @@
 0.6.0
 ---
-[?? ???, 2016]
+[08 Oct, 2016]
 * Split `\Akamai\Open\EdgeGrid\Authentication` into it's own (5.3+ compatible) package
 * Move documentation to `apigen/apigen`
 * Update dependencies

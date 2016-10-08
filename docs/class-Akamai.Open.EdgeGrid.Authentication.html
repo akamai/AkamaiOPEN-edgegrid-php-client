@@ -147,7 +147,7 @@
 		<b>Namespace:</b> <a href="namespace-Akamai.html">Akamai</a>\<a href="namespace-Akamai.Open.html">Open</a>\<a href="namespace-Akamai.Open.EdgeGrid.html">EdgeGrid</a><br>
 		<b>Package:</b> \Akamai\Open\EdgeGrid\Authentication<br>
 
-			<b>Located at</b> <a href="source-class-Akamai.Open.EdgeGrid.Authentication.html#22-582" title="Go to source code">Authentication.php</a>
+			<b>Located at</b> <a href="source-class-Akamai.Open.EdgeGrid.Authentication.html#22-598" title="Go to source code">Authentication.php</a>
 		<br>
 	</div>
 
@@ -948,7 +948,7 @@ the type passed in to setQuery().</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_canonicalizeHeaders">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Authentication.html#410-450" title="Go to source code">canonicalizeHeaders</a>( )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Authentication.html#410-453" title="Go to source code">canonicalizeHeaders</a>( )</code>
 
 			<div class="description short">
 				<p>Returns headers in normalized form</p>
@@ -981,7 +981,7 @@ the type passed in to setQuery().</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_makeBase64HmacSha256">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Authentication.html#452-463" title="Go to source code">makeBase64HmacSha256</a>( <span>string <var>$data</var></span>, <span>string <var>$key</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Authentication.html#455-466" title="Go to source code">makeBase64HmacSha256</a>( <span>string <var>$data</var></span>, <span>string <var>$key</var></span> )</code>
 
 			<div class="description short">
 				<p>Returns Base64 encoded HMAC-SHA256 Hash</p>
@@ -1021,7 +1021,7 @@ the type passed in to setQuery().</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_makeBase64Sha256">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Authentication.html#465-475" title="Go to source code">makeBase64Sha256</a>( <span>string <var>$data</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Authentication.html#468-478" title="Go to source code">makeBase64Sha256</a>( <span>string <var>$data</var></span> )</code>
 
 			<div class="description short">
 				<p>Returns Base64 encoded SHA256 Hash</p>
@@ -1059,7 +1059,7 @@ the type passed in to setQuery().</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_makeContentHash">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Authentication.html#477-490" title="Go to source code">makeContentHash</a>( )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Authentication.html#480-493" title="Go to source code">makeContentHash</a>( )</code>
 
 			<div class="description short">
 				<p>Returns a hash of the HTTP POST body</p>
@@ -1092,7 +1092,7 @@ the type passed in to setQuery().</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_makeDataToSign">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Authentication.html#492-521" title="Go to source code">makeDataToSign</a>( <span>string <var>$auth_header</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Authentication.html#495-524" title="Go to source code">makeDataToSign</a>( <span>string <var>$auth_header</var></span> )</code>
 
 			<div class="description short">
 				<p>Returns a string with all data that will be signed</p>
@@ -1130,7 +1130,7 @@ the type passed in to setQuery().</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_makeSigningKey">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Authentication.html#523-532" title="Go to source code">makeSigningKey</a>( )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Authentication.html#526-535" title="Go to source code">makeSigningKey</a>( )</code>
 
 			<div class="description short">
 				<p>Creates a signing key based on the secret and timestamp</p>
@@ -1163,7 +1163,7 @@ the type passed in to setQuery().</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_signRequest">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Authentication.html#534-546" title="Go to source code">signRequest</a>( <span>string <var>$auth_header</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Authentication.html#537-549" title="Go to source code">signRequest</a>( <span>string <var>$auth_header</var></span> )</code>
 
 			<div class="description short">
 				<p>Returns a signature of the given request, timestamp and auth_header</p>
@@ -1201,7 +1201,7 @@ the type passed in to setQuery().</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_parseEdgeRcFile">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Authentication.html#548-581" title="Go to source code">parseEdgeRcFile</a>( <span> <var>$path</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Authentication.html#551-584" title="Go to source code">parseEdgeRcFile</a>( <span> <var>$path</var></span> )</code>
 
 			<div class="description short">
 				<p>Parse a .edgerc File</p>
@@ -1226,6 +1226,44 @@ the type passed in to setQuery().</p>
 					<div class="list">
 						<code><a href="class-Akamai.Open.EdgeGrid.Authentication.Exception.ConfigException.html">Akamai\Open\EdgeGrid\Authentication\Exception\ConfigException</a></code>
 					</div>
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="buildQueryString" id="_buildQueryString">
+
+			<td class="attributes"><code>
+				 protected 
+				string
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_buildQueryString">#</a>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Authentication.html#586-597" title="Go to source code">buildQueryString</a>( <span> <var>$query</var></span> )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$query</var></dt>
+						<dd></dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						string
+					</div>
+
 
 
 
