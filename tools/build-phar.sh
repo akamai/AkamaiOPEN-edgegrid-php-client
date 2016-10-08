@@ -42,3 +42,12 @@ file_put_contents('build/phar/stub.php', \$stub);" > build/phar/bootstrap.php
 php -dphar.readonly=0 ./vendor/bin/box build
 
 mv akamai-open-edgegrid-client.phar "akamai-open-edgegrid-client${VERSION}.phar"
+
+php "akamai-open-edgegrid-client${VERSION}.phar"
+
+echo "<?php
+include 'akamai-open-edgegrid-client${VERSION}.phar';
+\$client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile();" > test.php
+echo "Running test.php";
+php test.php
+rm test.php
