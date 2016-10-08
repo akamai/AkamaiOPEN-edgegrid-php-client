@@ -34,7 +34,10 @@
         "phpunit",
         "herrera-io/annotations",
         "herrera-io/box",
-        "herrera-io/version"
+        "herrera-io/version",
+        "apigen",
+        "latte",
+        "kululich"
       ],
       "in": "vendor"
     }
