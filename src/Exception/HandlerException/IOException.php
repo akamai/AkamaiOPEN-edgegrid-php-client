@@ -7,7 +7,7 @@
  * as GuzzleHttp a Middleware Handlers
  *
  * @author Davey Shafik <dshafik@akamai.com>
- * @copyright Copyright 2015 Akamai Technologies, Inc. All rights reserved.
+ * @copyright Copyright 2016 Akamai Technologies, Inc. All rights reserved.
  * @license Apache 2.0
  * @link https://github.com/akamai-open/edgegrid-auth-php
  * @link https://developer.akamai.com
