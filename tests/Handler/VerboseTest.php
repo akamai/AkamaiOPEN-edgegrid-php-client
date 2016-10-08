@@ -47,18 +47,15 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
 
         $client->setInstanceVerbose(true);
 
-        ob_start();
-        $client->get('/test');
-        $output = ob_get_clean();
-
         $expectedOutput = hex2bin(
             '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333' .
             'b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b' .
             '33363b30316d3d3d3d3e205b564552424f53455d20526573706f6e73653a200a1b5b33333b3' .
             '0316d7b0a202020202274657374223a202264617461220a7d1b5b33393b34393b30306d0a'
         );
+        $this->expectOutputString($expectedOutput);
 
-        $this->assertEquals($expectedOutput, $output);
+        $client->get('/test');
     }
 
     public function testInstanceVerboseMultiple()
@@ -77,11 +74,6 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
 
         $client->setInstanceVerbose(true);
 
-        ob_start();
-        $client->get('/test1');
-        $client->get('/test2');
-        $output = ob_get_clean();
-
         $expectedOutput = hex2bin(
             '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333' .
             'b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b' .
@@ -95,8 +87,10 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
             '02231223a2066616c73652c0a202020202232223a206e756c6c2c0a202020202233223a2031' .
             '32332c0a202020202234223a20302e3132330a7d1b5b33393b34393b30306d0a'
         );
+        $this->expectOutputString($expectedOutput);
 
-        $this->assertEquals($expectedOutput, $output);
+        $client->get('/test1');
+        $client->get('/test2');
     }
 
     public function testStaticVerboseSingle()
@@ -111,18 +105,15 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
 
         Client::setVerbose(true);
 
-        ob_start();
-        $client->get('/test');
-        $output = ob_get_clean();
-
         $expectedOutput = hex2bin(
             '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333' .
             'b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b' .
             '33363b30316d3d3d3d3e205b564552424f53455d20526573706f6e73653a200a1b5b33333b3' .
             '0316d7b0a202020202274657374223a202264617461220a7d1b5b33393b34393b30306d0a'
         );
+        $this->expectOutputString($expectedOutput);
 
-        $this->assertEquals($expectedOutput, $output);
+        $client->get('/test');
     }
 
     public function testStaticVerboseMultiple()
@@ -140,11 +131,6 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
 
         Client::setVerbose(true);
 
-        ob_start();
-        $client->get('/test');
-        $client->get('/test2');
-        $output = ob_get_clean();
-
         $expectedOutput = hex2bin(
             '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333' .
             'b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b' .
@@ -158,8 +144,10 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
             '02231223a2066616c73652c0a202020202232223a206e756c6c2c0a202020202233223a2031' .
             '32332c0a202020202234223a20302e3132330a7d1b5b33393b34393b30306d0a'
         );
+        $this->expectOutputString($expectedOutput);
 
-        $this->assertEquals($expectedOutput, $output);
+        $client->get('/test');
+        $client->get('/test2');
     }
 
     public function testVerboseOverrideSingle()
@@ -175,13 +163,9 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
         Client::setVerbose(true);
         $client->setInstanceVerbose(false);
 
-        ob_start();
+        $this->expectOutputString("");
+
         $client->get('/test');
-        $output = ob_get_clean();
-
-        $expectedOutput = "";
-
-        $this->assertEquals($expectedOutput, $output);
     }
 
     public function testVerboseOverrideMultiple()
@@ -200,14 +184,10 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
         Client::setVerbose(true);
         $client->setInstanceVerbose(false);
 
-        ob_start();
+        $this->expectOutputString("");
+
         $client->get('/test');
         $client->get('/test2');
-        $output = ob_get_clean();
-
-        $expectedOutput = "";
-
-        $this->assertEquals($expectedOutput, $output);
     }
 
     public function testVerboseRedirect()
@@ -226,10 +206,6 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
 
         Client::setVerbose(true);
 
-        ob_start();
-        $client->get('/redirect');
-        $output = ob_get_clean();
-
         $expectedOutput = hex2bin(
             '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333' .
             'b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b' .
@@ -243,8 +219,9 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
             '02231223a2066616c73652c0a202020202232223a206e756c6c2c0a202020202233223a2031' .
             '32332c0a202020202234223a20302e3132330a7d1b5b33393b34393b30306d0a'
         );
+        $this->expectOutputString($expectedOutput);
 
-        $this->assertEquals($expectedOutput, $output);
+        $client->get('/redirect');
     }
 
     public function testVerboseNonJson()
@@ -262,21 +239,18 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
 
         Client::setVerbose(true);
 
-        ob_start();
-        try {
-            $client->get('/error');
-        } catch (\GuzzleHttp\Exception\ClientException $e) {
-        }
-        $output = ob_get_clean();
-
         $expectedOutput = hex2bin(
             '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333' .
             'b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b' .
             '33363b30316d3d3d3d3e205b564552424f53455d20526573706f6e73653a200a1b5b33333b3' .
             '0316d537472696e6720626f64791b5b33393b34393b30306d0a'
         );
+        $this->expectOutputString($expectedOutput);
 
-        $this->assertEquals($expectedOutput, $output);
+        try {
+            $client->get('/error');
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+        }
     }
 
     public function testVerboseRequestHandler()
@@ -293,21 +267,18 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
 
         Client::setVerbose(true);
 
-        ob_start();
-        try {
-            $client->get('/error', ['handler' => $handler]);
-        } catch (\GuzzleHttp\Exception\ClientException $e) {
-        }
-        $output = ob_get_clean();
-
         $expectedOutput = hex2bin(
             '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333' .
             'b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b' .
             '33363b30316d3d3d3d3e205b564552424f53455d20526573706f6e73653a200a1b5b33333b3' .
             '0316d537472696e6720626f64791b5b33393b34393b30306d0a'
         );
+        $this->expectOutputString($expectedOutput);
 
-        $this->assertEquals($expectedOutput, $output);
+        try {
+            $client->get('/error', ['handler' => $handler]);
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+        }
     }
 
     public function testVerboseNoResponse()
@@ -325,13 +296,6 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
 
         Client::setVerbose(true);
 
-        ob_start();
-        try {
-            $client->get('/error');
-        } catch (\GuzzleHttp\Exception\ClientException $e) {
-        }
-        $output = ob_get_clean();
-
         $expectedOutput = hex2bin(
             '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333' .
             'b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b' .
@@ -339,8 +303,13 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
             '0316d4e6f20726573706f6e736520626f64792072657475726e65641b5b33393b34393b3030' .
             '6d0a'
         );
+        $this->expectOutputString($expectedOutput);
 
-        $this->assertEquals($expectedOutput, $output);
+
+        try {
+            $client->get('/error');
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+        }
     }
 
     public function testVerboseError()
@@ -359,12 +328,11 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
         $fp = fopen('php://memory', 'a+');
         Client::setVerbose([$fp, $fp]);
 
-        ob_start();
+        $this->expectOutputString("");
         try {
             $client->get('/error');
         } catch (\GuzzleHttp\Exception\ClientException $e) {
         }
-        $this->assertEmpty(ob_get_clean());
 
         fseek($fp, 0);
         $output = '';
@@ -395,12 +363,11 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
         $fp = fopen('php://memory', 'a+');
         Client::setVerbose($fp);
 
-        ob_start();
+        $this->expectOutputString("");
         try {
             $client->get('/error');
         } catch (\GuzzleHttp\Exception\ClientException $e) {
         }
-        $this->assertEmpty(ob_get_clean());
 
         fseek($fp, 0);
         $output = '';
@@ -432,20 +399,17 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
         $fp = fopen('php://memory', 'a+');
         Client::setVerbose(['php://output', $fp]);
 
-        ob_start();
+
+        $expectedOutput = hex2bin(
+            '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b33363b30316d3d3d3d3e205b564552424f53455d20526573706f6e73653a200a1b5b33333b30316d7b0a202020202274657374223a202264617461220a7d1b5b33393b34393b30306d0a1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a'
+        );
+        $this->expectOutputString($expectedOutput);
+
         try {
             $client->get('/success');
             $client->get('/error');
         } catch (\GuzzleHttp\Exception\ClientException $e) {
         }
-
-        $output = ob_get_clean();
-
-        $expectedOutput = hex2bin(
-            '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b33363b30316d3d3d3d3e205b564552424f53455d20526573706f6e73653a200a1b5b33333b30316d7b0a202020202274657374223a202264617461220a7d1b5b33393b34393b30306d0a1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a'
-        );
-
-        $this->assertEquals($expectedOutput, $output);
 
         fseek($fp, 0);
         $output = '';
@@ -480,21 +444,18 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
 
         Client::setVerbose(true);
 
-        ob_start();
-        try {
-            $client->get('/error');
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-        }
-        $output = ob_get_clean();
-
         $expectedOutput = hex2bin(
             '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333' .
             'b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b' .
             '33313b30316d3d3d3d3e205b4552524f525d20416e206572726f72206f636375727265643a2' .
             '00a1b5b33333b30316d4572726f72206d6573736167651b5b33393b34393b30306d0a'
         );
+        $this->expectOutputString($expectedOutput);
 
-        $this->assertEquals($expectedOutput, $output);
+        try {
+            $client->get('/error');
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+        }
     }
 
     public function testVerboseResponseExceptionWithCode()
@@ -516,13 +477,6 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
 
         Client::setVerbose(true);
 
-        ob_start();
-        try {
-            $client->get('/error');
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-        }
-        $output = ob_get_clean();
-
         $expectedOutput = hex2bin(
             '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333' .
             'b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b' .
@@ -530,8 +484,12 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
             '00a1b5b33333b30316d3530303a204572726f72206d6573736167651b5b33393b34393b3030' .
             '6d0a'
         );
+        $this->expectOutputString($expectedOutput);
 
-        $this->assertEquals($expectedOutput, $output);
+        try {
+            $client->get('/error');
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+        }
     }
 
     public function testVerboseResponseExceptionWithBody()
@@ -553,13 +511,6 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
 
         Client::setVerbose(true);
 
-        ob_start();
-        try {
-            $client->get('/error');
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-        }
-        $output = ob_get_clean();
-
         $expectedOutput = hex2bin(
             '1b5b33363b30316d3d3d3d3e205b564552424f53455d20526571756573743a200a1b5b33333' .
             'b30316d4e6f207265717565737420626f64792073656e741b5b33393b34393b30306d0a1b5b' .
@@ -567,8 +518,12 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
             '00a1b5b33333b30316d3530303a204572726f72206d6573736167650a1b5b33333b30316d7b' .
             '226572726f72537472696e67223a22416e206572726f72227d1b5b33393b34393b30306d0a'
         );
+        $this->expectOutputString($expectedOutput);
 
-        $this->assertEquals($expectedOutput, $output);
+        try {
+            $client->get('/error');
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+        }
     }
 
     public function testVerboseSingleStreamString()

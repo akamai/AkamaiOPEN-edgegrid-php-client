@@ -48,13 +48,12 @@ class DebugTest extends \PHPUnit_Framework_TestCase
         $fp = fopen('php://memory', 'a+');
         $client->setInstanceDebug($fp);
 
-        ob_start();
+        $this->expectOutputString("");
+
         try {
             $client->get('/error');
         } catch (\Exception $e) {
         }
-
-        $this->assertEmpty(ob_get_clean());
 
         $output = $this->readStreamData($fp);
 
@@ -86,13 +85,12 @@ EOF;
         $fp = fopen('php://memory', 'a+');
         Client::setDebug($fp);
 
-        ob_start();
+        $this->expectOutputString("");
+
         try {
             $client->get('/error');
         } catch (\Exception $e) {
         }
-
-        $this->assertEmpty(ob_get_clean());
 
         $output = $this->readStreamData($fp);
 
@@ -123,12 +121,12 @@ EOF;
         Client::setDebug($fp);
         $client->setInstanceDebug(false);
 
-        ob_start();
+        $this->expectOutputString("");
+
         try {
             $client->get('/error');
         } catch (\Exception $e) {
         }
-        $this->assertEmpty(ob_get_clean());
 
         $output = $this->readStreamData($fp);
 
@@ -152,12 +150,12 @@ EOF;
         $fp2 = fopen('php://memory', 'a+');
         $client->setInstanceDebug($fp2);
 
-        ob_start();
+        $this->expectOutputString("");
+
         try {
             $client->get('/error');
         } catch (\Exception $e) {
         }
-        $this->assertEmpty(ob_get_clean());
 
         $output = $this->readStreamData($fp);
 
@@ -199,7 +197,8 @@ EOF;
         $fp = fopen('php://memory', 'a+');
         $client->setInstanceDebug($fp);
 
-        ob_start();
+        $this->expectOutputString("");
+
         try {
             $client->get('/400');
         } catch (\Exception $e) {
@@ -216,7 +215,6 @@ EOF;
             $client->get('/404');
         } catch (\Exception $e) {
         }
-        $this->assertEmpty(ob_get_clean());
 
         $output = $this->readStreamData($fp);
 
@@ -272,13 +270,12 @@ EOF;
         $fp = fopen('php://memory', 'a+');
         Client::setDebug($fp);
 
-        ob_start();
+        $this->expectOutputString("");
+
         try {
             $client->get('/error');
         } catch (\Exception $e) {
         }
-
-        $this->assertEmpty(ob_get_clean());
 
         $output = $this->readStreamData($fp);
 
@@ -309,13 +306,12 @@ EOF;
         $fp = fopen('php://memory', 'a+');
         Client::setDebug($fp);
 
-        ob_start();
+        $this->expectOutputString("");
+
         try {
             $client->get('/error');
         } catch (\Exception $e) {
         }
-
-        $this->assertEmpty(ob_get_clean());
 
         $output = $this->readStreamData($fp);
 
@@ -344,13 +340,12 @@ EOF;
         $fp = fopen('php://memory', 'a+');
         Client::setDebug($fp);
 
-        ob_start();
+        $this->expectOutputString("");
+
         try {
             $client->get('/error');
         } catch (\Exception $e) {
         }
-
-        $this->assertEmpty(ob_get_clean());
 
         $output = $this->readStreamData($fp);
 
@@ -396,12 +391,12 @@ EOF;
         $fp = fopen('php://memory', 'a+');
         Client::setDebug($fp);
 
-        ob_start();
+        $this->expectOutputString("");
+
         try {
             $client->get('/error');
         } catch (\GuzzleHttp\Exception\RequestException $e) {
         }
-        $this->assertEmpty(ob_get_clean());
 
         $output = $this->readStreamData($fp);
         $this->assertEmpty($output);
@@ -427,12 +422,12 @@ EOF;
         $fp = fopen("php://memory", "a+");
         Client::setDebug($fp);
 
-        ob_start();
+        $this->expectOutputString("");
+
         try {
             $client->get('/error');
         } catch (\GuzzleHttp\Exception\RequestException $e) {
         }
-        $this->assertEmpty(ob_get_clean());
 
         $output = $this->readStreamData($fp);
         $this->assertEmpty($output);
@@ -458,12 +453,12 @@ EOF;
         $fp = fopen('php://memory', 'a+');
         Client::setDebug($fp);
 
-        ob_start();
+        $this->expectOutputString("");
+
         try {
             $client->get('/error');
         } catch (\GuzzleHttp\Exception\RequestException $e) {
         }
-        $this->assertEmpty(ob_get_clean());
 
         $output = $this->readStreamData($fp);
 
