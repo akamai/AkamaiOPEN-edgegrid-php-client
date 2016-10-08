@@ -20,7 +20,7 @@ use Akamai\Open\EdgeGrid\Exception\HandlerException\IOException;
 /**
  * Debug Response Guzzle Middleware Handler
  *
- * @package Akamai {OPEN} EdgeGrid Auth
+ * @package Akamai\Open\EdgeGrid\Client
  */
 class Debug
 {
@@ -45,6 +45,14 @@ class Debug
 
     protected $fp;
 
+    /**
+     * Debug constructor.
+     *
+     * This method accepts a stream resource or a valid stream URL
+     * (including file paths).  If none is passed in stderr is used.
+     *
+     * @param resource|null $resource
+     */
     public function __construct($resource = null)
     {
         $fp = $resource;

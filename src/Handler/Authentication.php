@@ -22,7 +22,7 @@ use Psr\Http\Message\RequestInterface;
 /**
  * Akamai {OPEN} EdgeGrid Auth Guzzle Middleware Handler
  *
- * @package Akamai {OPEN} EdgeGrid Auth
+ * @package Akamai\Open\EdgeGrid\Client
  *
  * @method $this createAuthHeader()
  * @method $this setHttpMethod($method)
@@ -46,6 +46,11 @@ class Authentication
      */
     protected $signer;
 
+    /**
+     * Inject signer object
+     *
+     * @param Signer|null $auth
+     */
     public function setSigner(\Akamai\Open\EdgeGrid\Authentication $auth = null)
     {
         $this->signer = $auth;
@@ -54,6 +59,11 @@ class Authentication
         }
     }
 
+    /**
+     * Handler magic invoker
+     *
+     * @param callable $handler The next handler in the stack
+     */
     public function __invoke(callable $handler)
     {
         return function (
@@ -106,6 +116,17 @@ class Authentication
         return $return;
     }
 
+    /**
+     * Create Handler using an .edgerc file
+     *
+     * Automatically create a valid authentication handler using
+     * an .edgerc file
+     *
+     * @param string $section
+     * @param null $file
+     *
+     * @return static
+     */
     public static function createFromEdgeRcFile($section = "default", $file = null)
     {
         $signer = Signer::createFromEdgeRcFile($section, $file);

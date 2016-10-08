@@ -20,6 +20,10 @@
  */
 namespace Akamai\Open\EdgeGrid;
 
+/**
+ * Class Cli
+ * @package Akamai\Open\EdgeGrid\Client
+ */
 class Cli
 {
     /**
@@ -27,11 +31,17 @@ class Cli
      */
     protected $climate;
 
+    /**
+     * Cli constructor.
+     */
     public function __construct()
     {
         $this->climate = new \League\CLImate\CLImate();
     }
 
+    /**
+     * Execute the CLI
+     */
     public function run()
     {
         if ($this->parseArguments()) {
@@ -39,6 +49,11 @@ class Cli
         }
     }
 
+    /**
+     * Parse incoming arguments
+     *
+     * @return bool|void
+     */
     protected function parseArguments()
     {
         $args = $this->getNamedArgs();
@@ -81,6 +96,11 @@ class Cli
         return true;
     }
 
+    /**
+     * Execute the HTTP request
+     *
+     * @return mixed|\Psr\Http\Message\ResponseInterface
+     */
     protected function executeCommand()
     {
         static $methods = [
@@ -241,6 +261,9 @@ class Cli
         return $client->request($method, $url, $options);
     }
 
+    /**
+     * Display CLI help
+     */
     public function help()
     {
         $arguments = new \League\CLImate\Argument\Manager();
@@ -250,12 +273,19 @@ class Cli
         return;
     }
 
+    /**
+     * Return the client version
+     *
+     * @return string
+     */
     public function version()
     {
         return Client::VERSION;
     }
 
     /**
+     * Handle named arguments
+     *
      * @return array
      */
     protected function getNamedArgs()
@@ -309,6 +339,12 @@ class Cli
         return $args;
     }
 
+    /**
+     * Get argument values
+     *
+     * @param $matches
+     * @return bool|string
+     */
     protected function getArgValue($matches)
     {
         $value = $matches['value'];

@@ -33,6 +33,7 @@ use GuzzleHttp\Psr7\Response;
  * @author Davey Shafik <dshafik@akamai.com>
  * @since PHP 5.6
  * @version 1.0
+ * @requires PHP 5.5
  */
 class ClientTest extends \PHPUnit_Framework_TestCase
 {

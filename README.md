@@ -1,10 +1,14 @@
 # akamai-open/edgegrid-client
 
-[![License](https://img.shields.io/github/license/akamai-open/AkamaiOPEN-edgegrid-php.png)](https://github.com/akamai-open/AkamaiOPEN-edgegrid-php/blob/master/LICENSE) [![Build Status](https://travis-ci.org/akamai-open/AkamaiOPEN-edgegrid-php.svg?branch=master)](https://travis-ci.org/akamai-open/AkamaiOPEN-edgegrid-php) [![Code Coverage](https://scrutinizer-ci.com/g/akamai-open/AkamaiOPEN-edgegrid-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/akamai-open/AkamaiOPEN-edgegrid-php/?branch=master)
+[![License](https://img.shields.io/github/license/akamai-open/AkamaiOPEN-edgegrid-php-client.png)](https://github.com/akamai-open/AkamaiOPEN-edgegrid-php-client/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/akamai-open/AkamaiOPEN-edgegrid-php-client.svg?branch=master)](https://travis-ci.org/akamai-open/AkamaiOPEN-edgegrid-php-client)
+[![Code Coverage](https://scrutinizer-ci.com/g/akamai-open/AkamaiOPEN-edgegrid-php-client/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/akamai-open/AkamaiOPEN-edgegrid-php-client/?branch=master)
+[![API Docs](https://img.shields.io/badge/api-docs-blue.svg)](http://akamai-open.github.io/AkamaiOPEN-edgegrid-php-client/)
 
-[Akamai {OPEN} EdgeGrid Authentication] for PHP
+[Akamai {OPEN} EdgeGrid Authentication] Client for PHP
 
-[Akamai {OPEN} EdgeGrid Authentication]: https://developer.akamai.com/introduction/Client_Auth.html
+> **Note:** in version 0.6.0 the `\Akamai\Open\EdgeGrid\Authentication` library itself has been moved to a seperate
+> [akamai-open/edgegrid-auth](https://packagist.org/packages/akamai-open/edgegrid-auth) package.
 
 This library implements the Akamai {OPEN} EdgeGrid Authentication scheme on top of [Guzzle](https://github.com/guzzle/guzzle), as both a drop-in replacement client, and middleware.
 
@@ -14,7 +18,7 @@ For more information visit the [Akamai {OPEN} Developer Community](https://devel
 
 This library requires PHP 5.5+, or HHVM 3.5+ to be used with the built-in Guzzle HTTP client.
 
-To install use [`composer`](http://getcomposer.org):
+To install, use [`composer`](http://getcomposer.org):
 
 ```sh
 $ composer require akamai-open/edgegrid-client
@@ -22,7 +26,7 @@ $ composer require akamai-open/edgegrid-client
 
 ### Alternative (single file) Install
 
-Alternatively, download the PHAR file from the [releases](https://github.com/akamai-open/AkamaiOPEN-edgegrid-php/releases) page.
+Alternatively, download the PHAR file from the [releases](https://github.com/akamai-open/AkamaiOPEN-edgegrid-php-client/releases) page.
 
 To use it, you just include it inside your code:
 
@@ -198,40 +202,11 @@ $guzzle = new \GuzzleHttp\Client([
 
 ### Using PHP 5.3 (not recommended)
 
-> PHP 5.3 has been EOL since August 14th, 2014, and has **known** security vulnerabilities, therefore we do not recommend using it. However, we understand that many actively supported LTS distributions are still shipping with PHP 5.3, and therefore we are providing the following information.
+> PHP 5.3 has been EOL since August 14th, 2014, and has **known** security vulnerabilities, therefore we do not recommend using it.
+> However, we understand that many actively supported LTS distributions are still shipping with PHP 5.3, and therefore we are providing
+> the following information.
 
-It is possible to use the request signer on it's own, without Guzzle, making it possible to use with PHP 5.3+. To do so you _cannot_ use the autoloader or the phar release. You must [download the source as `zip` or `tar.gz` file](https://github.com/akamai-open/AkamaiOPEN-edgegrid-php/releases) and include all the files yourself:
-
-```php
-require_once 'src/Authentication.php';
-require_once 'src/Authentication/Timestamp.php';
-require_once 'src/Authentication/Nonce.php';
-require_once 'src/Exception.php';
-require_once 'src/Exception/ConfigException.php';
-require_once 'src/Exception/SignerException.php';
-require_once 'src/Exception/SignerException/InvalidSignDataException.php';
-```
-
-Once you have done this, you can create the header value by calling the appropriate [`\Akamai\Open\Edgegrid\Authentication::set*()` methods](https://akamai-open.github.io/AkamaiOPEN-edgegrid-php/classes/Akamai_Open_EdgeGrid_Authentication.html#methods). For example, using it with the built-in streams HTTP client might look like the following:
-
-```php
-$auth = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile('default', '/.edgerc');
-$auth->setHttpMethod('GET');
-$auth->setPath('/diagnostic-tools/v1/locations');
-
-$context = array(
-	'http' => array(
-		'header' => array(
-			'Authorization: ' . $auth->createAuthHeader(),
-			'Content-Type: application/json'
-		)
-	)
-);
-
-$context = stream_context_create($context);
-
-$response = json_decode(file_get_contents('https://' . $auth->getHost() . $auth->getPath(), null, $context));
-```
+The signer itself is PHP 5.3 compatible and has been moved to the [akamai-open/edgegrid-auth](https://packagist.org/packages/akamai-open/edgegrid-auth) package.
 
 ## Author
 
@@ -239,7 +214,7 @@ Davey Shafik <dshafik@akamai.com>
 
 ## License
 
-Copyright 2015 Akamai Technologies, Inc.  All rights reserved.
+Copyright 2016 Akamai Technologies, Inc.  All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -250,3 +225,5 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+[Akamai {OPEN} EdgeGrid Authentication]: https://developer.akamai.com/introduction/Client_Auth.html

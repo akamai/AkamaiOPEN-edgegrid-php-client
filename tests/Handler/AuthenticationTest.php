@@ -23,6 +23,9 @@ namespace Akamai\Open\EdgeGrid\Tests\Handler;
 
 use GuzzleHttp\Psr7\Response;
 
+/**
+ * @requires PHP 5.5
+ */
 class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 {
     /**

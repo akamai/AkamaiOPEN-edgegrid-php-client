@@ -20,7 +20,7 @@ use Akamai\Open\EdgeGrid\Exception\HandlerException\IOException;
 /**
  * Verbose Response Guzzle Middleware Handler
  *
- * @package Akamai {OPEN} EdgeGrid Auth
+ * @package Akamai\Open\EdgeGrid\Client
  */
 class Verbose
 {
@@ -28,6 +28,18 @@ class Verbose
 
     protected $errorStream;
 
+    /**
+     * Verbose constructor.
+     *
+     * This method accepts stream resources or a valid stream URLs
+     * (including file paths). It will use the output stream for
+     * both output and error streams if no error stream is passed in.
+     *
+     * If neither is passed in, stdout and stderr are used.
+     *
+     * @param resource|string|null $outputStream
+     * @param resource|string|null $errorStream
+     */
     public function __construct($outputStream = null, $errorStream = null)
     {
         $errorStreamException = null;
@@ -157,6 +169,13 @@ class Verbose
         };
     }
 
+    /**
+     * Get response body
+     *
+     * @param \Psr\Http\Message\MessageInterface $message
+     *
+     * @return string
+     */
     protected function getBody(\Psr\Http\Message\MessageInterface $message)
     {
         $body = trim($message->getBody());

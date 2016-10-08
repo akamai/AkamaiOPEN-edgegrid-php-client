@@ -31,7 +31,7 @@ use Akamai\Open\EdgeGrid\Handler\Verbose as VerboseHandler;
  * Akamai {OPEN} EdgeGrid Client for PHP. Based on
  * [Guzzle](http://guzzlephp.org).
  *
- * @package Akamai {OPEN} EdgeGrid Client
+ * @package Akamai\Open\EdgeGrid\Client
  */
 class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
 {
@@ -140,13 +140,20 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
         return parent::requestAsync($method, $uri, $options);
     }
 
+    /**
+     * Send an Asynchronous HTTP request
+     *
+     * @param \Psr\Http\Message\RequestInterface $request The HTTP request
+     * @param array $options Request options
+     *
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
     public function sendAsync(\Psr\Http\Message\RequestInterface $request, array $options = [])
     {
         $options = $this->setRequestOptions($options);
 
         return parent::sendAsync($request, $options);
     }
-
 
     /**
      * Set Akamai {OPEN} Authentication Credentials
@@ -348,9 +355,10 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     /**
      * Handle debug option
      *
+     * @param array $config
      * @return bool|resource
      */
-    protected function getDebugOption($config)
+    protected function getDebugOption(array $config)
     {
         if (isset($config['debug'])) {
             return ($config['debug'] === true) ? fopen('php://stderr', 'a') : $config['debug'];
@@ -404,6 +412,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     /**
      * Set the Authentication instance
      *
+     * @param array $config
      * @param Authentication|null $authentication
      */
     protected function setAuthentication(array $config, Authentication $authentication = null)
@@ -429,7 +438,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
      * @param Authentication|null $authentication
      * @return array
      */
-    protected function setAuthenticationHandler($config, Authentication $authentication = null)
+    protected function setAuthenticationHandler(array $config, Authentication $authentication = null)
     {
         $this->setAuthentication($config, $authentication);
 
@@ -451,10 +460,12 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
-     * @param $config
+     * Set timeout and base_uri options
+     *
+     * @param array $config
      * @return mixed
      */
-    protected function setBasicOptions($config)
+    protected function setBasicOptions(array $config)
     {
         if (!isset($config['timeout'])) {
             $config['timeout'] = static::DEFAULT_REQUEST_TIMEOUT;
@@ -485,7 +496,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
             $this->config[$what] = $value;
         };
 
-        $closure = $closure->bindTo($this, \GuzzleHttp\Client::CLASS);
+        $closure = $closure->bindTo($this, \GuzzleHttp\Client::class);
         $closure();
     }
 
@@ -599,6 +610,8 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     }
 
     /**
+     * Set request specific options
+     *
      * @param array $options
      * @return array
      */

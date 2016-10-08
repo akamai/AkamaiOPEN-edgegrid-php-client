@@ -24,6 +24,9 @@ namespace Akamai\Open\EdgeGrid\Tests\Handler;
 use GuzzleHttp\Psr7\Response;
 use Akamai\Open\EdgeGrid\Client;
 
+/**
+ * @requires PHP 5.5
+ */
 class VerboseTest extends \PHPUnit_Framework_TestCase
 {
     public function teardown()

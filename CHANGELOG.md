@@ -1,5 +1,43 @@
+0.6.0
+---
+[?? ???, 2016]
+* Split `\Akamai\Open\EdgeGrid\Authentication` into it's own (5.3+ compatible) package
+* Move documentation to `apigen/apigen`
+* Update dependencies
+
+0.5.0
+---
+[12 Sep, 2016]
+* Add additional getters to `\Akamai\Open\EdgeGrid\Authentication`:
+
+0.4.6
+---
+[30 Aug, 2016]
+* Update dependencies
+
+0.4.5
+---
+[05 May, 2016]
+* This release has some minor changes to allow running the signer on PHP 5.3+.
+
+0.4.4
+---
+[29 Mar, 2016]
+* Use STDERR stream instead of cli-only constant (Fixes #24)
+
+0.4.3
+---
+[03 Dec, 2015]
+* Changes the default timeout to 300 seconds to match the SLA (Fixes #20)
+
+0.4.2
+---
+[29 Oct, 2015]
+* Removed the shebang from the PHAR build as it is output when including it.
+
 0.4.1
 ---
+[29 Oct, 2015]
 * Add more httpie-compatible features
   * Support for `--follow` (redirects are no longer followed by default)
   * Support `--json|-j` (default: on)
@@ -13,6 +51,7 @@
 
 0.4.0
 ---
+[24 Oct, 2015]
 * Add support for PSR-7 requests (e.g. `->send()` and `->sendAsync()`)
 * Add CLI interface to PHAR release file ([docs](https://github.com/akamai-open/AkamaiOPEN-edgegrid-php#command-line-interface))
 * Move away from using `\Exception` to more appropriate, and package specific exceptions
@@ -22,19 +61,24 @@
 
 0.3.0
 ---
+[21 Jul, 2015]
 * Move to using GuzzleHttp Middleware
 * Adds Authentication, Verbose, and Debug middleware handlers
 
 0.2.1
 ---
+[16 Jul, 2015]
 * Add PSR-3 Logging (defaults to monolog/monolog)
 * Added `\Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile()`
 * Bug fixes
 
 0.2.0
 ---
+[16 Jul, 2015]
 * Refactor Authentication Signer out of the client for easier re-use
 
 0.1.0
 ---
+[13 Jul, 2015]
+
 * Initial release

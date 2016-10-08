@@ -29,7 +29,8 @@ if (class_exists('Phar')) {
 
 Phar::interceptFileFuncs();
 require_once 'phar://' .__FILE__. '/vendor/autoload.php';
-if (PHP_SAPI == 'cli') {
+// Run the CLI if called directly
+if (PHP_SAPI == 'cli' && \\\$_SERVER['argv'][0] == basename(__FILE__)) {
     (new \\Akamai\\Open\\EdgeGrid\\Cli())->run();
     exit;
 }

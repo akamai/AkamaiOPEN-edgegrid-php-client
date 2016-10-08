@@ -1,0 +1,7 @@
+title: "Akamai {OPEN} EdgeGrid Authentication for PHP"
+source:
+  - ./src
+  - ./vendor/akamai-open/edgegrid-auth/src
+destination: ./docs
+templateTheme: bootstrap
+tree: yes
