@@ -10,34 +10,17 @@
     "README.md",
     "vendor/autoload.php"
   ],
+  "compression": "BZ2",
   "finder": [
     {
       "name": "*.php",
       "exclude": [
+        "bin",
+        "docs",
+        "examples",
         "Tests",
         "tests",
-        "fabpot",
-        "doctrine",
-        "phine",
-        "phpdocumentor",
-        "phploc",
-        "phpspec",
-        "sebastian",
-        "seld",
-        "squizlabs",
-        "tedivm",
-        "theseer",
-        "kherge",
-        "justinrainbow",
-        "phine",
-        "mikey179",
-        "phpunit",
-        "herrera-io/annotations",
-        "herrera-io/box",
-        "herrera-io/version",
-        "apigen",
-        "latte",
-        "kululich"
+        "tools"
       ],
       "in": "vendor"
     }
@@ -45,6 +28,5 @@
   "bootstrap": "build/phar/bootstrap.php",
   "git-version": "package_version",
   "output": "akamai-open-edgegrid-client.phar",
-  "stub": "build/phar/stub.php",
-  "shebang": "#!/usr/bin/env php"
+  "stub": "build/phar/stub.php"
 }

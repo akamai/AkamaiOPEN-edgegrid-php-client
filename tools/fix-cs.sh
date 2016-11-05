@@ -22,4 +22,6 @@ then
         php-cs-fixer fix ./src --level=psr2
     fi
     exit -1
+else
+    echo "Nothing to fix!"
 fi
