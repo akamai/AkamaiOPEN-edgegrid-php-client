@@ -1,3 +1,12 @@
+0.6.1
+---
+[04 Nov, 2016]
+* Install bin/http using composer
+* Cleanup tools and composer setup
+* Shrink PHAR from 5.6MB to 370KB
+* Add support for `-A` short flag for `--auth-type` on CLI to match httpie
+* Update dependencies
+
 0.6.0
 ---
 [08 Oct, 2016]
