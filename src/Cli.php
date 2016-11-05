@@ -299,6 +299,7 @@ class Cli
             ],
             'auth-type' => [
                 'longPrefix' => 'auth-type',
+                'prefix' => 'A',
                 'description' => "{basic, digest, edgegrid}"
             ],
             'auth' => [
