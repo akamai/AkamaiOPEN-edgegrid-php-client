@@ -1,3 +1,8 @@
+0.6.2
+---
+[17 Dec, 2016]
+* Update to akamai-open/edgegrid-auth 0.6.1 (PHP 7.1 compatibility)
+
 0.6.1
 ---
 [04 Nov, 2016]
