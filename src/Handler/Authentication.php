@@ -63,6 +63,7 @@ class Authentication
      * Handler magic invoker
      *
      * @param callable $handler The next handler in the stack
+     * @return \Closure
      */
     public function __invoke(callable $handler)
     {
@@ -77,7 +78,7 @@ class Authentication
             }
 
             if (!$this->signer) {
-                throw new HandlerException("Signer not set, make sure to call setSigner first");
+                throw new HandlerException('Signer not set, make sure to call setSigner first');
             }
 
             $request->getBody()->rewind();
@@ -101,11 +102,12 @@ class Authentication
      * @param $method
      * @param $args
      * @return mixed
+     * @throws \Akamai\Open\EdgeGrid\Exception\HandlerException
      */
     public function __call($method, $args)
     {
-        if (!isset($this->signer)) {
-            throw new HandlerException("Signer not set, make sure to call setSigner first");
+        if ($this->signer === null) {
+            throw new HandlerException('Signer not set, make sure to call setSigner first');
         }
 
         $return = call_user_func_array([$this->signer, $method], $args);
@@ -127,7 +129,7 @@ class Authentication
      *
      * @return static
      */
-    public static function createFromEdgeRcFile($section = "default", $file = null)
+    public static function createFromEdgeRcFile($section = 'default', $file = null)
     {
         $signer = Signer::createFromEdgeRcFile($section, $file);
         $auth = new static();

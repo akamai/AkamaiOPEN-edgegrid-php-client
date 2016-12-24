@@ -31,9 +31,9 @@ class Debug
             "have the necessary permissions in the Luna portal.\n",
         ],
         400 => [
-            "This indicates a problem with authentication or headers.",
-            "Please ensure that the .edgerc file is formatted correctly.",
-            "If you still have issues, please use gen_edgerc.php to generate the credentials",
+            'This indicates a problem with authentication or headers.',
+            'Please ensure that the .edgerc file is formatted correctly.',
+            'If you still have issues, please use gen_edgerc.php to generate the credentials',
         ],
         401 => 400,
         404 => [
@@ -52,20 +52,21 @@ class Debug
      * (including file paths).  If none is passed in stderr is used.
      *
      * @param resource|null $resource
+     * @throws \Akamai\Open\EdgeGrid\Exception\HandlerException\IOException
      */
     public function __construct($resource = null)
     {
         $fp = $resource;
 
         if (!is_resource($fp) && $fp !== null) {
-            $fp = @fopen($fp, 'a+');
+            $fp = @fopen($fp, 'ab+');
             if (!$fp) {
-                throw new IOException("Unable to use resource: " . (string) $resource);
+                throw new IOException('Unable to use resource: ' . (string) $resource);
             }
         }
 
         if ($fp === null) {
-            $fp = fopen('php://stderr', 'a');
+            $fp = fopen('php://stderr', 'ab');
         }
 
         $this->fp = $fp;
@@ -80,13 +81,13 @@ class Debug
     public function __invoke(callable $handler)
     {
         $colors = [
-            'red' => "",
-            'yellow' => "",
-            'cyan' => "",
-            'reset' => "",
+            'red' => '',
+            'yellow' => '',
+            'cyan' => '',
+            'reset' => '',
         ];
 
-        if (PHP_SAPI == 'cli') {
+        if (PHP_SAPI === 'cli') {
             $colors = [
                 'red' => "\x1b[31;01m",
                 'yellow' => "\x1b[33;01m",
@@ -109,7 +110,7 @@ class Debug
                                 $detail = json_encode($result, JSON_PRETTY_PRINT);
                             }
                         } else {
-                            $detail = (!empty(trim($body))) ? $body : "No response body returned";
+                            $detail = (!empty(trim($body))) ? $body : 'No response body returned';
                         }
 
                         $out = [];
@@ -122,11 +123,11 @@ class Debug
                             }
 
                             foreach ($message as $line) {
-                                $out[] = "===> [ERROR] " . $line;
+                                $out[] = '===> [ERROR] ' . $line;
                             }
                         }
 
-                        $out[] = "===> [ERROR] Problem details:";
+                        $out[] = '===> [ERROR] Problem details:';
                         $out[] = $detail;
 
                         $out = sprintf(
@@ -136,8 +137,8 @@ class Debug
                             $detail
                         );
 
-                        fputs($this->fp, $out);
-                        fputs($this->fp, "{$colors['reset']}\n");
+                        fwrite($this->fp, $out);
+                        fwrite($this->fp, "{$colors['reset']}\n");
                     }
 
                     return $response;

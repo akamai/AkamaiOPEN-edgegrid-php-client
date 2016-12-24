@@ -30,12 +30,13 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 {
     /**
      * @dataProvider createFromEdgeRcProvider
+     * @param $section
+     * @param $file
      */
     public function testCreateFromEdgeRc($section, $file)
     {
         $_SERVER['HOME'] = __DIR__ . '/../edgerc';
 
-        $guzzle = new \GuzzleHttp\Client();
         $authentication = \Akamai\Open\EdgeGrid\Handler\Authentication::createFromEdgeRcFile($section, $file);
         $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Handler\Authentication::CLASS, $authentication);
     }
@@ -72,7 +73,7 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         // Because of PSR-7 immutability the history handler has
         // to be the last one, otherwise it doesn't get the latest
         // instance of the Request.
-        $handler->before('history', $auth, "signer");
+        $handler->before('history', $auth, 'signer');
 
         $client = new \GuzzleHttp\Client(
             array_merge($options, [
@@ -97,12 +98,12 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
             ]
         );
 
-        $this->assertEquals(1, sizeof($container));
+        $this->assertEquals(1, count($container));
         $request = $container[0]['request'];
         $headers = $request->getHeaders();
 
         $this->assertArrayHasKey('Authorization', $headers);
-        $this->assertEquals(1, sizeof($headers['Authorization']));
+        $this->assertEquals(1, count($headers['Authorization']));
         $this->assertEquals($result, $headers['Authorization'][0]);
     }
 
@@ -116,7 +117,7 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         // Because of PSR-7 immutability the history handler has
         // to be the last one, otherwise it doesn't get the latest
         // instance of the Request.
-        $handler->before('history', $auth, "signer");
+        $handler->before('history', $auth, 'signer');
 
         $client = new \GuzzleHttp\Client([
             'base_uri' => 'http://example.org',
@@ -125,7 +126,7 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 
         $client->get('/test');
 
-        $this->assertEquals(1, sizeof($container));
+        $this->assertEquals(1, count($container));
         $request = $container[0]['request'];
         $this->assertInstanceOf(\Psr\Http\Message\RequestInterface::CLASS, $request);
     }
@@ -144,7 +145,7 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         // Because of PSR-7 immutability the history handler has
         // to be the last one, otherwise it doesn't get the latest
         // instance of the Request.
-        $handler->before('history', $auth, "signer");
+        $handler->before('history', $auth, 'signer');
 
         $client = new \GuzzleHttp\Client(
             [
@@ -152,14 +153,11 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
             ]
         );
 
-        $client->get("https://test-akamaiapis.net");
+        $client->get('https://test-akamaiapis.net');
     }
 
     public function testProxyNonFluent()
     {
-        $container = [];
-        $handler = $this->getMockHandler([new Response(200)], $container);
-
         $auth = new \Akamai\Open\EdgeGrid\Handler\Authentication();
         $auth->setSigner(new \Akamai\Open\EdgeGrid\Authentication());
         $auth->setHost('test.host');
@@ -173,9 +171,6 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
      */
     public function testProxyNoSigner()
     {
-        $container = [];
-        $handler = $this->getMockHandler([new Response(200)], $container);
-
         $auth = new \Akamai\Open\EdgeGrid\Handler\Authentication();
         $auth->setHost('test.host');
     }

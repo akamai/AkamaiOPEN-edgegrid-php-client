@@ -62,7 +62,7 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
     {
         $handler = $this->getMockHandler([
             new Response(200, [], json_encode(['test' => 'data'])),
-            new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))
+            new Response(200, [], json_encode(['test' => 'data2', ['foo', 'bar'], false, null, 123, 0.123]))
         ]);
         $client = new Client(
             [
@@ -120,7 +120,7 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
     {
         $handler = $this->getMockHandler([
             new Response(200, [], json_encode(['test' => 'data'])),
-            new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))
+            new Response(200, [], json_encode(['test' => 'data2', ['foo', 'bar'], false, null, 123, 0.123]))
         ]);
         $client = new Client(
             [
@@ -163,7 +163,7 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
         Client::setVerbose(true);
         $client->setInstanceVerbose(false);
 
-        $this->expectOutputString("");
+        $this->expectOutputString('');
 
         $client->get('/test');
     }
@@ -172,7 +172,7 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
     {
         $handler = $this->getMockHandler([
             new Response(200, [], json_encode(['test' => 'data'])),
-            new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))
+            new Response(200, [], json_encode(['test' => 'data2', ['foo', 'bar'], false, null, 123, 0.123]))
         ]);
         $client = new Client(
             [
@@ -184,7 +184,7 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
         Client::setVerbose(true);
         $client->setInstanceVerbose(false);
 
-        $this->expectOutputString("");
+        $this->expectOutputString('');
 
         $client->get('/test');
         $client->get('/test2');
@@ -193,8 +193,8 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
     public function testVerboseRedirect()
     {
         $handler = $this->getMockHandler([
-            new Response(301, ["Location" => "http://example.org/redirected"], json_encode(['test' => 'data'])),
-            new Response(200, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))
+            new Response(301, ['Location' => 'http://example.org/redirected'], json_encode(['test' => 'data'])),
+            new Response(200, [], json_encode(['test' => 'data2', ['foo', 'bar'], false, null, 123, 0.123]))
         ]);
 
         $client = new Client(
@@ -227,7 +227,7 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
     public function testVerboseNonJson()
     {
         $handler = $this->getMockHandler([
-            new Response(200, [], "String body")
+            new Response(200, [], 'String body')
         ]);
 
         $client = new Client(
@@ -256,7 +256,7 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
     public function testVerboseRequestHandler()
     {
         $handler = $this->getMockHandler([
-            new Response(200, [], "String body")
+            new Response(200, [], 'String body')
         ]);
 
         $client = new Client(
@@ -315,7 +315,7 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
     public function testVerboseError()
     {
         $handler = $this->getMockHandler([
-            new Response(404, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))
+            new Response(404, [], json_encode(['test' => 'data2', ['foo', 'bar'], false, null, 123, 0.123]))
         ]);
 
         $client = new Client(
@@ -325,10 +325,10 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $fp = fopen('php://memory', 'a+');
+        $fp = fopen('php://memory', 'ab+');
         Client::setVerbose([$fp, $fp]);
 
-        $this->expectOutputString("");
+        $this->expectOutputString('');
         try {
             $client->get('/error');
         } catch (\GuzzleHttp\Exception\ClientException $e) {
@@ -350,7 +350,7 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
     public function testVerboseErrorNonJson()
     {
         $handler = $this->getMockHandler([
-            new Response(404, [], "String body")
+            new Response(404, [], 'String body')
         ]);
 
         $client = new Client(
@@ -360,10 +360,10 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $fp = fopen('php://memory', 'a+');
+        $fp = fopen('php://memory', 'ab+');
         Client::setVerbose($fp);
 
-        $this->expectOutputString("");
+        $this->expectOutputString('');
         try {
             $client->get('/error');
         } catch (\GuzzleHttp\Exception\ClientException $e) {
@@ -386,7 +386,7 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
     {
         $handler = $this->getMockHandler([
             new Response(200, [], json_encode(['test' => 'data'])),
-            new Response(404, [], json_encode(['test' => 'data2', ["foo", "bar"], false, null, 123, 0.123]))
+            new Response(404, [], json_encode(['test' => 'data2', ['foo', 'bar'], false, null, 123, 0.123]))
         ]);
 
         $client = new Client(
@@ -396,7 +396,7 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $fp = fopen('php://memory', 'a+');
+        $fp = fopen('php://memory', 'ab+');
         Client::setVerbose(['php://output', $fp]);
 
 
@@ -432,7 +432,7 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
     public function testVerboseResponseExceptionNoCode()
     {
         $handler = $this->getMockHandler([
-            new \GuzzleHttp\Exception\RequestException("Error message", new \GuzzleHttp\Psr7\Request('GET', '/test'))
+            new \GuzzleHttp\Exception\RequestException('Error message', new \GuzzleHttp\Psr7\Request('GET', '/test'))
         ]);
 
         $client = new Client(
@@ -462,7 +462,7 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
     {
         $handler = $this->getMockHandler([
             new \GuzzleHttp\Exception\RequestException(
-                "Error message",
+                'Error message',
                 new \GuzzleHttp\Psr7\Request('GET', '/test'),
                 new Response(500)
             )
@@ -496,9 +496,9 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
     {
         $handler = $this->getMockHandler([
             new \GuzzleHttp\Exception\RequestException(
-                "Error message",
+                'Error message',
                 new \GuzzleHttp\Psr7\Request('GET', '/test'),
-                new Response(500, [], json_encode(["errorString" => "An error"]))
+                new Response(500, [], json_encode(['errorString' => 'An error']))
             )
         ]);
 
@@ -534,7 +534,7 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
         $fp2 = \PHPUnit_Framework_Assert::readAttribute($verbose, 'errorStream');
 
         $this->assertSame($fp, $fp2);
-        $this->assertTrue(stream_get_meta_data($fp)['uri'] == 'php://memory');
+        $this->assertEquals(stream_get_meta_data($fp)['uri'], 'php://memory');
     }
 
     /**
@@ -554,8 +554,8 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
         $fp2 = \PHPUnit_Framework_Assert::readAttribute($verbose, 'errorStream');
 
         $this->assertNotSame($fp, $fp2);
-        $this->assertTrue(stream_get_meta_data($fp)['uri'] == 'php://memory');
-        $this->assertTrue(stream_get_meta_data($fp2)['uri'] == 'php://temp');
+        $this->assertEquals(stream_get_meta_data($fp)['uri'], 'php://memory');
+        $this->assertEquals(stream_get_meta_data($fp2)['uri'], 'php://temp');
     }
 
     /**

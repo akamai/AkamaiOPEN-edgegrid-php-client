@@ -39,22 +39,23 @@ class Verbose
      *
      * @param resource|string|null $outputStream
      * @param resource|string|null $errorStream
+     * @throws \Akamai\Open\EdgeGrid\Exception\HandlerException\IOException
      */
     public function __construct($outputStream = null, $errorStream = null)
     {
         $errorStreamException = null;
         if (!is_resource($errorStream) && $errorStream !== null) {
-            $fp = @fopen($errorStream, 'a+');
+            $fp = @fopen($errorStream, 'ab+');
             if (!$fp) {
-                $errorStreamException = new IOException("Unable to use error stream: " . (string) $errorStream);
+                $errorStreamException = new IOException('Unable to use error stream: ' . (string) $errorStream);
             }
             $errorStream = $fp;
         }
 
         if (!is_resource($outputStream) && $outputStream !== null) {
-            $fp = @fopen($outputStream, 'a+');
+            $fp = @fopen($outputStream, 'ab+');
             if (!$fp) {
-                throw new IOException("Unable to use output stream: " . (string) $outputStream);
+                throw new IOException('Unable to use output stream: ' . (string) $outputStream);
             }
             $outputStream = $fp;
         }
@@ -68,11 +69,11 @@ class Verbose
         }
 
         if ($outputStream === null && $errorStream === null) {
-            $errorStream = fopen('php://stderr', 'a');
+            $errorStream = fopen('php://stderr', 'ab');
         }
 
         if ($outputStream === null) {
-            $outputStream = fopen('php://output', 'a');
+            $outputStream = fopen('php://output', 'ab');
         }
 
         $this->outputStream = $outputStream;
@@ -88,13 +89,13 @@ class Verbose
     public function __invoke(callable $handler)
     {
         $colors = [
-            'red' => "",
-            'yellow' => "",
-            'cyan' => "",
-            'reset' => "",
+            'red' => '',
+            'yellow' => '',
+            'cyan' => '',
+            'reset' => '',
         ];
 
-        if (PHP_SAPI == 'cli') {
+        if (PHP_SAPI === 'cli') {
             $colors = [
                 'red' => "\x1b[31;01m",
                 'yellow' => "\x1b[33;01m",
@@ -110,36 +111,36 @@ class Verbose
             $handler,
             $colors
         ) {
-            fputs($this->outputStream, "{$colors['cyan']}===> [VERBOSE] Request: \n");
-            fputs($this->outputStream, "{$colors['yellow']}" . $this->getBody($request));
-            fputs($this->outputStream, "{$colors['reset']}\n");
+            fwrite($this->outputStream, "{$colors['cyan']}===> [VERBOSE] Request: \n");
+            fwrite($this->outputStream, "{$colors['yellow']}" . $this->getBody($request));
+            fwrite($this->outputStream, "{$colors['reset']}\n");
 
             return $handler($request, $config)->then(
                 function (\Psr\Http\Message\ResponseInterface $response) use ($colors) {
                     $statusCode = $response->getStatusCode();
                     if ($statusCode > 299 && $statusCode < 400) {
-                        fputs($this->outputStream, "{$colors['cyan']}===> [VERBOSE] Redirected: ");
-                        fputs($this->outputStream, $response->getHeader('Location')[0]);
-                        fputs($this->outputStream, "{$colors['reset']}\n");
+                        fwrite($this->outputStream, "{$colors['cyan']}===> [VERBOSE] Redirected: ");
+                        fwrite($this->outputStream, $response->getHeader('Location')[0]);
+                        fwrite($this->outputStream, "{$colors['reset']}\n");
                     } else {
                         $responseBody = $this->getBody($response);
 
                         if ($statusCode > 399 && $statusCode < 600) {
-                            fputs($this->errorStream, "{$colors['red']}===> [ERROR] An error occurred: \n");
-                            fputs($this->errorStream, "{$colors['yellow']}" . $responseBody);
-                            fputs($this->errorStream, "{$colors['reset']}\n");
+                            fwrite($this->errorStream, "{$colors['red']}===> [ERROR] An error occurred: \n");
+                            fwrite($this->errorStream, "{$colors['yellow']}" . $responseBody);
+                            fwrite($this->errorStream, "{$colors['reset']}\n");
                         } else {
-                            fputs($this->outputStream, "{$colors['cyan']}===> [VERBOSE] Response: \n");
-                            fputs($this->outputStream, "{$colors['yellow']}" . $responseBody);
-                            fputs($this->outputStream, "{$colors['reset']}\n");
+                            fwrite($this->outputStream, "{$colors['cyan']}===> [VERBOSE] Response: \n");
+                            fwrite($this->outputStream, "{$colors['yellow']}" . $responseBody);
+                            fwrite($this->outputStream, "{$colors['reset']}\n");
                         }
                     }
 
                     return $response;
                 },
                 function (\Exception $reason) use ($colors) {
-                    fputs($this->outputStream, "{$colors['red']}===> [ERROR] An error occurred: \n");
-                    fputs($this->outputStream, "{$colors['yellow']}");
+                    fwrite($this->outputStream, "{$colors['red']}===> [ERROR] An error occurred: \n");
+                    fwrite($this->outputStream, "{$colors['yellow']}");
 
                     $code = $reason->getCode();
                     if (!empty($code)) {
@@ -148,7 +149,7 @@ class Verbose
 
                     $message = $reason->getMessage();
 
-                    fputs($this->outputStream, ((!empty($code)) ? $code : "") . $message);
+                    fwrite($this->outputStream, ((!empty($code)) ? $code : '') . $message);
 
                     $response = $reason instanceof \GuzzleHttp\Exception\RequestException
                         ? $reason->getResponse()
@@ -157,11 +158,11 @@ class Verbose
                     if ($response instanceof \Psr\Http\Message\ResponseInterface) {
                         $body = $response->getBody()->getContents();
                         if (!empty($body)) {
-                            fputs($this->outputStream, "\n{$colors['yellow']}" . $body);
+                            fwrite($this->outputStream, "\n{$colors['yellow']}" . $body);
                         }
                     }
 
-                    fputs($this->outputStream, "{$colors['reset']}\n");
+                    fwrite($this->outputStream, "{$colors['reset']}\n");
 
                     return new \GuzzleHttp\Promise\RejectedPromise($reason);
                 }
@@ -180,11 +181,11 @@ class Verbose
     {
         $body = trim($message->getBody());
 
-        if ($message->getBody()->getSize() == 0 || empty($body)) {
+        if ($message->getBody()->getSize() === 0 || empty($body)) {
             if ($message instanceof \Psr\Http\Message\ResponseInterface) {
-                return "No response body returned";
+                return 'No response body returned';
             }
-            return "No request body sent";
+            return 'No request body sent';
         }
         $result = json_decode($body);
         if ($result !== null) {

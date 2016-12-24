@@ -96,12 +96,12 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertEquals(1, sizeof($container));
+        $this->assertCount(1, $container);
         $request = $container[0]['request'];
         $headers = $request->getHeaders();
 
         $this->assertArrayHasKey('Authorization', $headers);
-        $this->assertEquals(1, sizeof($headers['Authorization']));
+        $this->assertCount(1, $headers['Authorization']);
         $this->assertEquals($result, $headers['Authorization'][0]);
     }
 
@@ -158,17 +158,19 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $client->send($request);
 
-        $this->assertEquals(1, sizeof($container));
+        $this->assertCount(1, $container);
         $request = $container[0]['request'];
         $headers = $request->getHeaders();
 
         $this->assertArrayHasKey('Authorization', $headers);
-        $this->assertEquals(1, sizeof($headers['Authorization']));
+        $this->assertCount(1, $headers['Authorization']);
         $this->assertEquals($result, $headers['Authorization'][0]);
     }
 
     /**
      * @dataProvider createFromEdgeRcProvider
+     * @param $section
+     * @param $file
      */
     public function testCreateFromEdgeRcDefault($section, $file)
     {
@@ -179,9 +181,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Client::CLASS, $client);
         $this->assertEquals(
             [
-                'client_token' => "akab-client-token-xxx-xxxxxxxxxxxxxxxx",
-                'client_secret' => "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=",
-                'access_token' => "akab-access-token-xxx-xxxxxxxxxxxxxxxx"
+                'client_token' => 'akab-client-token-xxx-xxxxxxxxxxxxxxxx',
+                'client_secret' => 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=',
+                'access_token' => 'akab-access-token-xxx-xxxxxxxxxxxxxxxx'
             ],
             \PHPUnit_Framework_Assert::readAttribute($authentication, 'auth')
         );
@@ -352,7 +354,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $client->setAuth('test', 'test', 'test');
-        $client->setDebug(true);
+        $client->setInstanceDebug(true);
         $client->get('/test', ['debug' => false]);
         $this->assertEquals(false, is_resource(end($container)['options']['debug']));
         $this->assertFalse(end($container)['options']['debug']);
@@ -413,9 +415,11 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $response
+     * @param $method
+     * @param $responses
      * @param $path
      * @param $expected
+     * @internal param $response
      * @dataProvider loggingProvider
      */
     public function testLogging($method, $responses, $path, $expected)
@@ -459,7 +463,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $logHandler = $this->setLogger($client);
 
         try {
-            $client->get("/redirect");
+            $client->get('/redirect');
         } catch (\Exception $e) {
         }
 
@@ -467,7 +471,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         foreach ($logHandler->getRecords() as $record) {
             $records[] = $record['message'];
         }
-        $this->assertEquals(["GET /redirect 301 ", "GET /redirected 200 application/json"], $records);
+        $this->assertEquals(['GET /redirect 301 ', 'GET /redirected 200 application/json'], $records);
     }
 
     public function testLoggingDefault()
@@ -499,12 +503,12 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         );
         $logHandler = $this->setLogger($client);
 
-        $client->get("/test", ['handler' => $handler]);
+        $client->get('/test', ['handler' => $handler]);
         $records = [];
         foreach ($logHandler->getRecords() as $record) {
             $records[] = $record['message'];
         }
-        $this->assertEquals(["GET /test 200 application/json"], $records);
+        $this->assertEquals(['GET /test 200 application/json'], $records);
     }
 
     public function testSetSimpleLog()
@@ -520,12 +524,21 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $fp = fopen("php://memory", "w+");
-        $client->setSimpleLog($fp, "{method} {target} {code}");
-        $client->get("/test");
+        $fp = fopen('php://memory', 'wb+');
+        $client->setSimpleLog($fp, '{method} {target} {code}');
+        $client->get('/test');
 
         fseek($fp, 0);
-        $this->assertEquals("GET /test 200", fgets($fp));
+        $this->assertEquals('GET /test 200', fgets($fp));
+    }
+
+    public function testSetSimpleLogInvalid()
+    {
+        $logger = new SimpleLog();
+        $client = new Client();
+        $client->setLogger($logger);
+
+        $this->assertFalse($client->setSimpleLog('test'));
     }
 
     public function makeAuthHeaderProvider()
@@ -538,7 +551,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             yield [
                 'name' => $test['testName'],
                 'options' => array_merge($testdata, $test['request']),
-                'request' => array_merge(['data' => ""], $test['request']),
+                'request' => array_merge(['data' => ''], $test['request']),
                 'result' => $test['expectedAuthorization'],
             ];
         }
@@ -574,7 +587,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 [new Response(200)],
                 '/test',
                 [
-                    "GET /test 200 "
+                    'GET /test 200 '
                 ]
             ],
             [
@@ -582,7 +595,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 [new Response(404)],
                 '/error',
                 [
-                    "GET /error 404 "
+                    'GET /error 404 '
                 ]
             ],
             [
@@ -590,7 +603,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 [new Response(500)],
                 '/error',
                 [
-                    "POST /error 500 "
+                    'POST /error 500 '
                 ]
             ],
             [
@@ -598,7 +611,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 [new Response(200, ['Content-Type' => 'application/json'])],
                 '/test',
                 [
-                    "PUT /test 200 application/json"
+                    'PUT /test 200 application/json'
                 ]
             ],
             [
@@ -606,7 +619,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 [new Response(405, ['Content-Type' => 'application/json'])],
                 '/error',
                 [
-                    "OPTIONS /error 405 application/json"
+                    'OPTIONS /error 405 application/json'
                 ]
             ],
             [
@@ -614,7 +627,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 [new Response(503, ['Content-Type' => 'text/csv'])],
                 '/error',
                 [
-                    "GET /error 503 text/csv"
+                    'GET /error 503 text/csv'
                 ]
             ],
             [
@@ -625,8 +638,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 ],
                 '/notthere',
                 [
-                    "GET /notthere 301 ",
-                    "GET /redirect 200 ",
+                    'GET /notthere 301 ',
+                    'GET /redirect 200 ',
                 ]
             ]
         ];
@@ -645,13 +658,14 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return Client
+     * @param \Akamai\Open\EdgeGrid\Client $client
+     * @return \Monolog\Handler\TestHandler
      */
     protected function setLogger(Client $client)
     {
         $handler = new \Monolog\Handler\TestHandler();
-        $logger = new \Monolog\Logger("Test Logger", [$handler]);
-        $client->setLogger($logger, "{method} {target} {code} {res_header_content-type}");
+        $logger = new \Monolog\Logger('Test Logger', [$handler]);
+        $client->setLogger($logger, '{method} {target} {code} {res_header_content-type}');
 
         return $handler;
     }

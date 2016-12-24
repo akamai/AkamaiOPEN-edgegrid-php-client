@@ -78,13 +78,13 @@ class Cli
         try {
             $this->climate->arguments->parse($_SERVER['argv']);
 
-            $padding = sizeof($args);
+            $padding = count($args);
             foreach ($this->climate->arguments->toArray() as $arg) {
-                if ($arg == null) {
-                    $padding -= 1;
+                if ($arg === null) {
+                    --$padding;
                 }
             }
-            $argSize = sizeof($_SERVER['argv']) - $padding - 1;
+            $argSize = count($_SERVER['argv']) - $padding - 1;
             for ($i = 0; $i < $argSize; $i++) {
                 $args['arg-' . $i] = [];
             }
@@ -119,11 +119,11 @@ class Cli
 
         if ($this->climate->arguments->defined('auth-type')) {
             $auth = $this->climate->arguments->get('auth');
-            if ($this->climate->arguments->get('auth-type') == 'edgegrid' ||
+            if ($this->climate->arguments->get('auth-type') === 'edgegrid' ||
                 (!$this->climate->arguments->defined('auth-type'))) {
                 $section = 'default';
                 if ($this->climate->arguments->defined('auth')) {
-                    $section = (substr($auth, -1) == ':') ? substr($auth, 0, -1) : $auth;
+                    $section = (substr($auth, -1) === ':') ? substr($auth, 0, -1) : $auth;
                 }
                 $client = Client::createFromEdgeRcFile($section);
             }
@@ -166,7 +166,7 @@ class Cli
             if (!isset($url) && preg_match('@^(http(s?)://|:).*$@', trim($value))) {
                 $url = $value;
 
-                if ($url{0} == ':') {
+                if ($url{0} === ':') {
                     $url = substr($url, 1);
                 }
 
@@ -204,13 +204,13 @@ class Cli
             }
 
             $this->help();
-            $this->climate->error("Unknown argument: " . $value);
+            $this->climate->error('Unknown argument: ' . $value);
 
             return false;
         }
 
         $stdin = '';
-        $fp = fopen('php://stdin', 'r');
+        $fp = fopen('php://stdin', 'rb');
         if ($fp) {
             stream_set_blocking($fp, false);
             $stdin = fgets($fp);
@@ -226,7 +226,7 @@ class Cli
         if (!empty($stdin) && !empty($body)) {
             $this->help();
             $this->climate->error(
-                "error: Request body (from stdin or a file) and request data (key=value) cannot be mixed."
+                'error: Request body (from stdin or a file) and request data (key=value) cannot be mixed.'
             );
             return;
         }
@@ -235,7 +235,7 @@ class Cli
             $body = $stdin;
         }
 
-        if (sizeof($body) && !$this->climate->arguments->defined('form')) {
+        if (count($body) && !$this->climate->arguments->defined('form')) {
             if (!isset($options['headers']['Content-Type'])) {
                 $options['headers']['Content-Type'] = 'application/json';
             }
@@ -245,7 +245,7 @@ class Cli
             $options['body'] = (!is_string($body)) ? json_encode($body) : $body;
         }
 
-        if (sizeof($body) && $this->climate->arguments->defined('form')) {
+        if (count($body) && $this->climate->arguments->defined('form')) {
             if (!isset($options['headers']['Content-Type'])) {
                 $options['headers']['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
             }
@@ -267,10 +267,9 @@ class Cli
     public function help()
     {
         $arguments = new \League\CLImate\Argument\Manager();
-        $arguments->description("Akamai {OPEN} Edgegrid Auth for PHP Client (v" .Client::VERSION. ')');
+        $arguments->description('Akamai {OPEN} Edgegrid Auth for PHP Client (v' .Client::VERSION. ')');
         $arguments->add($this->getNamedArgs());
         $arguments->usage($this->climate, $_SERVER['argv']);
-        return;
     }
 
     /**
@@ -300,7 +299,7 @@ class Cli
             'auth-type' => [
                 'longPrefix' => 'auth-type',
                 'prefix' => 'A',
-                'description' => "{basic, digest, edgegrid}"
+                'description' => '{basic, digest, edgegrid}'
             ],
             'auth' => [
                 'longPrefix' => 'auth',
@@ -351,7 +350,7 @@ class Cli
         $value = $matches['value'];
         if (!empty($matches['file'])) {
             if (!file_exists($matches['value']) || !is_readable($matches['value'])) {
-                $this->climate->error("Unable to read input file: " . $matches['value']);
+                $this->climate->error('Unable to read input file: ' . $matches['value']);
                 return false;
             }
             $value = file_get_contents($matches['value']);

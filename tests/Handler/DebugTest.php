@@ -45,10 +45,10 @@ class DebugTest extends \PHPUnit_Framework_TestCase
         );
         $client->setAuth('test', 'test', 'test');
 
-        $fp = fopen('php://memory', 'a+');
+        $fp = fopen('php://memory', 'ab+');
         $client->setInstanceDebug($fp);
 
-        $this->expectOutputString("");
+        $this->expectOutputString('');
 
         try {
             $client->get('/error');
@@ -82,10 +82,10 @@ EOF;
         );
         $client->setAuth('test', 'test', 'test');
 
-        $fp = fopen('php://memory', 'a+');
+        $fp = fopen('php://memory', 'ab+');
         Client::setDebug($fp);
 
-        $this->expectOutputString("");
+        $this->expectOutputString('');
 
         try {
             $client->get('/error');
@@ -117,11 +117,11 @@ EOF;
             ]
         );
 
-        $fp = fopen('php://memory', 'a+');
+        $fp = fopen('php://memory', 'ab+');
         Client::setDebug($fp);
         $client->setInstanceDebug(false);
 
-        $this->expectOutputString("");
+        $this->expectOutputString('');
 
         try {
             $client->get('/error');
@@ -130,7 +130,7 @@ EOF;
 
         $output = $this->readStreamData($fp);
 
-        $expectedOutput = "";
+        $expectedOutput = '';
 
         $this->assertEquals($expectedOutput, $output);
     }
@@ -145,12 +145,12 @@ EOF;
             ]
         );
 
-        $fp = fopen('php://memory', 'a+');
+        $fp = fopen('php://memory', 'ab+');
         Client::setDebug($fp);
-        $fp2 = fopen('php://memory', 'a+');
+        $fp2 = fopen('php://memory', 'ab+');
         $client->setInstanceDebug($fp2);
 
-        $this->expectOutputString("");
+        $this->expectOutputString('');
 
         try {
             $client->get('/error');
@@ -159,7 +159,7 @@ EOF;
 
         $output = $this->readStreamData($fp);
 
-        $expectedOutput = "";
+        $expectedOutput = '';
         $this->assertEquals($expectedOutput, $output);
 
         $output = $this->readStreamData($fp2);
@@ -194,10 +194,10 @@ EOF;
         );
         $client->setAuth('test', 'test', 'test');
 
-        $fp = fopen('php://memory', 'a+');
+        $fp = fopen('php://memory', 'ab+');
         $client->setInstanceDebug($fp);
 
-        $this->expectOutputString("");
+        $this->expectOutputString('');
 
         try {
             $client->get('/400');
@@ -267,10 +267,10 @@ EOF;
         );
         $client->setAuth('test', 'test', 'test');
 
-        $fp = fopen('php://memory', 'a+');
+        $fp = fopen('php://memory', 'ab+');
         Client::setDebug($fp);
 
-        $this->expectOutputString("");
+        $this->expectOutputString('');
 
         try {
             $client->get('/error');
@@ -303,10 +303,10 @@ EOF;
         );
         $client->setAuth('test', 'test', 'test');
 
-        $fp = fopen('php://memory', 'a+');
+        $fp = fopen('php://memory', 'ab+');
         Client::setDebug($fp);
 
-        $this->expectOutputString("");
+        $this->expectOutputString('');
 
         try {
             $client->get('/error');
@@ -327,7 +327,7 @@ EOF;
 
     public function testResponseNoJsonBody()
     {
-        $handler = $this->getMockHandler([new Response(500, [], "error info")]);
+        $handler = $this->getMockHandler([new Response(500, [], 'error info')]);
 
         $client = new Client(
             [
@@ -337,10 +337,10 @@ EOF;
         );
         $client->setAuth('test', 'test', 'test');
 
-        $fp = fopen('php://memory', 'a+');
+        $fp = fopen('php://memory', 'ab+');
         Client::setDebug($fp);
 
-        $this->expectOutputString("");
+        $this->expectOutputString('');
 
         try {
             $client->get('/error');
@@ -378,7 +378,7 @@ EOF;
     public function testDebugResponseExceptionNoCode()
     {
         $handler = $this->getMockHandler([
-            new \GuzzleHttp\Exception\RequestException("Error message", new \GuzzleHttp\Psr7\Request('GET', '/test'))
+            new \GuzzleHttp\Exception\RequestException('Error message', new \GuzzleHttp\Psr7\Request('GET', '/test'))
         ]);
 
         $client = new Client(
@@ -388,10 +388,10 @@ EOF;
             ]
         );
 
-        $fp = fopen('php://memory', 'a+');
+        $fp = fopen('php://memory', 'ab+');
         Client::setDebug($fp);
 
-        $this->expectOutputString("");
+        $this->expectOutputString('');
 
         try {
             $client->get('/error');
@@ -406,7 +406,7 @@ EOF;
     {
         $handler = $this->getMockHandler([
             new \GuzzleHttp\Exception\RequestException(
-                "Error message",
+                'Error message',
                 new \GuzzleHttp\Psr7\Request('GET', '/test'),
                 new Response(500)
             )
@@ -419,10 +419,10 @@ EOF;
             ]
         );
 
-        $fp = fopen("php://memory", "a+");
+        $fp = fopen('php://memory', 'ab+');
         Client::setDebug($fp);
 
-        $this->expectOutputString("");
+        $this->expectOutputString('');
 
         try {
             $client->get('/error');
@@ -437,9 +437,9 @@ EOF;
     {
         $handler = $this->getMockHandler([
             new \GuzzleHttp\Exception\RequestException(
-                "Error message",
+                'Error message',
                 new \GuzzleHttp\Psr7\Request('GET', '/test'),
-                new Response(500, [], json_encode(["errorString" => "An error"]))
+                new Response(500, [], json_encode(['errorString' => 'An error']))
             )
         ]);
 
@@ -450,10 +450,10 @@ EOF;
             ]
         );
 
-        $fp = fopen('php://memory', 'a+');
+        $fp = fopen('php://memory', 'ab+');
         Client::setDebug($fp);
 
-        $this->expectOutputString("");
+        $this->expectOutputString('');
 
         try {
             $client->get('/error');

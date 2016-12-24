@@ -2,15 +2,6 @@
 /**
  * Akamai {OPEN} EdgeGrid Auth for PHP
  *
- * Akamai\Open\EdgeGrid\Client wraps GuzzleHttp\Client
- * providing request authentication/signing for Akamai
- * {OPEN} APIs.
- *
- * This client works _identically_ to GuzzleHttp\Client
- *
- * However, if you try to call an Akamai {OPEN} API you *must*
- * first call {@see Akamai\Open\EdgeGrid\Client->setAuth()}.
- *
  * @author Davey Shafik <dshafik@akamai.com>
  * @copyright Copyright 2016 Akamai Technologies, Inc. All rights reserved.
  * @license Apache 2.0
@@ -20,7 +11,6 @@
  */
 namespace Akamai\Open\EdgeGrid;
 
-use Akamai\Open\EdgeGrid\Authentication;
 use Akamai\Open\EdgeGrid\Handler\Authentication as AuthenticationHandler;
 use Akamai\Open\EdgeGrid\Handler\Debug as DebugHandler;
 use Akamai\Open\EdgeGrid\Handler\Verbose as VerboseHandler;
@@ -28,14 +18,20 @@ use Akamai\Open\EdgeGrid\Handler\Verbose as VerboseHandler;
 /**
  * Akamai {OPEN} EdgeGrid Client for PHP
  *
- * Akamai {OPEN} EdgeGrid Client for PHP. Based on
- * [Guzzle](http://guzzlephp.org).
+ * Akamai\Open\EdgeGrid\Client wraps GuzzleHttp\Client
+ * providing request authentication/signing for Akamai
+ * {OPEN} APIs.
+ *
+ * This client works _identically_ to GuzzleHttp\Client
+ *
+ * However, if you try to call an Akamai {OPEN} API you *must*
+ * first call {@see Akamai\Open\EdgeGrid\Client->setAuth()}.
  *
  * @package Akamai\Open\EdgeGrid\Client
  */
 class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
 {
-    const VERSION = "0.6.2";
+    const VERSION = '0.6.2';
 
     /**
      * @const int Default Timeout in seconds
@@ -133,7 +129,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
 
         $query = parse_url($uri, PHP_URL_QUERY);
         if (!empty($query)) {
-            $uri = substr($uri, 0, ((strlen($query)+1)) * -1);
+            $uri = substr($uri, 0, (strlen($query)+1) * -1);
             parse_str($query, $options['query']);
         }
 
@@ -207,7 +203,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
      */
     public function setHost($host)
     {
-        if (substr($host, -1) == '/') {
+        if (substr($host, -1) === '/') {
             $host = substr($host, 0, -1);
         }
 
@@ -275,7 +271,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     ) {
         if ($logger === null) {
             $handler = new \Monolog\Handler\ErrorLogHandler(\Monolog\Handler\ErrorLogHandler::SAPI);
-            $handler->setFormatter(new \Monolog\Formatter\LineFormatter("%message%"));
+            $handler->setFormatter(new \Monolog\Formatter\LineFormatter('%message%'));
             $logger = new \Monolog\Logger('HTTP Log', [$handler]);
         }
 
@@ -295,15 +291,16 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
      *
      * @param string $filename
      * @param string $format
+     * @return \Akamai\Open\EdgeGrid\Client|bool
      */
-    public function setSimpleLog($filename, $format = "{code}")
+    public function setSimpleLog($filename, $format = '{code}')
     {
         if ($this->logger && !($this->logger instanceof \Monolog\Logger)) {
             return false;
         }
 
         $handler = new \Monolog\Handler\StreamHandler($filename);
-        $handler->setFormatter(new \Monolog\Formatter\LineFormatter("%message%"));
+        $handler->setFormatter(new \Monolog\Formatter\LineFormatter('%message%'));
         $log = new \Monolog\Logger('HTTP Log', [$handler]);
 
         return $this->setLogger($log, $format);
@@ -320,7 +317,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
      * @param array $config Options to pass to the constructor/guzzle
      * @return \Akamai\Open\EdgeGrid\Client
      */
-    public static function createFromEdgeRcFile($section = 'default', $path = null, $config = [])
+    public static function createFromEdgeRcFile($section = 'default', $path = null, array $config = array())
     {
         $auth = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile($section, $path);
 
@@ -328,8 +325,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
             $config['base_uri'] = 'https://' . $host;
         }
 
-        $client = new static($config, $auth);
-        return $client;
+        return new static($config, $auth);
     }
 
     /**
@@ -345,7 +341,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     /**
      * Print formatted JSON responses to STDOUT
      *
-     * @param bool|resource $enable
+     * @param bool|resource|array $enable
      */
     public static function setVerbose($enable)
     {
@@ -361,13 +357,13 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     protected function getDebugOption(array $config)
     {
         if (isset($config['debug'])) {
-            return ($config['debug'] === true) ? fopen('php://stderr', 'a') : $config['debug'];
+            return ($config['debug'] === true) ? fopen('php://stderr', 'ab') : $config['debug'];
         }
 
-        if (($this->debugOverride && $this->debug)) {
-            return ($this->debug === true) ? fopen('php://stderr', 'a') : $this->debug;
-        } elseif ((!$this->debugOverride && static::$staticDebug)) {
-            return (static::$staticDebug === true) ? fopen('php://stderr', 'a') : static::$staticDebug;
+        if ($this->debugOverride && $this->debug) {
+            return ($this->debug === true) ? fopen('php://stderr', 'ab') : $this->debug;
+        } elseif (!$this->debugOverride && static::$staticDebug) {
+            return (static::$staticDebug === true) ? fopen('php://stderr', 'ab') : static::$staticDebug;
         }
 
         return false;
@@ -380,7 +376,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
      */
     protected function isDebug()
     {
-        if (($this->debugOverride && !$this->debug) || (!($this->debugOverride) && !static::$staticDebug)) {
+        if (($this->debugOverride && !$this->debug) || (!$this->debugOverride && !static::$staticDebug)) {
             return false;
         }
 
@@ -398,7 +394,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
      */
     protected function isVerbose()
     {
-        if (($this->verboseOverride && !$this->verbose) || (!($this->verboseOverride) && !static::$staticVerbose)) {
+        if (($this->verboseOverride && !$this->verbose) || (!$this->verboseOverride && !static::$staticVerbose)) {
             return false;
         }
 
@@ -451,7 +447,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
             if (!($config['handler'] instanceof \GuzzleHttp\HandlerStack)) {
                 $config['handler'] = \GuzzleHttp\HandlerStack::create($config['handler']);
             }
-            $config['handler']->before("history", $authenticationHandler, 'authentication');
+            $config['handler']->before('history', $authenticationHandler, 'authentication');
         } catch (\InvalidArgumentException $e) {
             // history middleware not added yet
             $config['handler']->push($authenticationHandler, 'authentication');
@@ -533,9 +529,9 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
                 $this->debugHandler = new DebugHandler($fp);
             }
 
-            $handler->after("allow_redirects", $this->debugHandler, "debug");
+            $handler->after('allow_redirects', $this->debugHandler, 'debug');
         } catch (\InvalidArgumentException $e) {
-            $handler->push($this->debugHandler, "debug");
+            $handler->push($this->debugHandler, 'debug');
         }
 
         $options['handler'] = $handler;
@@ -548,16 +544,17 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
      *
      * @param \GuzzleHttp\HandlerStack $handlerStack
      * @param callable $logHandler
+     * @return $this
      */
     protected function setLogHandler(\GuzzleHttp\HandlerStack $handlerStack, callable $logHandler)
     {
         try {
-            $handlerStack->after("history", $logHandler, "logger");
+            $handlerStack->after('history', $logHandler, 'logger');
         } catch (\InvalidArgumentException $e) {
             try {
-                $handlerStack->before("allow_redirects", $logHandler, "logger");
+                $handlerStack->before('allow_redirects', $logHandler, 'logger');
             } catch (\InvalidArgumentException $e) {
-                $handlerStack->push($logHandler, "logger");
+                $handlerStack->push($logHandler, 'logger');
             }
         }
 
@@ -599,9 +596,9 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
                 $this->verboseHandler = new VerboseHandler(array_shift($fp), array_shift($fp));
             }
 
-            $handler->after("allow_redirects", $this->verboseHandler, "verbose");
+            $handler->after('allow_redirects', $this->verboseHandler, 'verbose');
         } catch (\InvalidArgumentException $e) {
-            $handler->push($this->verboseHandler, "verbose");
+            $handler->push($this->verboseHandler, 'verbose');
         }
 
         $options['handler'] = $handler;
