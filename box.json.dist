@@ -8,9 +8,8 @@
   "files": [
     "LICENSE",
     "README.md",
-    "vendor/autoload.php"
+    "CHANGELOG.md"
   ],
-  "compression": "BZ2",
   "finder": [
     {
       "name": "*.php",
@@ -25,6 +24,7 @@
       "in": "vendor"
     }
   ],
+  "compression": "BZ2",
   "bootstrap": "build/phar/bootstrap.php",
   "git-version": "package_version",
   "output": "akamai-open-edgegrid-client.phar",
