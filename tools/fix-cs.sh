@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 export PATH=vendor/bin:$PATH
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 if [[ $# -eq 1 ]]
