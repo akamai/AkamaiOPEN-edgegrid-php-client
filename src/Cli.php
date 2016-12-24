@@ -1,20 +1,11 @@
 <?php
 /**
- * Akamai {OPEN} EdgeGrid Auth for PHP
- *
- * Akamai\Open\EdgeGrid\Client wraps GuzzleHttp\Client
- * providing request authentication/signing for Akamai
- * {OPEN} APIs.
- *
- * This client works _identically_ to GuzzleHttp\Client
- *
- * However, if you try to call an Akamai {OPEN} API you *must*
- * first call {@see Akamai\Open\EdgeGrid\Client->setAuth()}.
+ * Akamai {OPEN} EdgeGrid Auth Client
  *
  * @author Davey Shafik <dshafik@akamai.com>
  * @copyright Copyright 2016 Akamai Technologies, Inc. All rights reserved.
  * @license Apache 2.0
- * @link https://github.com/akamai-open/edgegrid-auth-php
+ * @link https://github.com/akamai-open/AkamaiOPEN-edgegrid-php-client
  * @link https://developer.akamai.com
  * @link https://developer.akamai.com/introduction/Client_Auth.html
  */
