@@ -31,7 +31,7 @@ use Akamai\Open\EdgeGrid\Handler\Verbose as VerboseHandler;
  */
 class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
 {
-    const VERSION = '0.6.2';
+    const VERSION = '0.6.3';
 
     /**
      * @const int Default Timeout in seconds
