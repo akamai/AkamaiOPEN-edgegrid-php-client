@@ -1,3 +1,10 @@
+0.6.3
+---
+[24 Dec, 2016]
+* Update to akamai-open/edge-auth 0.6.2
+* Add support for using environment variables for credentials
+* General cleanup
+
 0.6.2
 ---
 [17 Dec, 2016]
