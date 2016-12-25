@@ -132,8 +132,14 @@
 	<div class="description">
 	<p>Akamai {OPEN} EdgeGrid Client for PHP</p>
 
-<p>Akamai {OPEN} EdgeGrid Client for PHP. Based on
-<a href="http://guzzlephp.org">Guzzle</a>.</p>
+<p>Akamai\Open\EdgeGrid\Client wraps GuzzleHttp\Client
+providing request authentication/signing for Akamai
+{OPEN} APIs.</p>
+
+<p>This client works <em>identically</em> to GuzzleHttp\Client</p>
+
+<p>However, if you try to call an Akamai {OPEN} API you <em>must</em>
+first call Akamai\Open\EdgeGrid\Client->setAuth().</p>
 	</div>
 
 	<dl class="tree well">
@@ -165,7 +171,7 @@ GuzzleHttp\Client
 		<b>Namespace:</b> <a href="namespace-Akamai.html">Akamai</a>\<a href="namespace-Akamai.Open.html">Open</a>\<a href="namespace-Akamai.Open.EdgeGrid.html">EdgeGrid</a><br>
 		<b>Package:</b> Akamai\Open\EdgeGrid\Client<br>
 
-			<b>Located at</b> <a href="source-class-Akamai.Open.EdgeGrid.Client.html#28-650" title="Go to source code">Client.php</a>
+			<b>Located at</b> <a href="source-class-Akamai.Open.EdgeGrid.Client.html#18-669" title="Go to source code">Client.php</a>
 		<br>
 	</div>
 
@@ -185,7 +191,7 @@ GuzzleHttp\Client
 
 			<td class="name"><div>
 			<a class="anchor" href="#___construct">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#103-119" title="Go to source code">__construct</a>( <span>array <var>$config</var> = []</span>, <span><code><a href="class-Akamai.Open.EdgeGrid.Authentication.html">Akamai\Open\EdgeGrid\Authentication</a></code> <var>$authentication</var> = <span class="php-keyword1">null</span> </span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#99-115" title="Go to source code">__construct</a>( <span>array <var>$config</var> = []</span>, <span><code><a href="class-Akamai.Open.EdgeGrid.Authentication.html">Akamai\Open\EdgeGrid\Authentication</a></code> <var>$authentication</var> = <span class="php-keyword1">null</span> </span> )</code>
 
 			<div class="description short">
 				<p>\GuzzleHttp\Client-compatible constructor</p>
@@ -221,7 +227,7 @@ GuzzleHttp\Client
 
 			<td class="name"><div>
 			<a class="anchor" href="#_requestAsync">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#121-141" title="Go to source code">requestAsync</a>( <span>string <var>$method</var></span>, <span>string <var>$uri</var> = <span class="php-keyword1">null</span></span>, <span>array <var>$options</var> = []</span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#117-137" title="Go to source code">requestAsync</a>( <span>string <var>$method</var></span>, <span>string <var>$uri</var> = <span class="php-keyword1">null</span></span>, <span>array <var>$options</var> = []</span> )</code>
 
 			<div class="description short">
 				<p>Make an Asynchronous request</p>
@@ -267,7 +273,7 @@ GuzzleHttp\Client
 
 			<td class="name"><div>
 			<a class="anchor" href="#_sendAsync">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#143-156" title="Go to source code">sendAsync</a>( <span>Psr\Http\Message\RequestInterface <var>$request</var></span>, <span>array <var>$options</var> = []</span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#139-152" title="Go to source code">sendAsync</a>( <span>Psr\Http\Message\RequestInterface <var>$request</var></span>, <span>array <var>$options</var> = []</span> )</code>
 
 			<div class="description short">
 				<p>Send an Asynchronous HTTP request</p>
@@ -307,7 +313,7 @@ GuzzleHttp\Client
 
 			<td class="name"><div>
 			<a class="anchor" href="#_setAuth">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#158-171" title="Go to source code">setAuth</a>( <span>string <var>$client_token</var></span>, <span>string <var>$client_secret</var></span>, <span>string <var>$access_token</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#154-167" title="Go to source code">setAuth</a>( <span>string <var>$client_token</var></span>, <span>string <var>$client_secret</var></span>, <span>string <var>$access_token</var></span> )</code>
 
 			<div class="description short">
 				<p>Set Akamai {OPEN} Authentication Credentials</p>
@@ -349,7 +355,7 @@ GuzzleHttp\Client
 
 			<td class="name"><div>
 			<a class="anchor" href="#_setHeadersToSign">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#173-187" title="Go to source code">setHeadersToSign</a>( <span>array <var>$headers</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#169-183" title="Go to source code">setHeadersToSign</a>( <span>array <var>$headers</var></span> )</code>
 
 			<div class="description short">
 				<p>Specify the headers to include when signing the request</p>
@@ -390,7 +396,7 @@ feature.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_setMaxBodySize">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#189-200" title="Go to source code">setMaxBodySize</a>( <span>integer <var>$max_body_size</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#185-196" title="Go to source code">setMaxBodySize</a>( <span>integer <var>$max_body_size</var></span> )</code>
 
 			<div class="description short">
 				<p>Set the max body size</p>
@@ -428,7 +434,7 @@ feature.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_setHost">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#202-224" title="Go to source code">setHost</a>( <span>string <var>$host</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#198-220" title="Go to source code">setHost</a>( <span>string <var>$host</var></span> )</code>
 
 			<div class="description short">
 				<p>Set Request Host</p>
@@ -466,7 +472,7 @@ feature.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_setTimeout">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#226-237" title="Go to source code">setTimeout</a>( <span>integer <var>$timeout_in_seconds</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#222-233" title="Go to source code">setTimeout</a>( <span>integer <var>$timeout_in_seconds</var></span> )</code>
 
 			<div class="description short">
 				<p>Set the HTTP request timeout</p>
@@ -504,7 +510,7 @@ feature.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_setInstanceVerbose">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#239-250" title="Go to source code">setInstanceVerbose</a>( <span>boolean|resource <var>$enable</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#235-246" title="Go to source code">setInstanceVerbose</a>( <span>boolean|resource <var>$enable</var></span> )</code>
 
 			<div class="description short">
 				<p>Print formatted JSON responses to output</p>
@@ -542,7 +548,7 @@ feature.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_setInstanceDebug">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#252-263" title="Go to source code">setInstanceDebug</a>( <span>boolean|resource <var>$enable</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#248-259" title="Go to source code">setInstanceDebug</a>( <span>boolean|resource <var>$enable</var></span> )</code>
 
 			<div class="description short">
 				<p>Print HTTP requests/responses to output</p>
@@ -580,7 +586,7 @@ feature.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_setLogger">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#265-291" title="Go to source code">setLogger</a>( <span>Psr\Log\LoggerInterface <var>$logger</var> = <span class="php-keyword1">null</span></span>, <span>string <var>$messageFormat</var> = \GuzzleHttp\MessageFormatter::CLF </span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#261-287" title="Go to source code">setLogger</a>( <span>Psr\Log\LoggerInterface <var>$logger</var> = <span class="php-keyword1">null</span></span>, <span>string <var>$messageFormat</var> = \GuzzleHttp\MessageFormatter::CLF </span> )</code>
 
 			<div class="description short">
 				<p>Set a PSR-3 compatible logger (or use monolog by default)</p>
@@ -613,14 +619,14 @@ feature.</p>
 
 			<td class="attributes"><code>
 				 public 
-				
+				<code><a href="class-Akamai.Open.EdgeGrid.Client.html">Akamai\Open\EdgeGrid\Client</a></code>|boolean
 				
 				</code>
 			</td>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_setSimpleLog">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#293-310" title="Go to source code">setSimpleLog</a>( <span>string <var>$filename</var></span>, <span>string <var>$format</var> = <span class="php-quote">&quot;{code}&quot;</span></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#289-307" title="Go to source code">setSimpleLog</a>( <span>string <var>$filename</var></span>, <span>string <var>$format</var> = <span class="php-quote">'{code}'</span></span> )</code>
 
 			<div class="description short">
 				<p>Add logger using a given filename/format</p>
@@ -637,6 +643,68 @@ feature.</p>
 						<dt><var>$format</var></dt>
 						<dd></dd>
 					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						<code><a href="class-Akamai.Open.EdgeGrid.Client.html">Akamai\Open\EdgeGrid\Client</a></code>|boolean
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="createInstance" id="_createInstance">
+
+			<td class="attributes"><code>
+				 public static
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_createInstance">#</a>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#309-318" title="Go to source code">createInstance</a>( <span> <var>$section</var> = <span class="php-quote">'default'</span></span>, <span> <var>$path</var> = <span class="php-keyword1">null</span></span>, <span>array <var>$config</var> = []</span> )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="createFromEnv" id="_createFromEnv">
+
+			<td class="attributes"><code>
+				 public static
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_createFromEnv">#</a>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#320-329" title="Go to source code">createFromEnv</a>( <span> <var>$section</var> = <span class="php-quote">'default'</span></span>, <span>array <var>$config</var> = []</span> )</code>
+
+			<div class="description short">
+				
+			</div>
+
+			<div class="description detailed hidden">
+				
+
+
 
 
 
@@ -656,7 +724,7 @@ feature.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_createFromEdgeRcFile">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#312-333" title="Go to source code">createFromEdgeRcFile</a>( <span>string <var>$section</var> = <span class="php-quote">'default'</span></span>, <span>string <var>$path</var> = <span class="php-keyword1">null</span></span>, <span>array <var>$config</var> = []</span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#331-351" title="Go to source code">createFromEdgeRcFile</a>( <span>string <var>$section</var> = <span class="php-quote">'default'</span></span>, <span>string <var>$path</var> = <span class="php-keyword1">null</span></span>, <span>array <var>$config</var> = []</span> )</code>
 
 			<div class="description short">
 				<p>Factory method to create a client using credentials from <code>.edgerc</code></p>
@@ -701,7 +769,7 @@ directory for credentials, if no path is supplied.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_setDebug">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#335-343" title="Go to source code">setDebug</a>( <span>boolean|resource <var>$enable</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#353-361" title="Go to source code">setDebug</a>( <span>boolean|resource <var>$enable</var></span> )</code>
 
 			<div class="description short">
 				<p>Print HTTP requests/responses to STDOUT</p>
@@ -735,7 +803,7 @@ directory for credentials, if no path is supplied.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_setVerbose">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#345-353" title="Go to source code">setVerbose</a>( <span>boolean|resource <var>$enable</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#363-371" title="Go to source code">setVerbose</a>( <span>boolean|resource|array <var>$enable</var></span> )</code>
 
 			<div class="description short">
 				<p>Print formatted JSON responses to STDOUT</p>
@@ -769,7 +837,7 @@ directory for credentials, if no path is supplied.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_getDebugOption">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#355-374" title="Go to source code">getDebugOption</a>( <span>array <var>$config</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#373-392" title="Go to source code">getDebugOption</a>( <span>array <var>$config</var></span> )</code>
 
 			<div class="description short">
 				<p>Handle debug option</p>
@@ -807,7 +875,7 @@ directory for credentials, if no path is supplied.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_isDebug">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#376-392" title="Go to source code">isDebug</a>( )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#394-410" title="Go to source code">isDebug</a>( )</code>
 
 			<div class="description short">
 				<p>Debugging status for the current request</p>
@@ -840,7 +908,7 @@ directory for credentials, if no path is supplied.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_isVerbose">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#394-410" title="Go to source code">isVerbose</a>( )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#412-428" title="Go to source code">isVerbose</a>( )</code>
 
 			<div class="description short">
 				<p>Verbose status for the current request</p>
@@ -873,7 +941,7 @@ directory for credentials, if no path is supplied.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_setAuthentication">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#412-432" title="Go to source code">setAuthentication</a>( <span>array <var>$config</var></span>, <span><code><a href="class-Akamai.Open.EdgeGrid.Authentication.html">Akamai\Open\EdgeGrid\Authentication</a></code> <var>$authentication</var> = <span class="php-keyword1">null</span></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#430-450" title="Go to source code">setAuthentication</a>( <span>array <var>$config</var></span>, <span><code><a href="class-Akamai.Open.EdgeGrid.Authentication.html">Akamai\Open\EdgeGrid\Authentication</a></code> <var>$authentication</var> = <span class="php-keyword1">null</span></span> )</code>
 
 			<div class="description short">
 				<p>Set the Authentication instance</p>
@@ -909,7 +977,7 @@ directory for credentials, if no path is supplied.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_setAuthenticationHandler">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#434-460" title="Go to source code">setAuthenticationHandler</a>( <span>array <var>$config</var></span>, <span><code><a href="class-Akamai.Open.EdgeGrid.Authentication.html">Akamai\Open\EdgeGrid\Authentication</a></code> <var>$authentication</var> = <span class="php-keyword1">null</span></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#452-478" title="Go to source code">setAuthenticationHandler</a>( <span>array <var>$config</var></span>, <span><code><a href="class-Akamai.Open.EdgeGrid.Authentication.html">Akamai\Open\EdgeGrid\Authentication</a></code> <var>$authentication</var> = <span class="php-keyword1">null</span></span> )</code>
 
 			<div class="description short">
 				<p>Set the Authentication Handler</p>
@@ -949,7 +1017,7 @@ directory for credentials, if no path is supplied.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_setBasicOptions">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#462-479" title="Go to source code">setBasicOptions</a>( <span>array <var>$config</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#480-497" title="Go to source code">setBasicOptions</a>( <span>array <var>$config</var></span> )</code>
 
 			<div class="description short">
 				<p>Set timeout and base_uri options</p>
@@ -987,7 +1055,7 @@ directory for credentials, if no path is supplied.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_setConfigOption">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#481-501" title="Go to source code">setConfigOption</a>( <span>string <var>$what</var></span>, <span>mixed <var>$value</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#499-519" title="Go to source code">setConfigOption</a>( <span>string <var>$what</var></span>, <span>mixed <var>$value</var></span> )</code>
 
 			<div class="description short">
 				<p>Set values on the private \GuzzleHttp\Client->config</p>
@@ -1027,7 +1095,7 @@ when there is no setter.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_setDebugHandler">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#503-544" title="Go to source code">setDebugHandler</a>( <span>array <var>$options</var></span>, <span>boolean|resource|null <var>$fp</var> = <span class="php-keyword1">null</span></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#521-562" title="Go to source code">setDebugHandler</a>( <span>array <var>$options</var></span>, <span>boolean|resource|null <var>$fp</var> = <span class="php-keyword1">null</span></span> )</code>
 
 			<div class="description short">
 				<p>Add the Debug handler to the HandlerStack</p>
@@ -1060,14 +1128,14 @@ when there is no setter.</p>
 
 			<td class="attributes"><code>
 				 protected 
-				
+				<code><a href="class-Akamai.Open.EdgeGrid.Client.html">Akamai\Open\EdgeGrid\Client</a></code>
 				
 				</code>
 			</td>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_setLogHandler">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#546-565" title="Go to source code">setLogHandler</a>( <span>GuzzleHttp\HandlerStack <var>$handlerStack</var></span>, <span>callable <var>$logHandler</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#564-584" title="Go to source code">setLogHandler</a>( <span>GuzzleHttp\HandlerStack <var>$handlerStack</var></span>, <span>callable <var>$logHandler</var></span> )</code>
 
 			<div class="description short">
 				<p>Add the Log handler to the HandlerStack</p>
@@ -1085,6 +1153,10 @@ when there is no setter.</p>
 						<dd></dd>
 					</dl></div>
 
+					<h4>Returns</h4>
+					<div class="list">
+						<code><a href="class-Akamai.Open.EdgeGrid.Client.html">Akamai\Open\EdgeGrid\Client</a></code><br>$this
+					</div>
 
 
 
@@ -1103,7 +1175,7 @@ when there is no setter.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_setVerboseHandler">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#567-610" title="Go to source code">setVerboseHandler</a>( <span>array <var>$options</var></span>, <span>boolean|resource|array|null <var>$fp</var> = <span class="php-keyword1">null</span></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#586-629" title="Go to source code">setVerboseHandler</a>( <span>array <var>$options</var></span>, <span>boolean|resource|array|null <var>$fp</var> = <span class="php-keyword1">null</span></span> )</code>
 
 			<div class="description short">
 				<p>Add the Verbose handler to the HandlerStack</p>
@@ -1143,7 +1215,7 @@ when there is no setter.</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#_setRequestOptions">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#612-649" title="Go to source code">setRequestOptions</a>( <span>array <var>$options</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Client.html#631-668" title="Go to source code">setRequestOptions</a>( <span>array <var>$options</var></span> )</code>
 
 			<div class="description short">
 				<p>Set request specific options</p>
@@ -1188,7 +1260,7 @@ when there is no setter.</p>
 				<td class="attributes"><code>string</code></td>
 				<td class="name">
 					<code>
-						<a href="source-constant-VERSION.html#38" title="Go to source code"><b>VERSION</b></a>
+						<a href="source-constant-VERSION.html#34" title="Go to source code"><b>VERSION</b></a>
 					</code>
 
 					<div class="description short">
@@ -1203,7 +1275,7 @@ when there is no setter.</p>
 				<td class="value">
 					<div>
 						<a href="#VERSION" class="anchor">#</a>
-						<code><span class="php-quote">&quot;0.6.2&quot;</span></code>
+						<code><span class="php-quote">'0.6.3'</span></code>
 					</div>
 				</td>
 			</tr>
@@ -1212,7 +1284,7 @@ when there is no setter.</p>
 				<td class="attributes"><code>integer</code></td>
 				<td class="name">
 					<code>
-						<a href="source-constant-DEFAULT_REQUEST_TIMEOUT.html#40-43" title="Go to source code"><b>DEFAULT_REQUEST_TIMEOUT</b></a>
+						<a href="source-constant-DEFAULT_REQUEST_TIMEOUT.html#36-39" title="Go to source code"><b>DEFAULT_REQUEST_TIMEOUT</b></a>
 					</code>
 
 					<div class="description short">
@@ -1251,7 +1323,7 @@ when there is no setter.</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Akamai.Open.EdgeGrid.Client.html#45-52" title="Go to source code"><var>$staticVerbose</var></a>
+					<a href="source-class-Akamai.Open.EdgeGrid.Client.html#41-48" title="Go to source code"><var>$staticVerbose</var></a>
 
 				<div class="description short">
 					<p>Whether verbose mode is enabled</p>
@@ -1288,7 +1360,7 @@ when there is no setter.</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Akamai.Open.EdgeGrid.Client.html#54-57" title="Go to source code"><var>$staticDebug</var></a>
+					<a href="source-class-Akamai.Open.EdgeGrid.Client.html#50-53" title="Go to source code"><var>$staticDebug</var></a>
 
 				<div class="description short">
 					<p>Whether debug mode is enabled</p>
@@ -1313,7 +1385,7 @@ when there is no setter.</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Akamai.Open.EdgeGrid.Client.html#59-62" title="Go to source code"><var>$authentication</var></a>
+					<a href="source-class-Akamai.Open.EdgeGrid.Client.html#55-58" title="Go to source code"><var>$authentication</var></a>
 
 				<div class="description short">
 					
@@ -1338,7 +1410,7 @@ when there is no setter.</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Akamai.Open.EdgeGrid.Client.html#64-67" title="Go to source code"><var>$verboseHandler</var></a>
+					<a href="source-class-Akamai.Open.EdgeGrid.Client.html#60-63" title="Go to source code"><var>$verboseHandler</var></a>
 
 				<div class="description short">
 					
@@ -1363,7 +1435,7 @@ when there is no setter.</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Akamai.Open.EdgeGrid.Client.html#69-72" title="Go to source code"><var>$debugHandler</var></a>
+					<a href="source-class-Akamai.Open.EdgeGrid.Client.html#65-68" title="Go to source code"><var>$debugHandler</var></a>
 
 				<div class="description short">
 					
@@ -1388,7 +1460,7 @@ when there is no setter.</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Akamai.Open.EdgeGrid.Client.html#74-81" title="Go to source code"><var>$verbose</var></a>
+					<a href="source-class-Akamai.Open.EdgeGrid.Client.html#70-77" title="Go to source code"><var>$verbose</var></a>
 
 				<div class="description short">
 					<p>Whether verbose mode is enabled</p>
@@ -1425,7 +1497,7 @@ when there is no setter.</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Akamai.Open.EdgeGrid.Client.html#83-86" title="Go to source code"><var>$debug</var></a>
+					<a href="source-class-Akamai.Open.EdgeGrid.Client.html#79-82" title="Go to source code"><var>$debug</var></a>
 
 				<div class="description short">
 					<p>Whether debugging is enabled</p>
@@ -1450,7 +1522,7 @@ when there is no setter.</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Akamai.Open.EdgeGrid.Client.html#88-91" title="Go to source code"><var>$verboseOverride</var></a>
+					<a href="source-class-Akamai.Open.EdgeGrid.Client.html#84-87" title="Go to source code"><var>$verboseOverride</var></a>
 
 				<div class="description short">
 					<p>Whether to override the static verbose setting</p>
@@ -1475,7 +1547,7 @@ when there is no setter.</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Akamai.Open.EdgeGrid.Client.html#93-96" title="Go to source code"><var>$debugOverride</var></a>
+					<a href="source-class-Akamai.Open.EdgeGrid.Client.html#89-92" title="Go to source code"><var>$debugOverride</var></a>
 
 				<div class="description short">
 					<p>Whether to override the static debug setting</p>
@@ -1500,7 +1572,7 @@ when there is no setter.</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Akamai.Open.EdgeGrid.Client.html#98-101" title="Go to source code"><var>$logger</var></a>
+					<a href="source-class-Akamai.Open.EdgeGrid.Client.html#94-97" title="Go to source code"><var>$logger</var></a>
 
 				<div class="description short">
 					<p>Logging Handler</p>
@@ -1533,7 +1605,7 @@ when there is no setter.</p>
 		Akamai {OPEN} EdgeGrid Authentication for PHP API documentation generated by <a href="http://apigen.org">ApiGen</a>
 	</div>
 </div>
-<script src="resources/combined.js?19d63920d9ee3f7b4ecde60e155a788e3f7e4b7d"></script>
-<script src="elementlist.js?96221d21635688100ec7914b73a865fc69b4f70f"></script>
+<script src="resources/combined.js?3861a1aa545d445bf7225c24a8b76c62a59bde19"></script>
+<script src="elementlist.js?429a77cbffa97411de924b4882ea0b35d0e4b517"></script>
 </body>
 </html>

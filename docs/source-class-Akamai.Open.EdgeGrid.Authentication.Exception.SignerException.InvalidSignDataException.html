@@ -121,35 +121,31 @@
 <div id="right">
 	<div id="rightInner">
 <div id="source">
-	<pre class="numbers"><code><span class="l"><a href="#1"> 1 </a></span><span class="l"><a href="#2"> 2 </a></span></span><span class="l"><a href="#3"> 3 </a></span></span><span class="l"><a href="#4"> 4 </a></span></span><span class="l"><a href="#5"> 5 </a></span></span><span class="l"><a href="#6"> 6 </a></span></span><span class="l"><a href="#7"> 7 </a></span></span><span class="l"><a href="#8"> 8 </a></span></span><span class="l"><a href="#9"> 9 </a></span></span><span class="l"><a href="#10">10 </a></span></span><span class="l"><a href="#11">11 </a></span></span><span class="l"><a href="#12">12 </a></span></span><span class="l"><a href="#13">13 </a></span></span><span class="l"><a href="#14">14 </a></span></span><span class="l"><a href="#15">15 </a></span><span class="l"><a href="#16">16 </a></span><span class="l"><a href="#17">17 </a></span><span class="l"><a href="#18">18 </a></span><span class="l"><a href="#19">19 </a></span><span class="l"><a href="#20">20 </a></span><span class="l"><a href="#21">21 </a></span></span><span class="l"><a href="#22">22 </a></span></span><span class="l"><a href="#23">23 </a></span></span><span class="l"><a href="#24">24 </a></span><span class="l"><a href="#25">25 </a></span><span class="l"><a href="#26">26 </a></span><span class="l"><a href="#27">27 </a></span><span class="l"><a href="#28">28 </a></span></code></pre>
+	<pre class="numbers"><code><span class="l"><a href="#1"> 1 </a></span><span class="l"><a href="#2"> 2 </a></span></span><span class="l"><a href="#3"> 3 </a></span></span><span class="l"><a href="#4"> 4 </a></span></span><span class="l"><a href="#5"> 5 </a></span></span><span class="l"><a href="#6"> 6 </a></span></span><span class="l"><a href="#7"> 7 </a></span></span><span class="l"><a href="#8"> 8 </a></span></span><span class="l"><a href="#9"> 9 </a></span></span><span class="l"><a href="#10">10 </a></span></span><span class="l"><a href="#11">11 </a></span><span class="l"><a href="#12">12 </a></span><span class="l"><a href="#13">13 </a></span><span class="l"><a href="#14">14 </a></span><span class="l"><a href="#15">15 </a></span><span class="l"><a href="#16">16 </a></span><span class="l"><a href="#17">17 </a></span></span><span class="l"><a href="#18">18 </a></span></span><span class="l"><a href="#19">19 </a></span></span><span class="l"><a href="#20">20 </a></span><span class="l"><a href="#21">21 </a></span><span class="l"><a href="#22">22 </a></span><span class="l"><a href="#23">23 </a></span><span class="l"><a href="#24">24 </a></span></code></pre>
 	<pre class="code"><code><span id="1" class="l"><span class="xlang">&lt;?php</span>
 </span><span id="2" class="l"><span class="php-comment">/**
 </span></span><span id="3" class="l"><span class="php-comment"> * Akamai {OPEN} EdgeGrid Auth for PHP
 </span></span><span id="4" class="l"><span class="php-comment"> *
-</span></span><span id="5" class="l"><span class="php-comment"> * Provides Request Signing as per
-</span></span><span id="6" class="l"><span class="php-comment"> * {@see https://developer.akamai.com/introduction/Client_Auth.html}
-</span></span><span id="7" class="l"><span class="php-comment"> * as GuzzleHttp a Middleware Handlers
-</span></span><span id="8" class="l"><span class="php-comment"> *
-</span></span><span id="9" class="l"><span class="php-comment"> * @author Davey Shafik &lt;dshafik@akamai.com&gt;
-</span></span><span id="10" class="l"><span class="php-comment"> * @copyright Copyright 2016 Akamai Technologies, Inc. All rights reserved.
-</span></span><span id="11" class="l"><span class="php-comment"> * @license Apache 2.0
-</span></span><span id="12" class="l"><span class="php-comment"> * @link https://github.com/akamai-open/edgegrid-auth-php
-</span></span><span id="13" class="l"><span class="php-comment"> * @link https://developer.akamai.com
-</span></span><span id="14" class="l"><span class="php-comment"> * @link https://developer.akamai.com/introduction/Client_Auth.html
-</span></span><span id="15" class="l"><span class="php-comment"> */</span>
+</span></span><span id="5" class="l"><span class="php-comment"> * @author Davey Shafik &lt;dshafik@akamai.com&gt;
+</span></span><span id="6" class="l"><span class="php-comment"> * @copyright Copyright 2016 Akamai Technologies, Inc. All rights reserved.
+</span></span><span id="7" class="l"><span class="php-comment"> * @license Apache 2.0
+</span></span><span id="8" class="l"><span class="php-comment"> * @link https://github.com/akamai-open/AkamaiOPEN-edgegrid-php
+</span></span><span id="9" class="l"><span class="php-comment"> * @link https://developer.akamai.com
+</span></span><span id="10" class="l"><span class="php-comment"> * @link https://developer.akamai.com/introduction/Client_Auth.html
+</span></span><span id="11" class="l"><span class="php-comment"> */</span>
+</span><span id="12" class="l">
+</span><span id="13" class="l"><span class="php-keyword1">namespace</span> Akamai\Open\EdgeGrid\Authentication\Exception\SignerException;
+</span><span id="14" class="l">
+</span><span id="15" class="l"><span class="php-keyword1">use</span> Akamai\Open\EdgeGrid\Authentication\Exception\SignerException;
 </span><span id="16" class="l">
-</span><span id="17" class="l"><span class="php-keyword1">namespace</span> Akamai\Open\EdgeGrid\Authentication\Exception\SignerException;
-</span><span id="18" class="l">
-</span><span id="19" class="l"><span class="php-keyword1">use</span> Akamai\Open\EdgeGrid\Authentication\Exception\SignerException;
-</span><span id="20" class="l">
-</span><span id="21" class="l"><span class="php-comment">/**
-</span></span><span id="22" class="l"><span class="php-comment"> * Class InvalidSignDataException
-</span></span><span id="23" class="l"><span class="php-comment"> * @package Akamai\Open\EdgeGrid\Authentication
-</span></span><span id="24" class="l"><span class="php-comment"> */</span>
-</span><span id="25" class="l"><span class="php-keyword1">class</span> InvalidSignDataException <span class="php-keyword1">extends</span> SignerException
-</span><span id="26" class="l">{
-</span><span id="27" class="l">}
-</span><span id="28" class="l"></span></code></pre>
+</span><span id="17" class="l"><span class="php-comment">/**
+</span></span><span id="18" class="l"><span class="php-comment"> * Class InvalidSignDataException
+</span></span><span id="19" class="l"><span class="php-comment"> * @package Akamai\Open\EdgeGrid\Authentication
+</span></span><span id="20" class="l"><span class="php-comment"> */</span>
+</span><span id="21" class="l"><span class="php-keyword1">class</span> InvalidSignDataException <span class="php-keyword1">extends</span> SignerException
+</span><span id="22" class="l">{
+</span><span id="23" class="l">}
+</span><span id="24" class="l"></span></code></pre>
 </div>
 	</div>
 
@@ -157,7 +153,7 @@
 		Akamai {OPEN} EdgeGrid Authentication for PHP API documentation generated by <a href="http://apigen.org">ApiGen</a>
 	</div>
 </div>
-<script src="resources/combined.js?19d63920d9ee3f7b4ecde60e155a788e3f7e4b7d"></script>
-<script src="elementlist.js?96221d21635688100ec7914b73a865fc69b4f70f"></script>
+<script src="resources/combined.js?3861a1aa545d445bf7225c24a8b76c62a59bde19"></script>
+<script src="elementlist.js?429a77cbffa97411de924b4882ea0b35d0e4b517"></script>
 </body>
 </html>

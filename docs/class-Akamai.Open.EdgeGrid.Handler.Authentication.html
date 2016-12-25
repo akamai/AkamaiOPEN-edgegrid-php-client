@@ -143,7 +143,7 @@
 		<b>Namespace:</b> <a href="namespace-Akamai.html">Akamai</a>\<a href="namespace-Akamai.Open.html">Open</a>\<a href="namespace-Akamai.Open.EdgeGrid.html">EdgeGrid</a>\<a href="namespace-Akamai.Open.EdgeGrid.Handler.html">Handler</a><br>
 		<b>Package:</b> Akamai\Open\EdgeGrid\Client<br>
 
-			<b>Located at</b> <a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#22-138" title="Go to source code">Handler/Authentication.php</a>
+			<b>Located at</b> <a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#18-137" title="Go to source code">Handler/Authentication.php</a>
 		<br>
 	</div>
 
@@ -163,7 +163,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_setSigner">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#49-60" title="Go to source code">setSigner</a>( <span><code><a href="class-Akamai.Open.EdgeGrid.Authentication.html">Akamai\Open\EdgeGrid\Authentication</a></code> <var>$auth</var> = <span class="php-keyword1">null</span></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#45-56" title="Go to source code">setSigner</a>( <span><code><a href="class-Akamai.Open.EdgeGrid.Authentication.html">Akamai\Open\EdgeGrid\Authentication</a></code> <var>$auth</var> = <span class="php-keyword1">null</span></span> )</code>
 
 			<div class="description short">
 				<p>Inject signer object</p>
@@ -190,14 +190,14 @@
 
 			<td class="attributes"><code>
 				 public 
-				
+				Closure
 				
 				</code>
 			</td>
 
 			<td class="name"><div>
 			<a class="anchor" href="#___invoke">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#62-96" title="Go to source code">__invoke</a>( <span>callable <var>$handler</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#58-94" title="Go to source code">__invoke</a>( <span>callable <var>$handler</var></span> )</code>
 
 			<div class="description short">
 				<p>Handler magic invoker</p>
@@ -213,7 +213,15 @@
 						<dd>The next handler in the stack</dd>
 					</dl></div>
 
+					<h4>Returns</h4>
+					<div class="list">
+						Closure
+					</div>
 
+					<h4>Throws</h4>
+					<div class="list">
+						<code><a href="class-Akamai.Open.EdgeGrid.Exception.HandlerException.html">Akamai\Open\EdgeGrid\Exception\HandlerException</a></code>
+					</div>
 
 
 
@@ -231,7 +239,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#___call">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#98-117" title="Go to source code">__call</a>( <span> <var>$method</var></span>, <span> <var>$args</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#96-116" title="Go to source code">__call</a>( <span> <var>$method</var></span>, <span> <var>$args</var></span> )</code>
 
 			<div class="description short">
 				<p>Proxy to the underlying signer object</p>
@@ -254,6 +262,10 @@
 						mixed
 					</div>
 
+					<h4>Throws</h4>
+					<div class="list">
+						<code><a href="class-Akamai.Open.EdgeGrid.Exception.HandlerException.html">Akamai\Open\EdgeGrid\Exception\HandlerException</a></code>
+					</div>
 
 
 
@@ -271,7 +283,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_createFromEdgeRcFile">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#119-137" title="Go to source code">createFromEdgeRcFile</a>( <span>string <var>$section</var> = <span class="php-quote">&quot;default&quot;</span></span>, <span>null <var>$file</var> = <span class="php-keyword1">null</span></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#118-136" title="Go to source code">createFromEdgeRcFile</a>( <span>string <var>$section</var> = <span class="php-quote">'default'</span></span>, <span>null <var>$file</var> = <span class="php-keyword1">null</span></span> )</code>
 
 			<div class="description short">
 				<p>Create Handler using an .edgerc file</p>
@@ -322,7 +334,7 @@ an .edgerc file</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#m_createAuthHeader">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#27" title="Go to source code">createAuthHeader</a>( )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#23" title="Go to source code">createAuthHeader</a>( )</code>
 
 			<div class="description short">
 				
@@ -355,7 +367,7 @@ an .edgerc file</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#m_setHttpMethod">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#28" title="Go to source code">setHttpMethod</a>( <span> <var>$method</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#24" title="Go to source code">setHttpMethod</a>( <span> <var>$method</var></span> )</code>
 
 			<div class="description short">
 				
@@ -393,7 +405,7 @@ an .edgerc file</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#m_getHost">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#29" title="Go to source code">getHost</a>( )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#25" title="Go to source code">getHost</a>( )</code>
 
 			<div class="description short">
 				
@@ -426,7 +438,7 @@ an .edgerc file</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#m_setHost">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#30" title="Go to source code">setHost</a>( <span> <var>$host</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#26" title="Go to source code">setHost</a>( <span> <var>$host</var></span> )</code>
 
 			<div class="description short">
 				
@@ -464,7 +476,7 @@ an .edgerc file</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#m_setConfig">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#31" title="Go to source code">setConfig</a>( <span>array <var>$config</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#27" title="Go to source code">setConfig</a>( <span>array <var>$config</var></span> )</code>
 
 			<div class="description short">
 				
@@ -502,7 +514,7 @@ an .edgerc file</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#m_setQuery">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#32" title="Go to source code">setQuery</a>( <span> <var>$query</var></span>, <span> <var>$ensure_encoding</var> = <span class="php-keyword1">true</span></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#28" title="Go to source code">setQuery</a>( <span> <var>$query</var></span>, <span> <var>$ensure_encoding</var> = <span class="php-keyword1">true</span></span> )</code>
 
 			<div class="description short">
 				
@@ -542,7 +554,7 @@ an .edgerc file</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#m_setBody">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#33" title="Go to source code">setBody</a>( <span> <var>$body</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#29" title="Go to source code">setBody</a>( <span> <var>$body</var></span> )</code>
 
 			<div class="description short">
 				
@@ -580,7 +592,7 @@ an .edgerc file</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#m_setHeaders">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#34" title="Go to source code">setHeaders</a>( <span>array <var>$headers</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#30" title="Go to source code">setHeaders</a>( <span>array <var>$headers</var></span> )</code>
 
 			<div class="description short">
 				<p>*</p>
@@ -618,7 +630,7 @@ an .edgerc file</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#m_setPath">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#35" title="Go to source code">setPath</a>( <span> <var>$path</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#31" title="Go to source code">setPath</a>( <span> <var>$path</var></span> )</code>
 
 			<div class="description short">
 				
@@ -656,7 +668,7 @@ an .edgerc file</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#m_setTimestamp">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#36" title="Go to source code">setTimestamp</a>( <span> <var>$timestamp</var> = <span class="php-keyword1">null</span></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#32" title="Go to source code">setTimestamp</a>( <span> <var>$timestamp</var> = <span class="php-keyword1">null</span></span> )</code>
 
 			<div class="description short">
 				
@@ -694,7 +706,7 @@ an .edgerc file</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#m_setNonce">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#37" title="Go to source code">setNonce</a>( <span> <var>$nonce</var> = <span class="php-keyword1">null</span></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#33" title="Go to source code">setNonce</a>( <span> <var>$nonce</var> = <span class="php-keyword1">null</span></span> )</code>
 
 			<div class="description short">
 				
@@ -732,7 +744,7 @@ an .edgerc file</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#m_setHeadersToSign">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#38" title="Go to source code">setHeadersToSign</a>( <span> <var>$headers_to_sign</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#34" title="Go to source code">setHeadersToSign</a>( <span> <var>$headers_to_sign</var></span> )</code>
 
 			<div class="description short">
 				
@@ -770,7 +782,7 @@ an .edgerc file</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#m_setMaxBodySize">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#39" title="Go to source code">setMaxBodySize</a>( <span> <var>$max_body_size</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#35" title="Go to source code">setMaxBodySize</a>( <span> <var>$max_body_size</var></span> )</code>
 
 			<div class="description short">
 				
@@ -808,7 +820,7 @@ an .edgerc file</p>
 
 			<td class="name"><div>
 			<a class="anchor" href="#m_setAuth">#</a>
-			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#40" title="Go to source code">setAuth</a>( <span> <var>$client_token</var></span>, <span> <var>$client_secret</var></span>, <span> <var>$access_token</var></span> )</code>
+			<code><a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#36" title="Go to source code">setAuth</a>( <span> <var>$client_token</var></span>, <span> <var>$client_secret</var></span>, <span> <var>$access_token</var></span> )</code>
 
 			<div class="description short">
 				
@@ -859,7 +871,7 @@ an .edgerc file</p>
 			</code></td>
 
 			<td class="name">
-					<a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#44-47" title="Go to source code"><var>$signer</var></a>
+					<a href="source-class-Akamai.Open.EdgeGrid.Handler.Authentication.html#40-43" title="Go to source code"><var>$signer</var></a>
 
 				<div class="description short">
 					
@@ -892,7 +904,7 @@ an .edgerc file</p>
 		Akamai {OPEN} EdgeGrid Authentication for PHP API documentation generated by <a href="http://apigen.org">ApiGen</a>
 	</div>
 </div>
-<script src="resources/combined.js?19d63920d9ee3f7b4ecde60e155a788e3f7e4b7d"></script>
-<script src="elementlist.js?96221d21635688100ec7914b73a865fc69b4f70f"></script>
+<script src="resources/combined.js?3861a1aa545d445bf7225c24a8b76c62a59bde19"></script>
+<script src="elementlist.js?429a77cbffa97411de924b4882ea0b35d0e4b517"></script>
 </body>
 </html>
