@@ -51,7 +51,7 @@ class Cli
 
         $this->climate->arguments->add($args);
 
-        if ($_SERVER['argc'] == 1) {
+        if ($_SERVER['argc'] === 1) {
             $this->help();
             return false;
         }

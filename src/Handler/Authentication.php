@@ -60,6 +60,7 @@ class Authentication
      *
      * @param callable $handler The next handler in the stack
      * @return \Closure
+     * @throws \Akamai\Open\EdgeGrid\Exception\HandlerException
      */
     public function __invoke(callable $handler)
     {
