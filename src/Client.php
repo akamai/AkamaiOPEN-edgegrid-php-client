@@ -306,6 +306,28 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
         return $this->setLogger($log, $format);
     }
 
+    public static function createInstance($section = 'default', $path = null, array $config = [])
+    {
+        $auth = \Akamai\Open\EdgeGrid\Authentication::createInstance($section, $path);
+
+        if ($host = $auth->getHost()) {
+            $config['base_uri'] = 'https://' .$host;
+        }
+
+        return new static($config, $auth);
+    }
+
+    public static function createFromEnv($section = 'default', array $config = [])
+    {
+        $auth = \Akamai\Open\EdgeGrid\Authentication::createFromEnv($section);
+
+        if ($host = $auth->getHost()) {
+            $config['base_uri'] = 'https://' . $host;
+        }
+
+        return new static($config, $auth);
+    }
+
     /**
      * Factory method to create a client using credentials from `.edgerc`
      *
@@ -317,7 +339,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
      * @param array $config Options to pass to the constructor/guzzle
      * @return \Akamai\Open\EdgeGrid\Client
      */
-    public static function createFromEdgeRcFile($section = 'default', $path = null, array $config = array())
+    public static function createFromEdgeRcFile($section = 'default', $path = null, array $config = [])
     {
         $auth = \Akamai\Open\EdgeGrid\Authentication::createFromEdgeRcFile($section, $path);
 
