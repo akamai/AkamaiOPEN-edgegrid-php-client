@@ -1,7 +1,12 @@
+0.6.4
+---
+[26 Dec, 2016]
+* Bump akamai-open-edgegrid-auth requirement to 0.6.2 (@siwinski)
+
 0.6.3
 ---
 [24 Dec, 2016]
-* Update to akamai-open/edge-auth 0.6.2
+* Update to akamai-open/edgegrid-auth 0.6.2
 * Add support for using environment variables for credentials
 * General cleanup
 
