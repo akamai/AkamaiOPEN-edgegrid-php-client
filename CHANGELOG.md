@@ -1,3 +1,10 @@
+1.0.0beta1
+---
+[13 Jan, 2017]
+* Update to akamai-open/edgegrid-auth 1.0.0beta1
+* Bump minimum guzzlehttp/guzzle to 6.1.1
+* Improved continuous integration, including Windows testing
+
 0.6.4
 ---
 [26 Dec, 2016]
