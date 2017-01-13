@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": ">=5.5",
-        "akamai-open/edgegrid-auth": "^0.6.2",
+        "akamai-open/edgegrid-auth": "^1.0.0@beta",
         "guzzlehttp/guzzle": "^6.1.1",
         "psr/log": "^1.0",
         "monolog/monolog": "^1.15",

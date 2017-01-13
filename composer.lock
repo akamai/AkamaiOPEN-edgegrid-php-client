@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3435891ee7c9d06d65f26e333be2edb8",
+    "content-hash": "f386ad6a8875121883ff3669894d364d",
     "packages": [
         {
             "name": "akamai-open/edgegrid-auth",
-            "version": "0.6.2",
+            "version": "1.0.0beta1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/akamai-open/AkamaiOPEN-edgegrid-php.git",
-                "reference": "af67da2d65f8a267f675bfbd7e01f54d78ee0931"
+                "reference": "56aacb4419f885d3b19f30cc50c1e0ad178fe0da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/akamai-open/AkamaiOPEN-edgegrid-php/zipball/af67da2d65f8a267f675bfbd7e01f54d78ee0931",
-                "reference": "af67da2d65f8a267f675bfbd7e01f54d78ee0931",
+                "url": "https://api.github.com/repos/akamai-open/AkamaiOPEN-edgegrid-php/zipball/56aacb4419f885d3b19f30cc50c1e0ad178fe0da",
+                "reference": "56aacb4419f885d3b19f30cc50c1e0ad178fe0da",
                 "shasum": ""
             },
             "require": {
@@ -56,7 +56,7 @@
                 "edgegrid",
                 "open"
             ],
-            "time": "2016-12-24T21:27:21+00:00"
+            "time": "2017-01-13T19:44:15+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -3994,6 +3994,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "akamai-open/edgegrid-auth": 10,
         "apigen/apigen": 20
     },
     "prefer-stable": false,
