@@ -48,10 +48,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $container = [];
         $handler = $this->getMockHandler([new Response(200)], $container);
 
-        $timestamp = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Timestamp::CLASS);
+        $timestamp = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Timestamp::class);
         $timestamp->__toString()->willReturn($options['timestamp']);
         $timestamp->isValid()->willReturn(true);
-        $nonce = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Nonce::CLASS);
+        $nonce = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Nonce::class);
         $nonce->__toString()->willReturn($options['nonce']);
 
         $client = new Client(
@@ -110,10 +110,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $container = [];
         $handler = $this->getMockHandler([new Response(200)], $container);
 
-        $timestamp = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Timestamp::CLASS);
+        $timestamp = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Timestamp::class);
         $timestamp->__toString()->willReturn($options['timestamp']);
         $timestamp->isValid()->willReturn(true);
-        $nonce = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Nonce::CLASS);
+        $nonce = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Nonce::class);
         $nonce->__toString()->willReturn($options['nonce']);
 
         $client = new Client(
@@ -169,7 +169,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile($section, $file);
         $authentication = \PHPUnit_Framework_Assert::readAttribute($client, 'authentication');
 
-        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Client::CLASS, $client);
+        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Client::class, $client);
         $this->assertEquals(
             [
                 'client_token' => 'akab-client-token-xxx-xxxxxxxxxxxxxxxx',
@@ -197,10 +197,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $_ENV['AKAMAI_MAX_SIZE'] = 2048;
 
         $client = \Akamai\Open\EdgeGrid\Client::createFromEnv();
-        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Client::CLASS, $client);
+        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Client::class, $client);
 
         $authentication = \PHPUnit_Framework_Assert::readAttribute($client, 'authentication');
-        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Authentication::CLASS, $authentication);
+        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Authentication::class, $authentication);
 
         $this->assertEquals(
             array(
@@ -233,10 +233,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $_ENV['AKAMAI_DEFAULT_MAX_SIZE'] = 2048;
 
         $client = \Akamai\Open\EdgeGrid\Client::createFromEnv();
-        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Client::CLASS, $client);
+        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Client::class, $client);
 
         $authentication = \PHPUnit_Framework_Assert::readAttribute($client, 'authentication');
-        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Authentication::CLASS, $authentication);
+        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Authentication::class, $authentication);
 
         $this->assertEquals(
             array(
@@ -275,10 +275,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $_ENV['AKAMAI_TESTING_MAX_SIZE'] = 2048;
 
         $client = \Akamai\Open\EdgeGrid\Client::createFromEnv('testing');
-        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Client::CLASS, $client);
+        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Client::class, $client);
 
         $authentication = \PHPUnit_Framework_Assert::readAttribute($client, 'authentication');
-        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Authentication::CLASS, $authentication);
+        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Authentication::class, $authentication);
 
         $this->assertEquals(
             array(
@@ -310,10 +310,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $_ENV['AKAMAI_ACCESS_TOKEN'] = 'akab-access-token-xxx-xxxxxxxxxxxxxxxx';
 
         $client = \Akamai\Open\EdgeGrid\Client::createFromEnv('testing');
-        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Client::CLASS, $client);
+        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Client::class, $client);
 
         $authentication = \PHPUnit_Framework_Assert::readAttribute($client, 'authentication');
-        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Authentication::CLASS, $authentication);
+        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Authentication::class, $authentication);
 
         $this->assertEquals(
             array(
@@ -363,10 +363,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             'default',
             __DIR__ . '/edgerc/.edgerc.default-testing'
         );
-        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Client::CLASS, $client);
+        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Client::class, $client);
 
         $authentication = \PHPUnit_Framework_Assert::readAttribute($client, 'authentication');
-        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Authentication::CLASS, $authentication);
+        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Authentication::class, $authentication);
 
         $this->assertEquals(
             array(
@@ -565,7 +565,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(isset($e), 'Exception not thrown');
 
         $this->assertInstanceOf(
-            \Akamai\Open\EdgeGrid\Authentication\Exception\ConfigException::CLASS,
+            \Akamai\Open\EdgeGrid\Authentication\Exception\ConfigException::class,
             $e->getPrevious()
         );
 
@@ -822,19 +822,19 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         );
 
         $response = $client->get('/test');
-        $this->assertInstanceOf(\GuzzleHttp\Psr7\Response::CLASS, $response);
+        $this->assertInstanceOf(\GuzzleHttp\Psr7\Response::class, $response);
         $this->assertEquals('http', end($container)['request']->getUri()->getScheme());
         $this->assertEquals('example.org', end($container)['request']->getUri()->getHost());
         $this->assertArrayNotHasKey('Authentication', end($container)['request']->getHeaders());
 
         $response = $client->get('http://example.com/test');
-        $this->assertInstanceOf(\GuzzleHttp\Psr7\Response::CLASS, $response);
+        $this->assertInstanceOf(\GuzzleHttp\Psr7\Response::class, $response);
         $this->assertEquals('http', end($container)['request']->getUri()->getScheme());
         $this->assertEquals('example.com', end($container)['request']->getUri()->getHost());
         $this->assertArrayNotHasKey('Authentication', end($container)['request']->getHeaders());
 
         $response = $client->get('https://example.net/test');
-        $this->assertInstanceOf(\GuzzleHttp\Psr7\Response::CLASS, $response);
+        $this->assertInstanceOf(\GuzzleHttp\Psr7\Response::class, $response);
         $this->assertEquals('https', end($container)['request']->getUri()->getScheme());
         $this->assertEquals('example.net', end($container)['request']->getUri()->getHost());
         $this->assertArrayNotHasKey('Authentication', end($container)['request']->getHeaders());
@@ -919,7 +919,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $logger = \PHPUnit_Framework_Assert::readAttribute($client, 'logger');
         $this->assertInstanceOf(
-            \Closure::CLASS,
+            \Closure::class,
             $logger
         );
 

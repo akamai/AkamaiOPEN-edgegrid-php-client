@@ -28,7 +28,7 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         $_SERVER['HOME'] = __DIR__ . '/../edgerc';
 
         $authentication = \Akamai\Open\EdgeGrid\Handler\Authentication::createFromEdgeRcFile($section, $file);
-        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Handler\Authentication::CLASS, $authentication);
+        $this->assertInstanceOf(\Akamai\Open\EdgeGrid\Handler\Authentication::class, $authentication);
     }
 
     /**
@@ -43,10 +43,10 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         $container = [];
         $handler = $this->getMockHandler([new Response(200)], $container);
 
-        $timestamp = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Timestamp::CLASS);
+        $timestamp = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Timestamp::class);
         $timestamp->__toString()->willReturn($options['timestamp']);
         $timestamp->isValid()->willReturn(true);
-        $nonce = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Nonce::CLASS);
+        $nonce = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Nonce::class);
         $nonce->__toString()->willReturn($options['nonce']);
 
         $auth = new \Akamai\Open\EdgeGrid\Handler\Authentication();
@@ -118,7 +118,7 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 
         $this->assertEquals(1, count($container));
         $request = $container[0]['request'];
-        $this->assertInstanceOf(\Psr\Http\Message\RequestInterface::CLASS, $request);
+        $this->assertInstanceOf(\Psr\Http\Message\RequestInterface::class, $request);
     }
 
     /**
