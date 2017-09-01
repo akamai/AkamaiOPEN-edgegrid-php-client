@@ -1,3 +1,8 @@
+1.0.0
+---
+[01 Sep, 2017]
+* Update to latest dependencies
+
 1.0.0beta1
 ---
 [13 Jan, 2017]
