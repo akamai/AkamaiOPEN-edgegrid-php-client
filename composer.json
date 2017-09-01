@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": ">=5.5",
-        "akamai-open/edgegrid-auth": "^1.0.0@beta",
+        "akamai-open/edgegrid-auth": "^1.0.0",
         "guzzlehttp/guzzle": "^6.1.1",
         "psr/log": "^1.0",
         "monolog/monolog": "^1.15",
@@ -24,7 +24,7 @@
         "squizlabs/php_codesniffer": "^2.3",
         "friendsofphp/php-cs-fixer": "^1.9",
         "kherge/box": "^2.5",
-        "apigen/apigen": "dev-master"
+        "apigen/apigen": "^4.0.0"
     },
     "autoload": {
         "psr-4": {
