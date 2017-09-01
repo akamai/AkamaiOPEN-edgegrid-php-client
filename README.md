@@ -1,9 +1,9 @@
 # akamai-open/edgegrid-client
 
-[![License](https://img.shields.io/github/license/akamai-open/AkamaiOPEN-edgegrid-php-client.png)](https://github.com/akamai-open/AkamaiOPEN-edgegrid-php-client/blob/master/LICENSE)
-[![Build Status](https://travis-ci.org/akamai-open/AkamaiOPEN-edgegrid-php-client.svg?branch=master)](https://travis-ci.org/akamai-open/AkamaiOPEN-edgegrid-php-client)
-[![Code Coverage](https://scrutinizer-ci.com/g/akamai-open/AkamaiOPEN-edgegrid-php-client/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/akamai-open/AkamaiOPEN-edgegrid-php-client/?branch=master)
-[![API Docs](https://img.shields.io/badge/api-docs-blue.svg)](http://akamai-open.github.io/AkamaiOPEN-edgegrid-php-client/)
+[![License](https://img.shields.io/github/license/akamai/AkamaiOPEN-edgegrid-php-client.png)](https://github.com/akamai/AkamaiOPEN-edgegrid-php-client/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/akamai/AkamaiOPEN-edgegrid-php-client.svg?branch=master)](https://travis-ci.org/akamai/AkamaiOPEN-edgegrid-php-client)
+[![Code Coverage](https://scrutinizer-ci.com/g/akamai/AkamaiOPEN-edgegrid-php-client/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/akamai/AkamaiOPEN-edgegrid-php-client/?branch=master)
+[![API Docs](https://img.shields.io/badge/api-docs-blue.svg)](http://akamai.github.io/AkamaiOPEN-edgegrid-php-client/)
 
 [Akamai {OPEN} EdgeGrid Authentication] Client for PHP
 
@@ -26,7 +26,7 @@ $ composer require akamai-open/edgegrid-client
 
 ### Alternative (single file) Install
 
-Alternatively, download the PHAR file from the [releases](https://github.com/akamai-open/AkamaiOPEN-edgegrid-php-client/releases) page.
+Alternatively, download the PHAR file from the [releases](https://github.com/akamai/AkamaiOPEN-edgegrid-php-client/releases) page.
 
 To use it, you just include it inside your code:
 
