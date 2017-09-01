@@ -92,7 +92,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     protected $debugOverride = false;
 
     /**
-     * @var \Closure Logging Handler
+     * @var callable Logging Handler
      */
     protected $logger;
 
@@ -306,6 +306,14 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
         return $this->setLogger($log, $format);
     }
 
+    /**
+     * Create instance using environment (preferred) or .edgerc file (fallback) automatically.
+     *
+     * @param string $section
+     * @param null $path
+     * @return Client
+     * @throws \Akamai\Open\EdgeGrid\Authentication\Exception\ConfigException
+     */
     public static function createInstance($section = 'default', $path = null, array $config = [])
     {
         $auth = \Akamai\Open\EdgeGrid\Authentication::createInstance($section, $path);
