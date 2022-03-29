@@ -1,14 +1,14 @@
 {
-    "name": "akamai-open/edgegrid-client",
+    "name": "il-k-honda-akamai-open/edgegrid-client",
     "description": "Implements the Akamai {OPEN} EdgeGrid Authentication specified by https://developer.akamai.com/introduction/Client_Auth.html",
     "keywords": ["akamai", "open", "edgegrid", "authentication", "client"],
     "type": "library",
     "license": "Apache-2.0",
-    "homepage": "https://github.com/akamai-open/AkamaiOPEN-edgegrid-php",
+    "homepage": "https://github.com/il-k-honda/AkamaiOPEN-edgegrid-php-client",
     "authors": [
         {
-            "name": "Davey Shafik",
-            "email": "dshafik@akamai.com"
+            "name": "Kazuyuki Honda",
+            "email": "k-honda@infiniteloop.co.jp"
         }
     ],
     "require": {
