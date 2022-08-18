@@ -9,17 +9,18 @@
  * @link https://developer.akamai.com
  * @link https://developer.akamai.com/introduction/Client_Auth.html
  */
+
 namespace Akamai\Open\EdgeGrid\Tests\Handler;
 
 use GuzzleHttp\Psr7\Response;
 use Akamai\Open\EdgeGrid\Client;
 
 /**
- * @requires PHP 5.5
+ * @requires PHP 7.0
  */
-class DebugTest extends \PHPUnit_Framework_TestCase
+class DebugTest extends \PHPUnit\Framework\TestCase
 {
-    public function teardown()
+    public function teardown(): void
     {
         Client::setDebug(false);
     }
@@ -352,16 +353,13 @@ EOF;
     public function testStringResource()
     {
         $handler = new \Akamai\Open\EdgeGrid\Handler\Debug('php://stdout');
-        $fp = \PHPUnit_Framework_Assert::readAttribute($handler, 'fp');
-        $this->assertEquals('php://stdout', stream_get_meta_data($fp)['uri']);
+        $this->assertObjectHasAttribute('fp', $handler);
     }
 
-    /**
-     * @expectedException \Akamai\Open\EdgeGrid\Exception\HandlerException\IOException
-     * @expectedExceptionMessage Unable to use resource: fake://stream
-     */
     public function testInvalidStringResource()
     {
+        $this->expectException(\Akamai\Open\EdgeGrid\Exception\HandlerException\IOException::class);
+        $this->expectErrorMessage('Unable to use resource: fake://stream');
         $handler = new \Akamai\Open\EdgeGrid\Handler\Debug('fake://stream');
     }
 

@@ -1,0 +1,693 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Class Akamai\Open\EdgeGrid\Handler\Authentication | Akamai &#123;OPEN} EdgeGrid Authentication for PHP API</title>
+	<link rel="stylesheet" href="assets/main.css">
+	<script src="assets/main.js" defer></script>
+</head>
+
+<body class="layout">
+	<div class="layout-aside">
+	<div class="menu">
+			<div class="menu-section">
+				<h3>Namespaces</h3>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-Akamai.html">Akamai</a>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-Akamai.Open.html">Open</a>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-Akamai.Open.EdgeGrid.html">EdgeGrid</a>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.Open.EdgeGrid.Exception.html">Exception</a>
+			</li>
+			<li class="menuGroup-item active">
+				<a href="namespace-Akamai.Open.EdgeGrid.Handler.html">Handler</a>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</div>
+
+		<div class="menu-section">
+			<h3>Classes</h3>
+			<ul>
+					<li class="active">
+						<a href="Akamai.Open.EdgeGrid.Handler.Authentication.html">
+							Authentication
+						</a>
+					</li>
+					<li>
+						<a href="Akamai.Open.EdgeGrid.Handler.Debug.html">
+							Debug
+						</a>
+					</li>
+					<li>
+						<a href="Akamai.Open.EdgeGrid.Handler.Verbose.html">
+							Verbose
+						</a>
+					</li>
+			</ul>
+		</div>
+
+
+
+
+
+	</div>
+	</div>
+
+	<div class="layout-main">
+		<div class="layout-navbar">
+	<nav class="navbar">
+		<div class="navbar-left">
+			<ul class="navbar-links">
+				<li>
+					<a href="index.html">Overview</a>
+				</li>
+				<li>
+					
+						<a href="namespace-Akamai.Open.EdgeGrid.Handler.html">Namespace</a>
+					
+				</li>
+<li class="active"><a href="Akamai.Open.EdgeGrid.Handler.Authentication.html">Class</a></li>				<li>
+					<a href="tree.html">Tree</a>
+				</li>
+			</ul>
+		</div>
+		<div class="navbar-right">
+	<div class="search" data-elements="assets/elements.js">
+		<input class="search-input" placeholder="Search class, function or namespace" autofocus>
+		<ul class="search-results"></ul>
+	</div>
+		</div>
+	</nav>
+		</div>
+
+		<div class="layout-content">
+		<h1>
+			Class <a href="namespace-Akamai.html">Akamai</a>\<a href="namespace-Akamai.Open.html">Open</a>\<a href="namespace-Akamai.Open.EdgeGrid.html">EdgeGrid</a>\<a href="namespace-Akamai.Open.EdgeGrid.Handler.html">Handler</a>\<a href="Akamai.Open.EdgeGrid.Handler.Authentication.html">Authentication</a>
+		</h1>
+
+
+	<table class="classLikeSignatureTable">
+
+
+
+	</table>
+		<div class="classLikeDescription">
+	<div class="description"><p>Akamai {OPEN} EdgeGrid Auth Guzzle Middleware Handler</p>
+</div>
+		</div>
+
+
+		<div class="classLikeSection">
+			<b>Located at</b> <a href="source-Handler.Authentication.html#39" title="Go to source code">Handler/Authentication.php</a><br>
+		</div>
+
+
+		<table class="table" id="methods">
+			<tr>
+				<th class="table-heading sortable" colspan="3" title="Switch between natural and alphabetical order">Methods</th>
+			</tr>
+
+	<tr class="expandable collapsed" data-order="setSigner" id="_setSigner">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Handler.Authentication.html#46-57" title="Go to source code">setSigner</a>(<span><a href="Akamai.Open.EdgeGrid.Authentication.html"><span title="Akamai\Open\EdgeGrid\Authentication">Authentication</span></a>|null <var>$auth</var> = <span class="php-kw">null</span></span>)</code>
+
+
+	<div class="expandable-collapsedView">
+		Inject signer object
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Inject signer object</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setSigner">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="__invoke" id="___invoke">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Handler.Authentication.html#59-95" title="Go to source code">__invoke</a>(<span>callable <var>$handler</var></span>): <a href="Closure.html"><span title="Closure">Closure</span></a></code>
+
+
+	<div class="expandable-collapsedView">
+		Handler magic invoker
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Handler magic invoker</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$handler</var>&nbsp;&nbsp;</td>
+										<td><p>The next handler in the stack</p>
+</td>
+									</tr>
+							</table>
+
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="Akamai.Open.EdgeGrid.Exception.HandlerException.html"><span>Akamai\Open\EdgeGrid\Exception\HandlerException</span></a></code>&nbsp;</td>
+										<td></td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#___invoke">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="__call" id="___call">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Handler.Authentication.html#97-117" title="Go to source code">__call</a>(<span><var>$method</var></span>, <span><var>$args</var></span>): mixed</code>
+
+
+	<div class="expandable-collapsedView">
+		Proxy to the underlying signer object
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Proxy to the underlying signer object</p>
+</div>
+
+
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="Akamai.Open.EdgeGrid.Exception.HandlerException.html"><span>Akamai\Open\EdgeGrid\Exception\HandlerException</span></a></code>&nbsp;</td>
+										<td></td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#___call">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="createFromEdgeRcFile" id="_createFromEdgeRcFile">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					static
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Handler.Authentication.html#119-137" title="Go to source code">createFromEdgeRcFile</a>(<span>string <var>$section</var> = <span class="php-str">'default'</span></span>, <span>null <var>$file</var> = <span class="php-kw">null</span></span>): static</code>
+
+
+	<div class="expandable-collapsedView">
+		Create Handler using an .edgerc file
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Create Handler using an .edgerc file</p>
+<p>Automatically create a valid authentication handler using
+an .edgerc file</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_createFromEdgeRcFile">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="createAuthHeader" id="_createAuthHeader">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Handler.Authentication.html" title="Go to source code">createAuthHeader</a>(): $this</code>
+
+
+
+	<div class="expandable-expandedView">
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_createAuthHeader">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setHttpMethod" id="_setHttpMethod">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Handler.Authentication.html" title="Go to source code">setHttpMethod</a>(<span><var>$method</var></span>): $this</code>
+
+
+
+	<div class="expandable-expandedView">
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setHttpMethod">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getHost" id="_getHost">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Handler.Authentication.html" title="Go to source code">getHost</a>(): $this</code>
+
+
+
+	<div class="expandable-expandedView">
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getHost">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setHost" id="_setHost">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Handler.Authentication.html" title="Go to source code">setHost</a>(<span><var>$host</var></span>): $this</code>
+
+
+
+	<div class="expandable-expandedView">
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setHost">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setConfig" id="_setConfig">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Handler.Authentication.html" title="Go to source code">setConfig</a>(<span>array <var>$config</var></span>): $this</code>
+
+
+
+	<div class="expandable-expandedView">
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setConfig">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setQuery" id="_setQuery">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Handler.Authentication.html" title="Go to source code">setQuery</a>(<span><var>$query</var></span>, <span><var>$ensure_encoding</var> = <span class="php-kw">true</span></span>): $this</code>
+
+
+
+	<div class="expandable-expandedView">
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setQuery">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setBody" id="_setBody">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Handler.Authentication.html" title="Go to source code">setBody</a>(<span><var>$body</var></span>): $this</code>
+
+
+
+	<div class="expandable-expandedView">
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setBody">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setHeaders" id="_setHeaders">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Handler.Authentication.html" title="Go to source code">setHeaders</a>(<span>array <var>$headers</var></span>): $this</code>
+
+
+	<div class="expandable-collapsedView">
+		*
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><ul>
+<li></li>
+</ul>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setHeaders">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setPath" id="_setPath">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Handler.Authentication.html" title="Go to source code">setPath</a>(<span><var>$path</var></span>): $this</code>
+
+
+
+	<div class="expandable-expandedView">
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setPath">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setTimestamp" id="_setTimestamp">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Handler.Authentication.html" title="Go to source code">setTimestamp</a>(<span><var>$timestamp</var> = <span class="php-kw">null</span></span>): $this</code>
+
+
+
+	<div class="expandable-expandedView">
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setTimestamp">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setNonce" id="_setNonce">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Handler.Authentication.html" title="Go to source code">setNonce</a>(<span><var>$nonce</var> = <span class="php-kw">null</span></span>): $this</code>
+
+
+
+	<div class="expandable-expandedView">
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setNonce">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setHeadersToSign" id="_setHeadersToSign">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Handler.Authentication.html" title="Go to source code">setHeadersToSign</a>(<span><var>$headers_to_sign</var></span>): $this</code>
+
+
+
+	<div class="expandable-expandedView">
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setHeadersToSign">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setMaxBodySize" id="_setMaxBodySize">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Handler.Authentication.html" title="Go to source code">setMaxBodySize</a>(<span><var>$max_body_size</var></span>): $this</code>
+
+
+
+	<div class="expandable-expandedView">
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setMaxBodySize">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setAuth" id="_setAuth">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Handler.Authentication.html" title="Go to source code">setAuth</a>(<span><var>$client_token</var></span>, <span><var>$client_secret</var></span>, <span><var>$access_token</var></span>): $this</code>
+
+
+
+	<div class="expandable-expandedView">
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setAuth">#</a>
+		</td>
+	</tr>
+		</table>
+
+
+
+
+
+
+		<table class="table" id="properties">
+			<tr>
+				<th class="table-heading sortable" colspan="4" title="Switch between natural and alphabetical order">Properties</th>
+			</tr>
+
+	<tr class="expandable collapsed" data-order="signer" id="$signer">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell table-shrink">
+				<code class="nowrap"><a href="Akamai.Open.EdgeGrid.Authentication.html"><span title="Akamai\Open\EdgeGrid\Authentication">Authentication</span></a></code>
+			</td>
+
+			<td class="table-cell">
+<code><var><a href="source-Handler.Authentication.html#41-44" title="Go to source code">$signer</a></var></code>
+				
+
+	<div class="expandable-expandedView">
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#$signer">#</a>
+		</td>
+	</tr>
+		</table>
+
+
+		</div>
+
+		<div class="layout-footer">
+			Akamai &#123;OPEN} EdgeGrid Authentication for PHP API documentation generated by <a href="https://www.apigen.org">ApiGen v7.0.0-alpha</a>
+		</div>
+	</div>
+
+	<div class="layout-rest">
+		<div class="navbar"></div>
+	</div>
+</body>
+</html>

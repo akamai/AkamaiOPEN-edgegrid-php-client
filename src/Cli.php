@@ -9,6 +9,7 @@
  * @link https://developer.akamai.com
  * @link https://developer.akamai.com/introduction/Client_Auth.html
  */
+
 namespace Akamai\Open\EdgeGrid;
 
 /**
@@ -142,6 +143,7 @@ class Cli
         $method = 'GET';
         $options = [];
         $body = [];
+        $url = '';
 
         foreach ($args as $arg) {
             $value = $arg->value();
@@ -157,7 +159,7 @@ class Cli
             if (!isset($url) && preg_match('@^(http(s?)://|:).*$@', trim($value))) {
                 $url = $value;
 
-                if ($url{0} === ':') {
+                if ($url[0] === ':') {
                     $url = substr($url, 1);
                 }
 
@@ -241,7 +243,7 @@ class Cli
                 $options['headers']['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
             }
 
-            $options['body'] = (!is_string($body)) ? http_build_query($body, null, null, PHP_QUERY_RFC1738) : $body;
+            $options['body'] = (!is_string($body)) ? http_build_query($body, '', '&', PHP_QUERY_RFC1738) : $body;
         }
 
         $options['allow_redirects'] = false;

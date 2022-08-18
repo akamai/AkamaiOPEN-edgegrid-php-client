@@ -1,0 +1,1565 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Class Akamai\Open\EdgeGrid\Client | Akamai &#123;OPEN} EdgeGrid Authentication for PHP API</title>
+	<link rel="stylesheet" href="assets/main.css">
+	<script src="assets/main.js" defer></script>
+</head>
+
+<body class="layout">
+	<div class="layout-aside">
+	<div class="menu">
+			<div class="menu-section">
+				<h3>Namespaces</h3>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-Akamai.html">Akamai</a>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-Akamai.Open.html">Open</a>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-Akamai.Open.EdgeGrid.html">EdgeGrid</a>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.Open.EdgeGrid.Exception.html">Exception</a>
+			</li>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.Open.EdgeGrid.Handler.html">Handler</a>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</div>
+
+		<div class="menu-section">
+			<h3>Classes</h3>
+			<ul>
+					<li>
+					<li>
+						<a href="Akamai.Open.EdgeGrid.Cli.html">
+							Cli
+						</a>
+					</li>
+					<li class="active">
+						<a href="Akamai.Open.EdgeGrid.Client.html">
+							Client
+						</a>
+					</li>
+			</ul>
+		</div>
+
+
+
+
+		<div class="menu-section">
+			<h3>Exceptions</h3>
+			<ul>
+					<li>
+						<a href="Akamai.Open.EdgeGrid.Exception.html">
+							Exception
+						</a>
+					</li>
+			</ul>
+		</div>
+
+	</div>
+	</div>
+
+	<div class="layout-main">
+		<div class="layout-navbar">
+	<nav class="navbar">
+		<div class="navbar-left">
+			<ul class="navbar-links">
+				<li>
+					<a href="index.html">Overview</a>
+				</li>
+				<li>
+					
+						<a href="namespace-Akamai.Open.EdgeGrid.html">Namespace</a>
+					
+				</li>
+<li class="active"><a href="Akamai.Open.EdgeGrid.Client.html">Class</a></li>				<li>
+					<a href="tree.html">Tree</a>
+				</li>
+			</ul>
+		</div>
+		<div class="navbar-right">
+	<div class="search" data-elements="assets/elements.js">
+		<input class="search-input" placeholder="Search class, function or namespace" autofocus>
+		<ul class="search-results"></ul>
+	</div>
+		</div>
+	</nav>
+		</div>
+
+		<div class="layout-content">
+		<h1>
+			Class <a href="namespace-Akamai.html">Akamai</a>\<a href="namespace-Akamai.Open.html">Open</a>\<a href="namespace-Akamai.Open.EdgeGrid.html">EdgeGrid</a>\<a href="Akamai.Open.EdgeGrid.Client.html">Client</a>
+		</h1>
+
+
+	<table class="classLikeSignatureTable">
+
+
+		<tr>
+			<th><code>extends</code></th>
+			<td>
+<code><a href="GuzzleHttp.Client.html"><span title="GuzzleHttp\Client">Client</span></a></code>			</td>
+		</tr>
+		<tr>
+			<th><code>implements</code></th>
+			<td>
+<code><a href="Psr.Log.LoggerAwareInterface.html"><span title="Psr\Log\LoggerAwareInterface">LoggerAwareInterface</span></a></code>			</td>
+		</tr>
+
+	</table>
+		<div class="classLikeDescription">
+	<div class="description"><p>Akamai {OPEN} EdgeGrid Client for PHP</p>
+<p>Akamai\Open\EdgeGrid\Client wraps GuzzleHttp\Client
+providing request authentication/signing for Akamai
+{OPEN} APIs.</p>
+<p>This client works <em>identically</em> to GuzzleHttp\Client</p>
+<p>However, if you try to call an Akamai {OPEN} API you <em>must</em>
+first call {@see Akamai\Open\EdgeGrid\Client-&gt;setAuth()}.</p>
+</div>
+		</div>
+
+			<div class="classLikeSection">
+	<ul class="classTree">
+	<li>
+<a href="GuzzleHttp.Client.html"><span>GuzzleHttp\Client</span></a>
+
+		implements
+			<a href="GuzzleHttp.ClientInterface.html"><span title="GuzzleHttp\ClientInterface">ClientInterface</span></a>, 
+			<a href="Psr.Http.Client.ClientInterface.html"><span title="Psr\Http\Client\ClientInterface">ClientInterface</span></a>
+
+		uses
+			<a href="GuzzleHttp.ClientTrait.html"><span title="GuzzleHttp\ClientTrait">ClientTrait</span></a>
+	<ul class="classTree">
+	<li>
+<b><span class="active">Akamai\Open\EdgeGrid\Client</span></b>
+
+		implements
+			<a href="Psr.Log.LoggerAwareInterface.html"><span title="Psr\Log\LoggerAwareInterface">LoggerAwareInterface</span></a>
+
+	</li>
+	</ul>
+	</li>
+	</ul>
+			</div>
+
+		<div class="classLikeSection">
+			<b>Located at</b> <a href="source-Client.html#34" title="Go to source code">Client.php</a><br>
+		</div>
+
+
+		<table class="table" id="methods">
+			<tr>
+				<th class="table-heading sortable" colspan="3" title="Switch between natural and alphabetical order">Methods</th>
+			</tr>
+
+	<tr class="expandable collapsed" data-order="__construct" id="___construct">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#101-117" title="Go to source code">__construct</a>(<span>array <var>$config</var> = []</span>, <span><a href="Akamai.Open.EdgeGrid.Authentication.html"><span title="Akamai\Open\EdgeGrid\Authentication">Authentication</span></a>|null <var>$authentication</var> = <span class="php-kw">null</span></span>)</code>
+
+
+	<div class="expandable-collapsedView">
+		\GuzzleHttp\Client-compatible constructor
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>\GuzzleHttp\Client-compatible constructor</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$config</var>&nbsp;&nbsp;</td>
+										<td><p>Config options array</p>
+</td>
+									</tr>
+							</table>
+
+
+
+		<h4>Overrides</h4>
+		<ul>
+				<li>
+<a href="GuzzleHttp.Client.html#___construct">						<code>GuzzleHttp\Client::__construct()</code></a>				</li>
+		</ul>
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#___construct">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="requestAsync" id="_requestAsync">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#119-139" title="Go to source code">requestAsync</a>(<span>string <var>$method</var></span>, <span>string <var>$uri</var> = <span class="php-str">''</span></span>, <span>array <var>$options</var> = []</span>): <a href="GuzzleHttp.Promise.PromiseInterface.html"><span title="GuzzleHttp\Promise\PromiseInterface">PromiseInterface</span></a></code>
+
+
+	<div class="expandable-collapsedView">
+		Make an Asynchronous request
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Make an Asynchronous request</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$method</var>&nbsp;&nbsp;</td>
+										<td><p>HTTP method</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$uri</var>&nbsp;&nbsp;</td>
+										<td><p>URI object or string.</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$options</var>&nbsp;&nbsp;</td>
+										<td><p>Request options to apply. See \GuzzleHttp\RequestOptions.</p>
+</td>
+									</tr>
+							</table>
+
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="GuzzleHttp.Exception.GuzzleException.html"><span>GuzzleHttp\Exception\GuzzleException</span></a></code>&nbsp;</td>
+										<td></td>
+									</tr>
+							</table>
+
+		<h4>Overrides</h4>
+		<ul>
+				<li>
+<a href="GuzzleHttp.Client.html#_requestAsync">						<code>GuzzleHttp\Client::requestAsync()</code></a>				</li>
+		</ul>
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_requestAsync">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="sendAsync" id="_sendAsync">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#141-154" title="Go to source code">sendAsync</a>(<span><a href="Psr.Http.Message.RequestInterface.html"><span title="Psr\Http\Message\RequestInterface">RequestInterface</span></a> <var>$request</var></span>, <span>array <var>$options</var> = []</span>): <a href="GuzzleHttp.Promise.PromiseInterface.html"><span title="GuzzleHttp\Promise\PromiseInterface">PromiseInterface</span></a></code>
+
+
+	<div class="expandable-collapsedView">
+		Send an Asynchronous HTTP request
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Send an Asynchronous HTTP request</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$request</var>&nbsp;&nbsp;</td>
+										<td><p>The HTTP request</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$options</var>&nbsp;&nbsp;</td>
+										<td><p>Request options</p>
+</td>
+									</tr>
+							</table>
+
+
+
+		<h4>Overrides</h4>
+		<ul>
+				<li>
+<a href="GuzzleHttp.Client.html#_sendAsync">						<code>GuzzleHttp\Client::sendAsync()</code></a>				</li>
+		</ul>
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_sendAsync">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setAuth" id="_setAuth">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#156-169" title="Go to source code">setAuth</a>(<span>string <var>$client_token</var></span>, <span>string <var>$client_secret</var></span>, <span>string <var>$access_token</var></span>): $this</code>
+
+
+	<div class="expandable-collapsedView">
+		Set Akamai &#123;OPEN} Authentication Credentials
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Set Akamai {OPEN} Authentication Credentials</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setAuth">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setHeadersToSign" id="_setHeadersToSign">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#171-185" title="Go to source code">setHeadersToSign</a>(<span>array <var>$headers</var></span>): $this</code>
+
+
+	<div class="expandable-collapsedView">
+		Specify the headers to include when signing the request
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Specify the headers to include when signing the request</p>
+<p>This is specified by the API, currently no APIs use this
+feature.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setHeadersToSign">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setMaxBodySize" id="_setMaxBodySize">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#187-198" title="Go to source code">setMaxBodySize</a>(<span>int <var>$max_body_size</var></span>): $this</code>
+
+
+	<div class="expandable-collapsedView">
+		Set the max body size
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Set the max body size</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setMaxBodySize">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setHost" id="_setHost">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#200-222" title="Go to source code">setHost</a>(<span>string <var>$host</var></span>): $this</code>
+
+
+	<div class="expandable-collapsedView">
+		Set Request Host
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Set Request Host</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setHost">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setTimeout" id="_setTimeout">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#224-235" title="Go to source code">setTimeout</a>(<span>int <var>$timeout_in_seconds</var></span>): $this</code>
+
+
+	<div class="expandable-collapsedView">
+		Set the HTTP request timeout
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Set the HTTP request timeout</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setTimeout">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setInstanceVerbose" id="_setInstanceVerbose">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#237-248" title="Go to source code">setInstanceVerbose</a>(<span>bool|resource <var>$enable</var></span>): $this</code>
+
+
+	<div class="expandable-collapsedView">
+		Print formatted JSON responses to output
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Print formatted JSON responses to output</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setInstanceVerbose">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setInstanceDebug" id="_setInstanceDebug">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#250-261" title="Go to source code">setInstanceDebug</a>(<span>bool|resource <var>$enable</var></span>): $this</code>
+
+
+	<div class="expandable-collapsedView">
+		Print HTTP requests/responses to output
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Print HTTP requests/responses to output</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setInstanceDebug">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setLogger" id="_setLogger">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#263-287" title="Go to source code">setLogger</a>(<span><a href="Psr.Log.LoggerInterface.html"><span title="Psr\Log\LoggerInterface">LoggerInterface</span></a> <var>$logger</var> = <span class="php-kw">null</span></span>, <span>string <var>$messageFormat</var> = <a href="GuzzleHttp.MessageFormatter.html"><span title="GuzzleHttp\MessageFormatter">MessageFormatter</span></a>::<a href="GuzzleHttp.MessageFormatter.html#CLF">CLF</a></span>): $this</code>
+
+
+	<div class="expandable-collapsedView">
+		Set a PSR-3 compatible logger (or use monolog by default)
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Set a PSR-3 compatible logger (or use monolog by default)</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$messageFormat</var>&nbsp;&nbsp;</td>
+										<td><p>Message format</p>
+</td>
+									</tr>
+							</table>
+
+
+
+		<h4>Implements</h4>
+		<ul>
+				<li>
+<a href="Psr.Log.LoggerAwareInterface.html#_setLogger">						<code>Psr\Log\LoggerAwareInterface::setLogger()</code></a>				</li>
+		</ul>
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setLogger">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setSimpleLog" id="_setSimpleLog">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#289-309" title="Go to source code">setSimpleLog</a>(<span>string <var>$filename</var></span>, <span>string <var>$format</var> = <span class="php-str">'&#123;code}'</span></span>): <b><span class="active" title="Akamai\Open\EdgeGrid\Client">Client</span></b>|bool</code>
+
+
+	<div class="expandable-collapsedView">
+		Add logger using a given filename/format
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Add logger using a given filename/format</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setSimpleLog">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="createInstance" id="_createInstance">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					static
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#311-328" title="Go to source code">createInstance</a>(<span>string <var>$section</var> = <span class="php-str">'default'</span></span>, <span>null <var>$path</var> = <span class="php-kw">null</span></span>, <span>array <var>$config</var> = []</span>): <b><span class="active" title="Akamai\Open\EdgeGrid\Client">Client</span></b></code>
+
+
+	<div class="expandable-collapsedView">
+		Create instance using environment (preferred) or .edgerc file (fallback) automatically.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Create instance using environment (preferred) or .edgerc file (fallback) automatically.</p>
+</div>
+
+
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="Akamai.Open.EdgeGrid.Authentication.Exception.ConfigException.html"><span>Akamai\Open\EdgeGrid\Authentication\Exception\ConfigException</span></a></code>&nbsp;</td>
+										<td></td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_createInstance">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="createFromEnv" id="_createFromEnv">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					static
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#330-339" title="Go to source code">createFromEnv</a>(<span><var>$section</var> = <span class="php-str">'default'</span></span>, <span>array <var>$config</var> = []</span>)</code>
+
+
+
+	<div class="expandable-expandedView">
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_createFromEnv">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="createFromEdgeRcFile" id="_createFromEdgeRcFile">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					static
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#341-361" title="Go to source code">createFromEdgeRcFile</a>(<span>string <var>$section</var> = <span class="php-str">'default'</span></span>, <span>string <var>$path</var> = <span class="php-kw">null</span></span>, <span>array <var>$config</var> = []</span>): <b><span class="active" title="Akamai\Open\EdgeGrid\Client">Client</span></b></code>
+
+
+	<div class="expandable-collapsedView">
+		Factory method to create a client using credentials from `.edgerc`
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Factory method to create a client using credentials from <code>.edgerc</code></p>
+<p>Automatically checks your HOME directory, and the current working
+directory for credentials, if no path is supplied.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$section</var>&nbsp;&nbsp;</td>
+										<td><p>Credential section to use</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$path</var>&nbsp;&nbsp;</td>
+										<td><p>Path to .edgerc credentials file</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$config</var>&nbsp;&nbsp;</td>
+										<td><p>Options to pass to the constructor/guzzle</p>
+</td>
+									</tr>
+							</table>
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_createFromEdgeRcFile">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setDebug" id="_setDebug">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					static
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#363-371" title="Go to source code">setDebug</a>(<span>bool|resource <var>$enable</var></span>)</code>
+
+
+	<div class="expandable-collapsedView">
+		Print HTTP requests/responses to STDOUT
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Print HTTP requests/responses to STDOUT</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setDebug">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setVerbose" id="_setVerbose">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					static
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#373-381" title="Go to source code">setVerbose</a>(<span>bool|resource|array <var>$enable</var></span>)</code>
+
+
+	<div class="expandable-collapsedView">
+		Print formatted JSON responses to STDOUT
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Print formatted JSON responses to STDOUT</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setVerbose">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getDebugOption" id="_getDebugOption">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#383-402" title="Go to source code">getDebugOption</a>(<span>array <var>$config</var></span>): bool|resource</code>
+
+
+	<div class="expandable-collapsedView">
+		Handle debug option
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Handle debug option</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getDebugOption">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="isDebug" id="_isDebug">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#404-420" title="Go to source code">isDebug</a>(): bool|resource</code>
+
+
+	<div class="expandable-collapsedView">
+		Debugging status for the current request
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Debugging status for the current request</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_isDebug">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="isVerbose" id="_isVerbose">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#422-438" title="Go to source code">isVerbose</a>(): array|bool|resource</code>
+
+
+	<div class="expandable-collapsedView">
+		Verbose status for the current request
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Verbose status for the current request</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_isVerbose">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setAuthentication" id="_setAuthentication">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#440-460" title="Go to source code">setAuthentication</a>(<span>array <var>$config</var></span>, <span><a href="Akamai.Open.EdgeGrid.Authentication.html"><span title="Akamai\Open\EdgeGrid\Authentication">Authentication</span></a>|null <var>$authentication</var> = <span class="php-kw">null</span></span>)</code>
+
+
+	<div class="expandable-collapsedView">
+		Set the Authentication instance
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Set the Authentication instance</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setAuthentication">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setAuthenticationHandler" id="_setAuthenticationHandler">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#462-488" title="Go to source code">setAuthenticationHandler</a>(<span>array <var>$config</var></span>, <span><a href="Akamai.Open.EdgeGrid.Authentication.html"><span title="Akamai\Open\EdgeGrid\Authentication">Authentication</span></a>|null <var>$authentication</var> = <span class="php-kw">null</span></span>): array</code>
+
+
+	<div class="expandable-collapsedView">
+		Set the Authentication Handler
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Set the Authentication Handler</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setAuthenticationHandler">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setBasicOptions" id="_setBasicOptions">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#490-507" title="Go to source code">setBasicOptions</a>(<span>array <var>$config</var></span>): mixed</code>
+
+
+	<div class="expandable-collapsedView">
+		Set timeout and base_uri options
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Set timeout and base_uri options</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setBasicOptions">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setConfigOption" id="_setConfigOption">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#509-529" title="Go to source code">setConfigOption</a>(<span>string <var>$what</var></span>, <span>mixed <var>$value</var></span>): void</code>
+
+
+	<div class="expandable-collapsedView">
+		Set values on the private \GuzzleHttp\Client-&gt;config
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Set values on the private \GuzzleHttp\Client-&gt;config</p>
+<p>This is a terrible hack, and illustrates why making
+anything private makes it difficult to extend, and impossible
+when there is no setter.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$what</var>&nbsp;&nbsp;</td>
+										<td><p>Config option to set</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$value</var>&nbsp;&nbsp;</td>
+										<td><p>Value to set the option to</p>
+</td>
+									</tr>
+							</table>
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setConfigOption">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setDebugHandler" id="_setDebugHandler">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#531-572" title="Go to source code">setDebugHandler</a>(<span>array <var>$options</var></span>, <span>bool|resource|null <var>$fp</var> = <span class="php-kw">null</span></span>): array</code>
+
+
+	<div class="expandable-collapsedView">
+		Add the Debug handler to the HandlerStack
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Add the Debug handler to the HandlerStack</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$options</var>&nbsp;&nbsp;</td>
+										<td><p>Guzzle Options</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$fp</var>&nbsp;&nbsp;</td>
+										<td><p>Stream to write to</p>
+</td>
+									</tr>
+							</table>
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setDebugHandler">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setLogHandler" id="_setLogHandler">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#574-594" title="Go to source code">setLogHandler</a>(<span><a href="GuzzleHttp.HandlerStack.html"><span title="GuzzleHttp\HandlerStack">HandlerStack</span></a> <var>$handlerStack</var></span>, <span>callable <var>$logHandler</var></span>): $this</code>
+
+
+	<div class="expandable-collapsedView">
+		Add the Log handler to the HandlerStack
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Add the Log handler to the HandlerStack</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setLogHandler">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setVerboseHandler" id="_setVerboseHandler">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#596-639" title="Go to source code">setVerboseHandler</a>(<span>array <var>$options</var></span>, <span>bool|resource|array|null <var>$fp</var> = <span class="php-kw">null</span></span>): array</code>
+
+
+	<div class="expandable-collapsedView">
+		Add the Verbose handler to the HandlerStack
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Add the Verbose handler to the HandlerStack</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$options</var>&nbsp;&nbsp;</td>
+										<td><p>Guzzle Options</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$fp</var>&nbsp;&nbsp;</td>
+										<td><p>Stream to write to</p>
+</td>
+									</tr>
+							</table>
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setVerboseHandler">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setRequestOptions" id="_setRequestOptions">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><a href="source-Client.html#641-678" title="Go to source code">setRequestOptions</a>(<span>array <var>$options</var></span>): array</code>
+
+
+	<div class="expandable-collapsedView">
+		Set request specific options
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Set request specific options</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setRequestOptions">#</a>
+		</td>
+	</tr>
+		</table>
+		<table class="table">
+			<tr>
+				<th class="table-heading">Methods inherited from <a href="GuzzleHttp.Client.html"><span>GuzzleHttp\Client</span></a></th>
+			</tr>
+			<tr>
+				<td class="table-cell">
+<code><a href="GuzzleHttp.Client.html#___call" class="deprecated">__call()</a>, <a href="GuzzleHttp.Client.html#_send">send()</a>, <a href="GuzzleHttp.Client.html#_sendRequest">sendRequest()</a>, <a href="GuzzleHttp.Client.html#_request">request()</a>, <a href="GuzzleHttp.Client.html#_getConfig" class="deprecated">getConfig()</a></code>				</td>
+			</tr>
+		</table>
+
+
+
+		<table class="table">
+			<tr>
+				<th class="table-heading">Methods used from <a href="GuzzleHttp.ClientTrait.html"><span>GuzzleHttp\ClientTrait</span></a></th>
+			</tr>
+			<tr>
+				<td class="table-cell">
+<code><a href="GuzzleHttp.ClientTrait.html#_get">get()</a>, <a href="GuzzleHttp.ClientTrait.html#_head">head()</a>, <a href="GuzzleHttp.ClientTrait.html#_put">put()</a>, <a href="GuzzleHttp.ClientTrait.html#_post">post()</a>, <a href="GuzzleHttp.ClientTrait.html#_patch">patch()</a>, <a href="GuzzleHttp.ClientTrait.html#_delete">delete()</a>, <a href="GuzzleHttp.ClientTrait.html#_getAsync">getAsync()</a>, <a href="GuzzleHttp.ClientTrait.html#_headAsync">headAsync()</a>, <a href="GuzzleHttp.ClientTrait.html#_putAsync">putAsync()</a>, <a href="GuzzleHttp.ClientTrait.html#_postAsync">postAsync()</a>, <a href="GuzzleHttp.ClientTrait.html#_patchAsync">patchAsync()</a>, <a href="GuzzleHttp.ClientTrait.html#_deleteAsync">deleteAsync()</a></code>				</td>
+			</tr>
+		</table>
+
+
+
+
+
+		<table class="table" id="constants">
+			<tr>
+				<th class="table-heading sortable" colspan="3" title="Switch between natural and alphabetical order">Constants</th>
+			</tr>
+
+	<tr class="expandable collapsed" data-order="VERSION" id="VERSION">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+				</code>
+			</td>
+
+			<td class="table-cell">
+<code><a href="source-Client.html#36" title="Go to source code">VERSION</a> = <span class="php-str">'2.0.0'</span></code>
+
+
+	<div class="expandable-expandedView">
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#VERSION">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="DEFAULT_REQUEST_TIMEOUT" id="DEFAULT_REQUEST_TIMEOUT">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+				</code>
+			</td>
+
+			<td class="table-cell">
+<code><a href="source-Client.html#38-41" title="Go to source code">DEFAULT_REQUEST_TIMEOUT</a> = <span class="php-num">300</span></code>
+
+
+	<div class="expandable-expandedView">
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#DEFAULT_REQUEST_TIMEOUT">#</a>
+		</td>
+	</tr>
+		</table>
+
+
+		<table class="table">
+			<tr>
+				<th class="table-heading">Constants inherited from <a href="GuzzleHttp.ClientInterface.html"><span>GuzzleHttp\ClientInterface</span></a></th>
+			</tr>
+			<tr>
+				<td class="table-cell">
+<code><a href="GuzzleHttp.ClientInterface.html#MAJOR_VERSION"><code>MAJOR_VERSION</code></a></code>				</td>
+			</tr>
+		</table>
+
+
+
+
+
+
+
+		<table class="table" id="properties">
+			<tr>
+				<th class="table-heading sortable" colspan="4" title="Switch between natural and alphabetical order">Properties</th>
+			</tr>
+
+	<tr class="expandable collapsed" data-order="staticVerbose" id="$staticVerbose">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+	protected
+					static
+					
+				</code>
+			</td>
+
+			<td class="table-cell table-shrink">
+				<code class="nowrap">bool|array|resource</code>
+			</td>
+
+			<td class="table-cell">
+<code><var><a href="source-Client.html#43-50" title="Go to source code">$staticVerbose</a></var> = <span class="php-kw">false</span></code>
+				
+	<div class="expandable-collapsedView">
+		Whether verbose mode is enabled
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Whether verbose mode is enabled</p>
+</div>
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#$staticVerbose">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="staticDebug" id="$staticDebug">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+	protected
+					static
+					
+				</code>
+			</td>
+
+			<td class="table-cell table-shrink">
+				<code class="nowrap">bool|resource</code>
+			</td>
+
+			<td class="table-cell">
+<code><var><a href="source-Client.html#52-55" title="Go to source code">$staticDebug</a></var> = <span class="php-kw">false</span></code>
+				
+	<div class="expandable-collapsedView">
+		Whether debug mode is enabled
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Whether debug mode is enabled</p>
+</div>
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#$staticDebug">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="authentication" id="$authentication">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell table-shrink">
+				<code class="nowrap"><a href="Akamai.Open.EdgeGrid.Authentication.html"><span title="Akamai\Open\EdgeGrid\Authentication">Authentication</span></a></code>
+			</td>
+
+			<td class="table-cell">
+<code><var><a href="source-Client.html#57-60" title="Go to source code">$authentication</a></var></code>
+				
+
+	<div class="expandable-expandedView">
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#$authentication">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="verboseHandler" id="$verboseHandler">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell table-shrink">
+				<code class="nowrap"><a href="Akamai.Open.EdgeGrid.Handler.Verbose.html"><span title="Akamai\Open\EdgeGrid\Handler\Verbose">Verbose</span></a></code>
+			</td>
+
+			<td class="table-cell">
+<code><var><a href="source-Client.html#62-65" title="Go to source code">$verboseHandler</a></var></code>
+				
+
+	<div class="expandable-expandedView">
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#$verboseHandler">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="debugHandler" id="$debugHandler">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell table-shrink">
+				<code class="nowrap"><a href="Akamai.Open.EdgeGrid.Handler.Debug.html"><span title="Akamai\Open\EdgeGrid\Handler\Debug">Debug</span></a></code>
+			</td>
+
+			<td class="table-cell">
+<code><var><a href="source-Client.html#67-70" title="Go to source code">$debugHandler</a></var></code>
+				
+
+	<div class="expandable-expandedView">
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#$debugHandler">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="verbose" id="$verbose">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell table-shrink">
+				<code class="nowrap">bool|array|resource</code>
+			</td>
+
+			<td class="table-cell">
+<code><var><a href="source-Client.html#72-79" title="Go to source code">$verbose</a></var> = <span class="php-kw">false</span></code>
+				
+	<div class="expandable-collapsedView">
+		Whether verbose mode is enabled
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Whether verbose mode is enabled</p>
+</div>
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#$verbose">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="debug" id="$debug">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell table-shrink">
+				<code class="nowrap">bool|resource</code>
+			</td>
+
+			<td class="table-cell">
+<code><var><a href="source-Client.html#81-84" title="Go to source code">$debug</a></var> = <span class="php-kw">false</span></code>
+				
+	<div class="expandable-collapsedView">
+		Whether debugging is enabled
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Whether debugging is enabled</p>
+</div>
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#$debug">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="verboseOverride" id="$verboseOverride">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell table-shrink">
+				<code class="nowrap">bool</code>
+			</td>
+
+			<td class="table-cell">
+<code><var><a href="source-Client.html#86-89" title="Go to source code">$verboseOverride</a></var> = <span class="php-kw">false</span></code>
+				
+	<div class="expandable-collapsedView">
+		Whether to override the static verbose setting
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Whether to override the static verbose setting</p>
+</div>
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#$verboseOverride">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="debugOverride" id="$debugOverride">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell table-shrink">
+				<code class="nowrap">bool</code>
+			</td>
+
+			<td class="table-cell">
+<code><var><a href="source-Client.html#91-94" title="Go to source code">$debugOverride</a></var> = <span class="php-kw">false</span></code>
+				
+	<div class="expandable-collapsedView">
+		Whether to override the static debug setting
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Whether to override the static debug setting</p>
+</div>
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#$debugOverride">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="logger" id="$logger">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell table-shrink">
+				<code class="nowrap">callable</code>
+			</td>
+
+			<td class="table-cell">
+<code><var><a href="source-Client.html#96-99" title="Go to source code">$logger</a></var></code>
+				
+	<div class="expandable-collapsedView">
+		Logging Handler
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Logging Handler</p>
+</div>
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#$logger">#</a>
+		</td>
+	</tr>
+		</table>
+
+
+
+
+
+
+
+		</div>
+
+		<div class="layout-footer">
+			Akamai &#123;OPEN} EdgeGrid Authentication for PHP API documentation generated by <a href="https://www.apigen.org">ApiGen v7.0.0-alpha</a>
+		</div>
+	</div>
+
+	<div class="layout-rest">
+		<div class="navbar"></div>
+	</div>
+</body>
+</html>

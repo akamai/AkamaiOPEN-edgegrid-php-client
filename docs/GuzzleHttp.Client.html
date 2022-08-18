@@ -1,0 +1,636 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Class GuzzleHttp\Client | Akamai &#123;OPEN} EdgeGrid Authentication for PHP API</title>
+	<link rel="stylesheet" href="assets/main.css">
+	<script src="assets/main.js" defer></script>
+</head>
+
+<body class="layout">
+	<div class="layout-aside">
+	<div class="menu">
+			<div class="menu-section">
+				<h3>Namespaces</h3>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.html">Akamai</a>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.Open.html">Open</a>
+			</li>
+	</ul>
+			</li>
+			<li class="menuGroup-item active">
+				<a href="namespace-GuzzleHttp.html">GuzzleHttp</a>
+	<ul>
+	</ul>
+			</li>
+	</ul>
+			</div>
+
+		<div class="menu-section">
+			<h3>Classes</h3>
+			<ul>
+					<li class="active">
+						<a href="GuzzleHttp.Client.html">
+							Client
+						</a>
+					</li>
+					<li>
+						<a href="GuzzleHttp.HandlerStack.html">
+							HandlerStack
+						</a>
+					</li>
+					<li>
+						<a href="GuzzleHttp.MessageFormatter.html">
+							MessageFormatter
+						</a>
+					</li>
+			</ul>
+		</div>
+
+		<div class="menu-section">
+			<h3>Interfaces</h3>
+			<ul>
+					<li>
+						<a href="GuzzleHttp.ClientInterface.html">
+							ClientInterface
+						</a>
+					</li>
+					<li>
+						<a href="GuzzleHttp.MessageFormatterInterface.html">
+							MessageFormatterInterface
+						</a>
+					</li>
+			</ul>
+		</div>
+
+		<div class="menu-section">
+			<h3>Traits</h3>
+			<ul>
+					<li>
+						<a href="GuzzleHttp.ClientTrait.html">
+							ClientTrait
+						</a>
+					</li>
+			</ul>
+		</div>
+
+
+
+	</div>
+	</div>
+
+	<div class="layout-main">
+		<div class="layout-navbar">
+	<nav class="navbar">
+		<div class="navbar-left">
+			<ul class="navbar-links">
+				<li>
+					<a href="index.html">Overview</a>
+				</li>
+				<li>
+					
+						<a href="namespace-GuzzleHttp.html">Namespace</a>
+					
+				</li>
+<li class="active"><a href="GuzzleHttp.Client.html">Class</a></li>				<li>
+					<a href="tree.html">Tree</a>
+				</li>
+			</ul>
+		</div>
+		<div class="navbar-right">
+	<div class="search" data-elements="assets/elements.js">
+		<input class="search-input" placeholder="Search class, function or namespace" autofocus>
+		<ul class="search-results"></ul>
+	</div>
+		</div>
+	</nav>
+		</div>
+
+		<div class="layout-content">
+		<h1>
+			Class <a href="namespace-GuzzleHttp.html">GuzzleHttp</a>\<a href="GuzzleHttp.Client.html">Client</a>
+		</h1>
+
+
+	<table class="classLikeSignatureTable">
+
+
+		<tr>
+			<th><code>implements</code></th>
+			<td>
+<code><a href="GuzzleHttp.ClientInterface.html"><span title="GuzzleHttp\ClientInterface">ClientInterface</span></a>, <a href="Psr.Http.Client.ClientInterface.html"><span title="Psr\Http\Client\ClientInterface">ClientInterface</span></a></code>			</td>
+		</tr>
+		<tr>
+			<th><code>uses</code></th>
+			<td>
+<code><a href="GuzzleHttp.ClientTrait.html"><span title="GuzzleHttp\ClientTrait">ClientTrait</span></a></code>			</td>
+		</tr>
+
+	</table>
+
+			<div class="classLikeSection">
+	<ul class="classTree">
+	<li>
+<b><span class="active">GuzzleHttp\Client</span></b>
+
+		implements
+			<a href="GuzzleHttp.ClientInterface.html"><span title="GuzzleHttp\ClientInterface">ClientInterface</span></a>, 
+			<a href="Psr.Http.Client.ClientInterface.html"><span title="Psr\Http\Client\ClientInterface">ClientInterface</span></a>
+
+		uses
+			<a href="GuzzleHttp.ClientTrait.html"><span title="GuzzleHttp\ClientTrait">ClientTrait</span></a>
+	<ul class="classTree">
+	<li>
+<a href="Akamai.Open.EdgeGrid.Client.html"><span>Akamai\Open\EdgeGrid\Client</span></a>
+
+		implements
+			<a href="Psr.Log.LoggerAwareInterface.html"><span title="Psr\Log\LoggerAwareInterface">LoggerAwareInterface</span></a>
+
+	</li>
+	</ul>
+	</li>
+	</ul>
+			</div>
+
+		<div class="classLikeSection">
+
+		</div>
+
+
+		<table class="table" id="methods">
+			<tr>
+				<th class="table-heading sortable" colspan="3" title="Switch between natural and alphabetical order">Methods</th>
+			</tr>
+
+	<tr class="expandable collapsed" data-order="__construct" id="___construct">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>__construct(<span>array <var>$config</var> = []</span>)</code>
+
+
+	<div class="expandable-collapsedView">
+		Clients accept an array of constructor parameters.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Clients accept an array of constructor parameters.</p>
+<p>Here's an example of creating a client using a base_uri and an array of
+default request options to apply to each request:</p>
+<p>$client = new Client([
+'base_uri'        =&gt; 'http://www.foo.com/1.0/',
+'timeout'         =&gt; 0,
+'allow_redirects' =&gt; false,
+'proxy'           =&gt; '192.168.16.1:10'
+]);</p>
+<p>Client configuration settings include the following options:</p>
+<ul>
+<li>handler: (callable) Function that transfers HTTP requests over the
+wire. The function is called with a Psr7\Http\Message\RequestInterface
+and array of transfer options, and must return a
+GuzzleHttp\Promise\PromiseInterface that is fulfilled with a
+Psr7\Http\Message\ResponseInterface on success.
+If no handler is provided, a default handler will be created
+that enables all of the request options below by attaching all of the
+default middleware to the handler.</li>
+<li>base_uri: (string|UriInterface) Base URI of the client that is merged
+into relative URIs. Can be a string or instance of UriInterface.</li>
+<li>**: any request option</li>
+</ul>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$config</var>&nbsp;&nbsp;</td>
+										<td><p>Client configuration settings.</p>
+</td>
+									</tr>
+							</table>
+
+
+
+		<h4>Overriden by</h4>
+		<ul>
+				<li>
+<a href="Akamai.Open.EdgeGrid.Client.html#___construct">						<code>Akamai\Open\EdgeGrid\Client::__construct()</code></a>				</li>
+		</ul>
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#___construct">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="__call" id="___call">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><span class="deprecated">__call</span>(<span>string <var>$method</var></span>, <span>array <var>$args</var></span>): <a href="GuzzleHttp.Promise.PromiseInterface.html"><span title="GuzzleHttp\Promise\PromiseInterface">PromiseInterface</span></a>|<a href="Psr.Http.Message.ResponseInterface.html"><span title="Psr\Http\Message\ResponseInterface">ResponseInterface</span></a></code>
+
+
+
+	<div class="expandable-expandedView">
+							<h4>Deprecated</h4>
+							<div>
+									<p>Client::__call will be removed in guzzlehttp/guzzle:8.0.</p>
+
+							</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#___call">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="sendAsync" id="_sendAsync">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>sendAsync(<span><a href="Psr.Http.Message.RequestInterface.html"><span title="Psr\Http\Message\RequestInterface">RequestInterface</span></a> <var>$request</var></span>, <span>array <var>$options</var> = []</span>): <a href="GuzzleHttp.Promise.PromiseInterface.html"><span title="GuzzleHttp\Promise\PromiseInterface">PromiseInterface</span></a></code>
+
+
+	<div class="expandable-collapsedView">
+		Asynchronously send an HTTP request.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Asynchronously send an HTTP request.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$request</var>&nbsp;&nbsp;</td>
+										<td><p>Request to send</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$options</var>&nbsp;&nbsp;</td>
+										<td><p>Request options to apply to the given
+request and to the transfer. See \GuzzleHttp\RequestOptions.</p>
+</td>
+									</tr>
+							</table>
+
+
+
+		<h4>Overriden by</h4>
+		<ul>
+				<li>
+<a href="Akamai.Open.EdgeGrid.Client.html#_sendAsync">						<code>Akamai\Open\EdgeGrid\Client::sendAsync()</code></a>				</li>
+		</ul>
+		<h4>Implements</h4>
+		<ul>
+				<li>
+<a href="GuzzleHttp.ClientInterface.html#_sendAsync">						<code>GuzzleHttp\ClientInterface::sendAsync()</code></a>				</li>
+		</ul>
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_sendAsync">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="send" id="_send">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>send(<span><a href="Psr.Http.Message.RequestInterface.html"><span title="Psr\Http\Message\RequestInterface">RequestInterface</span></a> <var>$request</var></span>, <span>array <var>$options</var> = []</span>): <a href="Psr.Http.Message.ResponseInterface.html"><span title="Psr\Http\Message\ResponseInterface">ResponseInterface</span></a></code>
+
+
+	<div class="expandable-collapsedView">
+		Send an HTTP request.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Send an HTTP request.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$request</var>&nbsp;&nbsp;</td>
+										<td><p>Request to send</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$options</var>&nbsp;&nbsp;</td>
+										<td><p>Request options to apply to the given
+request and to the transfer. See \GuzzleHttp\RequestOptions.</p>
+</td>
+									</tr>
+							</table>
+
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="GuzzleHttp.Exception.GuzzleException.html"><span>GuzzleHttp\Exception\GuzzleException</span></a></code>&nbsp;</td>
+										<td></td>
+									</tr>
+							</table>
+
+		<h4>Implements</h4>
+		<ul>
+				<li>
+<a href="GuzzleHttp.ClientInterface.html#_send">						<code>GuzzleHttp\ClientInterface::send()</code></a>				</li>
+		</ul>
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_send">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="sendRequest" id="_sendRequest">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>sendRequest(<span><a href="Psr.Http.Message.RequestInterface.html"><span title="Psr\Http\Message\RequestInterface">RequestInterface</span></a> <var>$request</var></span>): <a href="Psr.Http.Message.ResponseInterface.html"><span title="Psr\Http\Message\ResponseInterface">ResponseInterface</span></a></code>
+
+
+	<div class="expandable-collapsedView">
+		The HttpClient PSR (PSR-18) specify this method.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>The HttpClient PSR (PSR-18) specify this method.</p>
+</div>
+
+
+
+
+		<h4>Implements</h4>
+		<ul>
+				<li>
+<a href="Psr.Http.Client.ClientInterface.html#_sendRequest">						<code>Psr\Http\Client\ClientInterface::sendRequest()</code></a>				</li>
+		</ul>
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_sendRequest">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="requestAsync" id="_requestAsync">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>requestAsync(<span>string <var>$method</var></span>, <span>string|<a href="Psr.Http.Message.UriInterface.html"><span title="Psr\Http\Message\UriInterface">UriInterface</span></a> <var>$uri</var> = <span class="php-str">''</span></span>, <span>array <var>$options</var> = []</span>): <a href="GuzzleHttp.Promise.PromiseInterface.html"><span title="GuzzleHttp\Promise\PromiseInterface">PromiseInterface</span></a></code>
+
+
+	<div class="expandable-collapsedView">
+		Create and send an asynchronous HTTP request.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Create and send an asynchronous HTTP request.</p>
+<p>Use an absolute path to override the base path of the client, or a
+relative path to append to the base path of the client. The URL can
+contain the query string as well. Use an array to provide a URL
+template and additional variables to use in the URL template expansion.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$method</var>&nbsp;&nbsp;</td>
+										<td><p>HTTP method</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$uri</var>&nbsp;&nbsp;</td>
+										<td><p>URI object or string.</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$options</var>&nbsp;&nbsp;</td>
+										<td><p>Request options to apply. See \GuzzleHttp\RequestOptions.</p>
+</td>
+									</tr>
+							</table>
+
+
+
+		<h4>Overriden by</h4>
+		<ul>
+				<li>
+<a href="Akamai.Open.EdgeGrid.Client.html#_requestAsync">						<code>Akamai\Open\EdgeGrid\Client::requestAsync()</code></a>				</li>
+		</ul>
+		<h4>Implements</h4>
+		<ul>
+				<li>
+<a href="GuzzleHttp.ClientInterface.html#_requestAsync">						<code>GuzzleHttp\ClientInterface::requestAsync()</code></a>				</li>
+		</ul>
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_requestAsync">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="request" id="_request">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>request(<span>string <var>$method</var></span>, <span>string|<a href="Psr.Http.Message.UriInterface.html"><span title="Psr\Http\Message\UriInterface">UriInterface</span></a> <var>$uri</var> = <span class="php-str">''</span></span>, <span>array <var>$options</var> = []</span>): <a href="Psr.Http.Message.ResponseInterface.html"><span title="Psr\Http\Message\ResponseInterface">ResponseInterface</span></a></code>
+
+
+	<div class="expandable-collapsedView">
+		Create and send an HTTP request.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Create and send an HTTP request.</p>
+<p>Use an absolute path to override the base path of the client, or a
+relative path to append to the base path of the client. The URL can
+contain the query string as well.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$method</var>&nbsp;&nbsp;</td>
+										<td><p>HTTP method.</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$uri</var>&nbsp;&nbsp;</td>
+										<td><p>URI object or string.</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$options</var>&nbsp;&nbsp;</td>
+										<td><p>Request options to apply. See \GuzzleHttp\RequestOptions.</p>
+</td>
+									</tr>
+							</table>
+
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="GuzzleHttp.Exception.GuzzleException.html"><span>GuzzleHttp\Exception\GuzzleException</span></a></code>&nbsp;</td>
+										<td></td>
+									</tr>
+							</table>
+
+		<h4>Implements</h4>
+		<ul>
+				<li>
+<a href="GuzzleHttp.ClientInterface.html#_request">						<code>GuzzleHttp\ClientInterface::request()</code></a>				</li>
+		</ul>
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_request">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getConfig" id="_getConfig">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code><span class="deprecated">getConfig</span>(<span>string|null <var>$option</var> = <span class="php-kw">null</span></span>): mixed</code>
+
+
+	<div class="expandable-collapsedView">
+		Get a client configuration option.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Get a client configuration option.</p>
+<p>These options include default request options of the client, a &quot;handler&quot;
+(if utilized by the concrete client), and a &quot;base_uri&quot; if utilized by
+the concrete client.</p>
+</div>
+							<h4>Deprecated</h4>
+							<div>
+									<p>Client::getConfig will be removed in guzzlehttp/guzzle:8.0.</p>
+
+							</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$option</var>&nbsp;&nbsp;</td>
+										<td><p>The config option to retrieve.</p>
+</td>
+									</tr>
+							</table>
+
+
+
+		<h4>Implements</h4>
+		<ul>
+				<li>
+<a href="GuzzleHttp.ClientInterface.html#_getConfig" class="deprecated">						<code>GuzzleHttp\ClientInterface::getConfig()</code></a>				</li>
+		</ul>
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getConfig">#</a>
+		</td>
+	</tr>
+		</table>
+
+		<table class="table">
+			<tr>
+				<th class="table-heading">Methods used from <a href="GuzzleHttp.ClientTrait.html"><span>GuzzleHttp\ClientTrait</span></a></th>
+			</tr>
+			<tr>
+				<td class="table-cell">
+<code><a href="GuzzleHttp.ClientTrait.html#_get">get()</a>, <a href="GuzzleHttp.ClientTrait.html#_head">head()</a>, <a href="GuzzleHttp.ClientTrait.html#_put">put()</a>, <a href="GuzzleHttp.ClientTrait.html#_post">post()</a>, <a href="GuzzleHttp.ClientTrait.html#_patch">patch()</a>, <a href="GuzzleHttp.ClientTrait.html#_delete">delete()</a>, <a href="GuzzleHttp.ClientTrait.html#_getAsync">getAsync()</a>, <a href="GuzzleHttp.ClientTrait.html#_headAsync">headAsync()</a>, <a href="GuzzleHttp.ClientTrait.html#_putAsync">putAsync()</a>, <a href="GuzzleHttp.ClientTrait.html#_postAsync">postAsync()</a>, <a href="GuzzleHttp.ClientTrait.html#_patchAsync">patchAsync()</a>, <a href="GuzzleHttp.ClientTrait.html#_deleteAsync">deleteAsync()</a></code>				</td>
+			</tr>
+		</table>
+
+
+
+
+		<table class="table">
+			<tr>
+				<th class="table-heading">Constants inherited from <a href="GuzzleHttp.ClientInterface.html"><span>GuzzleHttp\ClientInterface</span></a></th>
+			</tr>
+			<tr>
+				<td class="table-cell">
+<code><a href="GuzzleHttp.ClientInterface.html#MAJOR_VERSION"><code>MAJOR_VERSION</code></a></code>				</td>
+			</tr>
+		</table>
+
+
+
+
+
+
+
+		</div>
+
+		<div class="layout-footer">
+			Akamai &#123;OPEN} EdgeGrid Authentication for PHP API documentation generated by <a href="https://www.apigen.org">ApiGen v7.0.0-alpha</a>
+		</div>
+	</div>
+
+	<div class="layout-rest">
+		<div class="navbar"></div>
+	</div>
+</body>
+</html>

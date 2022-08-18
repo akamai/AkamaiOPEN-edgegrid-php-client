@@ -1,0 +1,326 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Interface Psr\Http\Message\ResponseInterface | Akamai &#123;OPEN} EdgeGrid Authentication for PHP API</title>
+	<link rel="stylesheet" href="assets/main.css">
+	<script src="assets/main.js" defer></script>
+</head>
+
+<body class="layout">
+	<div class="layout-aside">
+	<div class="menu">
+			<div class="menu-section">
+				<h3>Namespaces</h3>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.html">Akamai</a>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.Open.html">Open</a>
+			</li>
+	</ul>
+			</li>
+			<li class="menuGroup-item active">
+				<a href="namespace-Psr.html">Psr</a>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-Psr.Http.html">Http</a>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-Psr.Http.Message.html">Message</a>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</div>
+
+
+		<div class="menu-section">
+			<h3>Interfaces</h3>
+			<ul>
+					<li>
+						<a href="Psr.Http.Message.MessageInterface.html">
+							MessageInterface
+						</a>
+					</li>
+					<li>
+						<a href="Psr.Http.Message.RequestInterface.html">
+							RequestInterface
+						</a>
+					</li>
+					<li class="active">
+						<a href="Psr.Http.Message.ResponseInterface.html">
+							ResponseInterface
+						</a>
+					</li>
+					<li>
+						<a href="Psr.Http.Message.StreamInterface.html">
+							StreamInterface
+						</a>
+					</li>
+					<li>
+						<a href="Psr.Http.Message.UriInterface.html">
+							UriInterface
+						</a>
+					</li>
+			</ul>
+		</div>
+
+
+
+
+	</div>
+	</div>
+
+	<div class="layout-main">
+		<div class="layout-navbar">
+	<nav class="navbar">
+		<div class="navbar-left">
+			<ul class="navbar-links">
+				<li>
+					<a href="index.html">Overview</a>
+				</li>
+				<li>
+					
+						<a href="namespace-Psr.Http.Message.html">Namespace</a>
+					
+				</li>
+<li class="active"><a href="Psr.Http.Message.ResponseInterface.html">Interface</a></li>				<li>
+					<a href="tree.html">Tree</a>
+				</li>
+			</ul>
+		</div>
+		<div class="navbar-right">
+	<div class="search" data-elements="assets/elements.js">
+		<input class="search-input" placeholder="Search class, function or namespace" autofocus>
+		<ul class="search-results"></ul>
+	</div>
+		</div>
+	</nav>
+		</div>
+
+		<div class="layout-content">
+		<h1>
+			Interface <a href="namespace-Psr.html">Psr</a>\<a href="namespace-Psr.Http.html">Http</a>\<a href="namespace-Psr.Http.Message.html">Message</a>\<a href="Psr.Http.Message.ResponseInterface.html">ResponseInterface</a>
+		</h1>
+
+
+	<table class="classLikeSignatureTable">
+		<tr>
+			<th><code>extends</code></th>
+			<td>
+<code><a href="Psr.Http.Message.MessageInterface.html"><span title="Psr\Http\Message\MessageInterface">MessageInterface</span></a></code>			</td>
+		</tr>
+
+	</table>
+		<div class="classLikeDescription">
+	<div class="description"><p>Representation of an outgoing, server-side response.</p>
+<p>Per the HTTP specification, this interface includes properties for
+each of the following:</p>
+<ul>
+<li>Protocol version</li>
+<li>Status code and reason phrase</li>
+<li>Headers</li>
+<li>Message body</li>
+</ul>
+<p>Responses are considered immutable; all methods that might change state MUST
+be implemented such that they retain the internal state of the current
+message and return an instance that contains the changed state.</p>
+</div>
+		</div>
+
+			<div class="classLikeSection">
+	<ul class="classTree">
+	<li>
+<b><span class="active">Psr\Http\Message\ResponseInterface</span></b>
+		extends
+			<a href="Psr.Http.Message.MessageInterface.html"><span title="Psr\Http\Message\MessageInterface">MessageInterface</span></a>
+
+
+	</li>
+	</ul>
+			</div>
+
+		<div class="classLikeSection">
+
+		</div>
+
+
+		<table class="table" id="methods">
+			<tr>
+				<th class="table-heading sortable" colspan="3" title="Switch between natural and alphabetical order">Methods</th>
+			</tr>
+
+	<tr class="expandable collapsed" data-order="getStatusCode" id="_getStatusCode">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getStatusCode(): int</code>
+
+
+	<div class="expandable-collapsedView">
+		Gets the response status code.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Gets the response status code.</p>
+<p>The status code is a 3-digit integer result code of the server's attempt
+to understand and satisfy the request.</p>
+</div>
+
+
+							<h4>Returns</h4>
+							<div><p>Status code.</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getStatusCode">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="withStatus" id="_withStatus">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>withStatus(<span>int <var>$code</var></span>, <span>string <var>$reasonPhrase</var> = <span class="php-str">''</span></span>): static</code>
+
+
+	<div class="expandable-collapsedView">
+		Return an instance with the specified status code and, optionally, reason phrase.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Return an instance with the specified status code and, optionally, reason phrase.</p>
+<p>If no reason phrase is specified, implementations MAY choose to default
+to the RFC 7231 or IANA recommended reason phrase for the response's
+status code.</p>
+<p>This method MUST be implemented in such a way as to retain the
+immutability of the message, and MUST return an instance that has the
+updated status and reason phrase.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$code</var>&nbsp;&nbsp;</td>
+										<td><p>The 3-digit integer result code to set.</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$reasonPhrase</var>&nbsp;&nbsp;</td>
+										<td><p>The reason phrase to use with the
+provided status code; if none is provided, implementations MAY
+use the defaults as suggested in the HTTP specification.</p>
+</td>
+									</tr>
+							</table>
+
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="InvalidArgumentException.html"><span>InvalidArgumentException</span></a></code>&nbsp;</td>
+										<td><p>For invalid status code arguments.</p>
+</td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_withStatus">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getReasonPhrase" id="_getReasonPhrase">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getReasonPhrase(): string</code>
+
+
+	<div class="expandable-collapsedView">
+		Gets the response reason phrase associated with the status code.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Gets the response reason phrase associated with the status code.</p>
+<p>Because a reason phrase is not a required element in a response
+status line, the reason phrase value MAY be null. Implementations MAY
+choose to return the default RFC 7231 recommended reason phrase (or those
+listed in the IANA HTTP Status Code Registry) for the response's
+status code.</p>
+</div>
+
+
+							<h4>Returns</h4>
+							<div><p>Reason phrase; must return an empty string if none present.</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getReasonPhrase">#</a>
+		</td>
+	</tr>
+		</table>
+		<table class="table">
+			<tr>
+				<th class="table-heading">Methods inherited from <a href="Psr.Http.Message.MessageInterface.html"><span>Psr\Http\Message\MessageInterface</span></a></th>
+			</tr>
+			<tr>
+				<td class="table-cell">
+<code><a href="Psr.Http.Message.MessageInterface.html#_getProtocolVersion">getProtocolVersion()</a>, <a href="Psr.Http.Message.MessageInterface.html#_withProtocolVersion">withProtocolVersion()</a>, <a href="Psr.Http.Message.MessageInterface.html#_getHeaders">getHeaders()</a>, <a href="Psr.Http.Message.MessageInterface.html#_hasHeader">hasHeader()</a>, <a href="Psr.Http.Message.MessageInterface.html#_getHeader">getHeader()</a>, <a href="Psr.Http.Message.MessageInterface.html#_getHeaderLine">getHeaderLine()</a>, <a href="Psr.Http.Message.MessageInterface.html#_withHeader">withHeader()</a>, <a href="Psr.Http.Message.MessageInterface.html#_withAddedHeader">withAddedHeader()</a>, <a href="Psr.Http.Message.MessageInterface.html#_withoutHeader">withoutHeader()</a>, <a href="Psr.Http.Message.MessageInterface.html#_getBody">getBody()</a>, <a href="Psr.Http.Message.MessageInterface.html#_withBody">withBody()</a></code>				</td>
+			</tr>
+		</table>
+
+
+
+
+
+
+
+
+
+
+
+		</div>
+
+		<div class="layout-footer">
+			Akamai &#123;OPEN} EdgeGrid Authentication for PHP API documentation generated by <a href="https://www.apigen.org">ApiGen v7.0.0-alpha</a>
+		</div>
+	</div>
+
+	<div class="layout-rest">
+		<div class="navbar"></div>
+	</div>
+</body>
+</html>

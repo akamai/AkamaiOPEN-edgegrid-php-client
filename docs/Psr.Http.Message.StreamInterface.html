@@ -1,0 +1,739 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Interface Psr\Http\Message\StreamInterface | Akamai &#123;OPEN} EdgeGrid Authentication for PHP API</title>
+	<link rel="stylesheet" href="assets/main.css">
+	<script src="assets/main.js" defer></script>
+</head>
+
+<body class="layout">
+	<div class="layout-aside">
+	<div class="menu">
+			<div class="menu-section">
+				<h3>Namespaces</h3>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.html">Akamai</a>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.Open.html">Open</a>
+			</li>
+	</ul>
+			</li>
+			<li class="menuGroup-item active">
+				<a href="namespace-Psr.html">Psr</a>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-Psr.Http.html">Http</a>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-Psr.Http.Message.html">Message</a>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</div>
+
+
+		<div class="menu-section">
+			<h3>Interfaces</h3>
+			<ul>
+					<li>
+						<a href="Psr.Http.Message.MessageInterface.html">
+							MessageInterface
+						</a>
+					</li>
+					<li>
+						<a href="Psr.Http.Message.RequestInterface.html">
+							RequestInterface
+						</a>
+					</li>
+					<li>
+						<a href="Psr.Http.Message.ResponseInterface.html">
+							ResponseInterface
+						</a>
+					</li>
+					<li class="active">
+						<a href="Psr.Http.Message.StreamInterface.html">
+							StreamInterface
+						</a>
+					</li>
+					<li>
+						<a href="Psr.Http.Message.UriInterface.html">
+							UriInterface
+						</a>
+					</li>
+			</ul>
+		</div>
+
+
+
+
+	</div>
+	</div>
+
+	<div class="layout-main">
+		<div class="layout-navbar">
+	<nav class="navbar">
+		<div class="navbar-left">
+			<ul class="navbar-links">
+				<li>
+					<a href="index.html">Overview</a>
+				</li>
+				<li>
+					
+						<a href="namespace-Psr.Http.Message.html">Namespace</a>
+					
+				</li>
+<li class="active"><a href="Psr.Http.Message.StreamInterface.html">Interface</a></li>				<li>
+					<a href="tree.html">Tree</a>
+				</li>
+			</ul>
+		</div>
+		<div class="navbar-right">
+	<div class="search" data-elements="assets/elements.js">
+		<input class="search-input" placeholder="Search class, function or namespace" autofocus>
+		<ul class="search-results"></ul>
+	</div>
+		</div>
+	</nav>
+		</div>
+
+		<div class="layout-content">
+		<h1>
+			Interface <a href="namespace-Psr.html">Psr</a>\<a href="namespace-Psr.Http.html">Http</a>\<a href="namespace-Psr.Http.Message.html">Message</a>\<a href="Psr.Http.Message.StreamInterface.html">StreamInterface</a>
+		</h1>
+
+
+	<table class="classLikeSignatureTable">
+
+	</table>
+		<div class="classLikeDescription">
+	<div class="description"><p>Describes a data stream.</p>
+<p>Typically, an instance will wrap a PHP stream; this interface provides
+a wrapper around the most common operations, including serialization of
+the entire stream to a string.</p>
+</div>
+		</div>
+
+
+		<div class="classLikeSection">
+
+		</div>
+
+
+		<table class="table" id="methods">
+			<tr>
+				<th class="table-heading sortable" colspan="3" title="Switch between natural and alphabetical order">Methods</th>
+			</tr>
+
+	<tr class="expandable collapsed" data-order="__toString" id="___toString">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>__toString(): string</code>
+
+
+	<div class="expandable-collapsedView">
+		Reads all data from the stream into a string, from the beginning to end.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Reads all data from the stream into a string, from the beginning to end.</p>
+<p>This method MUST attempt to seek to the beginning of the stream before
+reading data and read the stream until the end is reached.</p>
+<p>Warning: This could attempt to load a large amount of data into memory.</p>
+<p>This method MUST NOT raise an exception in order to conform with PHP's
+string casting operations.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#___toString">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="close" id="_close">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>close(): void</code>
+
+
+	<div class="expandable-collapsedView">
+		Closes the stream and any underlying resources.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Closes the stream and any underlying resources.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_close">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="detach" id="_detach">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>detach(): resource|null</code>
+
+
+	<div class="expandable-collapsedView">
+		Separates any underlying resources from the stream.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Separates any underlying resources from the stream.</p>
+<p>After the stream has been detached, the stream is in an unusable state.</p>
+</div>
+
+
+							<h4>Returns</h4>
+							<div><p>Underlying PHP stream, if any</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_detach">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getSize" id="_getSize">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getSize(): int|null</code>
+
+
+	<div class="expandable-collapsedView">
+		Get the size of the stream if known.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Get the size of the stream if known.</p>
+</div>
+
+
+							<h4>Returns</h4>
+							<div><p>Returns the size in bytes if known, or null if unknown.</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getSize">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="tell" id="_tell">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>tell(): int</code>
+
+
+	<div class="expandable-collapsedView">
+		Returns the current position of the file read/write pointer
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Returns the current position of the file read/write pointer</p>
+</div>
+
+
+							<h4>Returns</h4>
+							<div><p>Position of the file pointer</p>
+</div>
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="RuntimeException.html"><span>RuntimeException</span></a></code>&nbsp;</td>
+										<td><p>on error.</p>
+</td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_tell">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="eof" id="_eof">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>eof(): bool</code>
+
+
+	<div class="expandable-collapsedView">
+		Returns true if the stream is at the end of the stream.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Returns true if the stream is at the end of the stream.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_eof">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="isSeekable" id="_isSeekable">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>isSeekable(): bool</code>
+
+
+	<div class="expandable-collapsedView">
+		Returns whether or not the stream is seekable.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Returns whether or not the stream is seekable.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_isSeekable">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="seek" id="_seek">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>seek(<span>int <var>$offset</var></span>, <span>int <var>$whence</var> = SEEK_SET</span>)</code>
+
+
+	<div class="expandable-collapsedView">
+		Seek to a position in the stream.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Seek to a position in the stream.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$offset</var>&nbsp;&nbsp;</td>
+										<td><p>Stream offset</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$whence</var>&nbsp;&nbsp;</td>
+										<td><p>Specifies how the cursor position will be calculated
+based on the seek offset. Valid values are identical to the built-in
+PHP $whence values for <code>fseek()</code>.  SEEK_SET: Set position equal to
+offset bytes SEEK_CUR: Set position to current location plus offset
+SEEK_END: Set position to end-of-stream plus offset.</p>
+</td>
+									</tr>
+							</table>
+
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="RuntimeException.html"><span>RuntimeException</span></a></code>&nbsp;</td>
+										<td><p>on failure.</p>
+</td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_seek">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="rewind" id="_rewind">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>rewind()</code>
+
+
+	<div class="expandable-collapsedView">
+		Seek to the beginning of the stream.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Seek to the beginning of the stream.</p>
+<p>If the stream is not seekable, this method will raise an exception;
+otherwise, it will perform a seek(0).</p>
+</div>
+
+
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="RuntimeException.html"><span>RuntimeException</span></a></code>&nbsp;</td>
+										<td><p>on failure.</p>
+</td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_rewind">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="isWritable" id="_isWritable">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>isWritable(): bool</code>
+
+
+	<div class="expandable-collapsedView">
+		Returns whether or not the stream is writable.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Returns whether or not the stream is writable.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_isWritable">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="write" id="_write">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>write(<span>string <var>$string</var></span>): int</code>
+
+
+	<div class="expandable-collapsedView">
+		Write data to the stream.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Write data to the stream.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$string</var>&nbsp;&nbsp;</td>
+										<td><p>The string that is to be written.</p>
+</td>
+									</tr>
+							</table>
+
+							<h4>Returns</h4>
+							<div><p>Returns the number of bytes written to the stream.</p>
+</div>
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="RuntimeException.html"><span>RuntimeException</span></a></code>&nbsp;</td>
+										<td><p>on failure.</p>
+</td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_write">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="isReadable" id="_isReadable">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>isReadable(): bool</code>
+
+
+	<div class="expandable-collapsedView">
+		Returns whether or not the stream is readable.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Returns whether or not the stream is readable.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_isReadable">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="read" id="_read">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>read(<span>int <var>$length</var></span>): string</code>
+
+
+	<div class="expandable-collapsedView">
+		Read data from the stream.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Read data from the stream.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$length</var>&nbsp;&nbsp;</td>
+										<td><p>Read up to $length bytes from the object and return
+them. Fewer than $length bytes may be returned if underlying stream
+call returns fewer bytes.</p>
+</td>
+									</tr>
+							</table>
+
+							<h4>Returns</h4>
+							<div><p>Returns the data read from the stream, or an empty string
+if no bytes are available.</p>
+</div>
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="RuntimeException.html"><span>RuntimeException</span></a></code>&nbsp;</td>
+										<td><p>if an error occurs.</p>
+</td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_read">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getContents" id="_getContents">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getContents(): string</code>
+
+
+	<div class="expandable-collapsedView">
+		Returns the remaining contents in a string
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Returns the remaining contents in a string</p>
+</div>
+
+
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="RuntimeException.html"><span>RuntimeException</span></a></code>&nbsp;</td>
+										<td><p>if unable to read or an error occurs while
+reading.</p>
+</td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getContents">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getMetadata" id="_getMetadata">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getMetadata(<span>string <var>$key</var> = <span class="php-kw">null</span></span>): array|mixed|null</code>
+
+
+	<div class="expandable-collapsedView">
+		Get stream metadata as an associative array or retrieve a specific key.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Get stream metadata as an associative array or retrieve a specific key.</p>
+<p>The keys returned are identical to the keys returned from PHP's
+stream_get_meta_data() function.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$key</var>&nbsp;&nbsp;</td>
+										<td><p>Specific metadata to retrieve.</p>
+</td>
+									</tr>
+							</table>
+
+							<h4>Returns</h4>
+							<div><p>Returns an associative array if no key is
+provided. Returns a specific key value if a key is provided and the
+value is found, or null if the key is not found.</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getMetadata">#</a>
+		</td>
+	</tr>
+		</table>
+
+
+
+
+		</div>
+
+		<div class="layout-footer">
+			Akamai &#123;OPEN} EdgeGrid Authentication for PHP API documentation generated by <a href="https://www.apigen.org">ApiGen v7.0.0-alpha</a>
+		</div>
+	</div>
+
+	<div class="layout-rest">
+		<div class="navbar"></div>
+	</div>
+</body>
+</html>

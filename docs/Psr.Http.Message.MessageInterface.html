@@ -1,0 +1,694 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Interface Psr\Http\Message\MessageInterface | Akamai &#123;OPEN} EdgeGrid Authentication for PHP API</title>
+	<link rel="stylesheet" href="assets/main.css">
+	<script src="assets/main.js" defer></script>
+</head>
+
+<body class="layout">
+	<div class="layout-aside">
+	<div class="menu">
+			<div class="menu-section">
+				<h3>Namespaces</h3>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.html">Akamai</a>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.Open.html">Open</a>
+			</li>
+	</ul>
+			</li>
+			<li class="menuGroup-item active">
+				<a href="namespace-Psr.html">Psr</a>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-Psr.Http.html">Http</a>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-Psr.Http.Message.html">Message</a>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</div>
+
+
+		<div class="menu-section">
+			<h3>Interfaces</h3>
+			<ul>
+					<li class="active">
+						<a href="Psr.Http.Message.MessageInterface.html">
+							MessageInterface
+						</a>
+					</li>
+					<li>
+						<a href="Psr.Http.Message.RequestInterface.html">
+							RequestInterface
+						</a>
+					</li>
+					<li>
+						<a href="Psr.Http.Message.ResponseInterface.html">
+							ResponseInterface
+						</a>
+					</li>
+					<li>
+						<a href="Psr.Http.Message.StreamInterface.html">
+							StreamInterface
+						</a>
+					</li>
+					<li>
+						<a href="Psr.Http.Message.UriInterface.html">
+							UriInterface
+						</a>
+					</li>
+			</ul>
+		</div>
+
+
+
+
+	</div>
+	</div>
+
+	<div class="layout-main">
+		<div class="layout-navbar">
+	<nav class="navbar">
+		<div class="navbar-left">
+			<ul class="navbar-links">
+				<li>
+					<a href="index.html">Overview</a>
+				</li>
+				<li>
+					
+						<a href="namespace-Psr.Http.Message.html">Namespace</a>
+					
+				</li>
+<li class="active"><a href="Psr.Http.Message.MessageInterface.html">Interface</a></li>				<li>
+					<a href="tree.html">Tree</a>
+				</li>
+			</ul>
+		</div>
+		<div class="navbar-right">
+	<div class="search" data-elements="assets/elements.js">
+		<input class="search-input" placeholder="Search class, function or namespace" autofocus>
+		<ul class="search-results"></ul>
+	</div>
+		</div>
+	</nav>
+		</div>
+
+		<div class="layout-content">
+		<h1>
+			Interface <a href="namespace-Psr.html">Psr</a>\<a href="namespace-Psr.Http.html">Http</a>\<a href="namespace-Psr.Http.Message.html">Message</a>\<a href="Psr.Http.Message.MessageInterface.html">MessageInterface</a>
+		</h1>
+
+
+	<table class="classLikeSignatureTable">
+
+	</table>
+		<div class="classLikeDescription">
+	<div class="description"><p>HTTP messages consist of requests from a client to a server and responses
+from a server to a client. This interface defines the methods common to
+each.</p>
+<p>Messages are considered immutable; all methods that might change state MUST
+be implemented such that they retain the internal state of the current
+message and return an instance that contains the changed state.</p>
+</div>
+		</div>
+
+			<div class="classLikeSection">
+	<ul class="classTree">
+	<li>
+<b><span class="active">Psr\Http\Message\MessageInterface</span></b>
+
+
+	<ul class="classTree">
+	<li>
+<a href="Psr.Http.Message.ResponseInterface.html"><span>Psr\Http\Message\ResponseInterface</span></a>
+		extends
+			<b><span class="active" title="Psr\Http\Message\MessageInterface">MessageInterface</span></b>
+
+
+	</li>
+	<li>
+<a href="Psr.Http.Message.RequestInterface.html"><span>Psr\Http\Message\RequestInterface</span></a>
+		extends
+			<b><span class="active" title="Psr\Http\Message\MessageInterface">MessageInterface</span></b>
+
+
+	</li>
+	</ul>
+	</li>
+	</ul>
+			</div>
+
+		<div class="classLikeSection">
+
+		</div>
+
+
+		<table class="table" id="methods">
+			<tr>
+				<th class="table-heading sortable" colspan="3" title="Switch between natural and alphabetical order">Methods</th>
+			</tr>
+
+	<tr class="expandable collapsed" data-order="getProtocolVersion" id="_getProtocolVersion">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getProtocolVersion(): string</code>
+
+
+	<div class="expandable-collapsedView">
+		Retrieves the HTTP protocol version as a string.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Retrieves the HTTP protocol version as a string.</p>
+<p>The string MUST contain only the HTTP version number (e.g., &quot;1.1&quot;, &quot;1.0&quot;).</p>
+</div>
+
+
+							<h4>Returns</h4>
+							<div><p>HTTP protocol version.</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getProtocolVersion">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="withProtocolVersion" id="_withProtocolVersion">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>withProtocolVersion(<span>string <var>$version</var></span>): static</code>
+
+
+	<div class="expandable-collapsedView">
+		Return an instance with the specified HTTP protocol version.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Return an instance with the specified HTTP protocol version.</p>
+<p>The version string MUST contain only the HTTP version number (e.g.,
+&quot;1.1&quot;, &quot;1.0&quot;).</p>
+<p>This method MUST be implemented in such a way as to retain the
+immutability of the message, and MUST return an instance that has the
+new protocol version.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$version</var>&nbsp;&nbsp;</td>
+										<td><p>HTTP protocol version</p>
+</td>
+									</tr>
+							</table>
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_withProtocolVersion">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getHeaders" id="_getHeaders">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getHeaders(): string[][]</code>
+
+
+	<div class="expandable-collapsedView">
+		Retrieves all message header values.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Retrieves all message header values.</p>
+<p>The keys represent the header name as it will be sent over the wire, and
+each value is an array of strings associated with the header.</p>
+<p>// Represent the headers as a string
+foreach ($message-&gt;getHeaders() as $name =&gt; $values) {
+echo $name . &quot;: &quot; . implode(&quot;, &quot;, $values);
+}</p>
+<p>// Emit headers iteratively:
+foreach ($message-&gt;getHeaders() as $name =&gt; $values) {
+foreach ($values as $value) {
+header(sprintf('%s: %s', $name, $value), false);
+}
+}</p>
+<p>While header names are not case-sensitive, getHeaders() will preserve the
+exact case in which headers were originally specified.</p>
+</div>
+
+
+							<h4>Returns</h4>
+							<div><p>Returns an associative array of the message's headers. Each
+key MUST be a header name, and each value MUST be an array of strings
+for that header.</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getHeaders">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="hasHeader" id="_hasHeader">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>hasHeader(<span>string <var>$name</var></span>): bool</code>
+
+
+	<div class="expandable-collapsedView">
+		Checks if a header exists by the given case-insensitive name.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Checks if a header exists by the given case-insensitive name.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$name</var>&nbsp;&nbsp;</td>
+										<td><p>Case-insensitive header field name.</p>
+</td>
+									</tr>
+							</table>
+
+							<h4>Returns</h4>
+							<div><p>Returns true if any header names match the given header
+name using a case-insensitive string comparison. Returns false if
+no matching header name is found in the message.</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_hasHeader">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getHeader" id="_getHeader">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getHeader(<span>string <var>$name</var></span>): string[]</code>
+
+
+	<div class="expandable-collapsedView">
+		Retrieves a message header value by the given case-insensitive name.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Retrieves a message header value by the given case-insensitive name.</p>
+<p>This method returns an array of all the header values of the given
+case-insensitive header name.</p>
+<p>If the header does not appear in the message, this method MUST return an
+empty array.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$name</var>&nbsp;&nbsp;</td>
+										<td><p>Case-insensitive header field name.</p>
+</td>
+									</tr>
+							</table>
+
+							<h4>Returns</h4>
+							<div><p>An array of string values as provided for the given
+header. If the header does not appear in the message, this method MUST
+return an empty array.</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getHeader">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getHeaderLine" id="_getHeaderLine">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getHeaderLine(<span>string <var>$name</var></span>): string</code>
+
+
+	<div class="expandable-collapsedView">
+		Retrieves a comma-separated string of the values for a single header.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Retrieves a comma-separated string of the values for a single header.</p>
+<p>This method returns all of the header values of the given
+case-insensitive header name as a string concatenated together using
+a comma.</p>
+<p>NOTE: Not all header values may be appropriately represented using
+comma concatenation. For such headers, use getHeader() instead
+and supply your own delimiter when concatenating.</p>
+<p>If the header does not appear in the message, this method MUST return
+an empty string.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$name</var>&nbsp;&nbsp;</td>
+										<td><p>Case-insensitive header field name.</p>
+</td>
+									</tr>
+							</table>
+
+							<h4>Returns</h4>
+							<div><p>A string of values as provided for the given header
+concatenated together using a comma. If the header does not appear in
+the message, this method MUST return an empty string.</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getHeaderLine">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="withHeader" id="_withHeader">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>withHeader(<span>string <var>$name</var></span>, <span>string|string[] <var>$value</var></span>): static</code>
+
+
+	<div class="expandable-collapsedView">
+		Return an instance with the provided value replacing the specified header.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Return an instance with the provided value replacing the specified header.</p>
+<p>While header names are case-insensitive, the casing of the header will
+be preserved by this function, and returned from getHeaders().</p>
+<p>This method MUST be implemented in such a way as to retain the
+immutability of the message, and MUST return an instance that has the
+new and/or updated header and value.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$name</var>&nbsp;&nbsp;</td>
+										<td><p>Case-insensitive header field name.</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$value</var>&nbsp;&nbsp;</td>
+										<td><p>Header value(s).</p>
+</td>
+									</tr>
+							</table>
+
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="InvalidArgumentException.html"><span>InvalidArgumentException</span></a></code>&nbsp;</td>
+										<td><p>for invalid header names or values.</p>
+</td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_withHeader">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="withAddedHeader" id="_withAddedHeader">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>withAddedHeader(<span>string <var>$name</var></span>, <span>string|string[] <var>$value</var></span>): static</code>
+
+
+	<div class="expandable-collapsedView">
+		Return an instance with the specified header appended with the given value.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Return an instance with the specified header appended with the given value.</p>
+<p>Existing values for the specified header will be maintained. The new
+value(s) will be appended to the existing list. If the header did not
+exist previously, it will be added.</p>
+<p>This method MUST be implemented in such a way as to retain the
+immutability of the message, and MUST return an instance that has the
+new header and/or value.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$name</var>&nbsp;&nbsp;</td>
+										<td><p>Case-insensitive header field name to add.</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$value</var>&nbsp;&nbsp;</td>
+										<td><p>Header value(s).</p>
+</td>
+									</tr>
+							</table>
+
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="InvalidArgumentException.html"><span>InvalidArgumentException</span></a></code>&nbsp;</td>
+										<td><p>for invalid header names or values.</p>
+</td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_withAddedHeader">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="withoutHeader" id="_withoutHeader">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>withoutHeader(<span>string <var>$name</var></span>): static</code>
+
+
+	<div class="expandable-collapsedView">
+		Return an instance without the specified header.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Return an instance without the specified header.</p>
+<p>Header resolution MUST be done without case-sensitivity.</p>
+<p>This method MUST be implemented in such a way as to retain the
+immutability of the message, and MUST return an instance that removes
+the named header.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$name</var>&nbsp;&nbsp;</td>
+										<td><p>Case-insensitive header field name to remove.</p>
+</td>
+									</tr>
+							</table>
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_withoutHeader">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getBody" id="_getBody">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getBody(): <a href="Psr.Http.Message.StreamInterface.html"><span title="Psr\Http\Message\StreamInterface">StreamInterface</span></a></code>
+
+
+	<div class="expandable-collapsedView">
+		Gets the body of the message.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Gets the body of the message.</p>
+</div>
+
+
+							<h4>Returns</h4>
+							<div><p>Returns the body as a stream.</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getBody">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="withBody" id="_withBody">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>withBody(<span><a href="Psr.Http.Message.StreamInterface.html"><span title="Psr\Http\Message\StreamInterface">StreamInterface</span></a> <var>$body</var></span>): static</code>
+
+
+	<div class="expandable-collapsedView">
+		Return an instance with the specified message body.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Return an instance with the specified message body.</p>
+<p>The body MUST be a StreamInterface object.</p>
+<p>This method MUST be implemented in such a way as to retain the
+immutability of the message, and MUST return a new instance that has the
+new body stream.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$body</var>&nbsp;&nbsp;</td>
+										<td><p>Body.</p>
+</td>
+									</tr>
+							</table>
+
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="InvalidArgumentException.html"><span>InvalidArgumentException</span></a></code>&nbsp;</td>
+										<td><p>When the body is not valid.</p>
+</td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_withBody">#</a>
+		</td>
+	</tr>
+		</table>
+
+
+
+
+		</div>
+
+		<div class="layout-footer">
+			Akamai &#123;OPEN} EdgeGrid Authentication for PHP API documentation generated by <a href="https://www.apigen.org">ApiGen v7.0.0-alpha</a>
+		</div>
+	</div>
+
+	<div class="layout-rest">
+		<div class="navbar"></div>
+	</div>
+</body>
+</html>

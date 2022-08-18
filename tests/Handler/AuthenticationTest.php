@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Akamai {OPEN} EdgeGrid Auth Client
  *
@@ -9,6 +10,7 @@
  * @link https://developer.akamai.com
  * @link https://developer.akamai.com/introduction/Client_Auth.html
  */
+
 namespace Akamai\Open\EdgeGrid\Tests\Handler;
 
 use GuzzleHttp\Psr7\Response;
@@ -18,6 +20,8 @@ use GuzzleHttp\Psr7\Response;
  */
 class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 {
+    use \Prophecy\PhpUnit\ProphecyTrait;
+
     /**
      * @dataProvider createFromEdgeRcProvider
      * @param $section
@@ -121,12 +125,11 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         $this->assertInstanceOf(\Psr\Http\Message\RequestInterface::class, $request);
     }
 
-    /**
-     * @expectedException \Akamai\Open\EdgeGrid\Exception\HandlerException
-     * @expectedExceptionMessage Signer not set, make sure to call setSigner first
-     */
     public function testRequireSetSignerCall()
     {
+        $this->expectException(\Akamai\Open\EdgeGrid\Exception\HandlerException::class);
+        $this->expectErrorMessage('Signer not set, make sure to call setSigner first');
+
         $container = [];
         $handler = $this->getMockHandler([new Response(200)], $container);
 
@@ -155,12 +158,11 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         $this->assertEquals('test.host', $auth->getHost());
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Signer not set, make sure to call setSigner first
-     */
     public function testProxyNoSigner()
     {
+        $this->expectException(\Exception::class);
+        $this->expectErrorMessage('Signer not set, make sure to call setSigner first');
+
         $auth = new \Akamai\Open\EdgeGrid\Handler\Authentication();
         $auth->setHost('test.host');
     }

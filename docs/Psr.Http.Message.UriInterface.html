@@ -1,0 +1,922 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Interface Psr\Http\Message\UriInterface | Akamai &#123;OPEN} EdgeGrid Authentication for PHP API</title>
+	<link rel="stylesheet" href="assets/main.css">
+	<script src="assets/main.js" defer></script>
+</head>
+
+<body class="layout">
+	<div class="layout-aside">
+	<div class="menu">
+			<div class="menu-section">
+				<h3>Namespaces</h3>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.html">Akamai</a>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.Open.html">Open</a>
+			</li>
+	</ul>
+			</li>
+			<li class="menuGroup-item active">
+				<a href="namespace-Psr.html">Psr</a>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-Psr.Http.html">Http</a>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-Psr.Http.Message.html">Message</a>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</div>
+
+
+		<div class="menu-section">
+			<h3>Interfaces</h3>
+			<ul>
+					<li>
+						<a href="Psr.Http.Message.MessageInterface.html">
+							MessageInterface
+						</a>
+					</li>
+					<li>
+						<a href="Psr.Http.Message.RequestInterface.html">
+							RequestInterface
+						</a>
+					</li>
+					<li>
+						<a href="Psr.Http.Message.ResponseInterface.html">
+							ResponseInterface
+						</a>
+					</li>
+					<li>
+						<a href="Psr.Http.Message.StreamInterface.html">
+							StreamInterface
+						</a>
+					</li>
+					<li class="active">
+						<a href="Psr.Http.Message.UriInterface.html">
+							UriInterface
+						</a>
+					</li>
+			</ul>
+		</div>
+
+
+
+
+	</div>
+	</div>
+
+	<div class="layout-main">
+		<div class="layout-navbar">
+	<nav class="navbar">
+		<div class="navbar-left">
+			<ul class="navbar-links">
+				<li>
+					<a href="index.html">Overview</a>
+				</li>
+				<li>
+					
+						<a href="namespace-Psr.Http.Message.html">Namespace</a>
+					
+				</li>
+<li class="active"><a href="Psr.Http.Message.UriInterface.html">Interface</a></li>				<li>
+					<a href="tree.html">Tree</a>
+				</li>
+			</ul>
+		</div>
+		<div class="navbar-right">
+	<div class="search" data-elements="assets/elements.js">
+		<input class="search-input" placeholder="Search class, function or namespace" autofocus>
+		<ul class="search-results"></ul>
+	</div>
+		</div>
+	</nav>
+		</div>
+
+		<div class="layout-content">
+		<h1>
+			Interface <a href="namespace-Psr.html">Psr</a>\<a href="namespace-Psr.Http.html">Http</a>\<a href="namespace-Psr.Http.Message.html">Message</a>\<a href="Psr.Http.Message.UriInterface.html">UriInterface</a>
+		</h1>
+
+
+	<table class="classLikeSignatureTable">
+
+	</table>
+		<div class="classLikeDescription">
+	<div class="description"><p>Value object representing a URI.</p>
+<p>This interface is meant to represent URIs according to RFC 3986 and to
+provide methods for most common operations. Additional functionality for
+working with URIs can be provided on top of the interface or externally.
+Its primary use is for HTTP requests, but may also be used in other
+contexts.</p>
+<p>Instances of this interface are considered immutable; all methods that
+might change state MUST be implemented such that they retain the internal
+state of the current instance and return an instance that contains the
+changed state.</p>
+<p>Typically the Host header will be also be present in the request message.
+For server-side requests, the scheme will typically be discoverable in the
+server parameters.</p>
+</div>
+		</div>
+
+
+		<div class="classLikeSection">
+
+		</div>
+
+
+		<table class="table" id="methods">
+			<tr>
+				<th class="table-heading sortable" colspan="3" title="Switch between natural and alphabetical order">Methods</th>
+			</tr>
+
+	<tr class="expandable collapsed" data-order="getScheme" id="_getScheme">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getScheme(): string</code>
+
+
+	<div class="expandable-collapsedView">
+		Retrieve the scheme component of the URI.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Retrieve the scheme component of the URI.</p>
+<p>If no scheme is present, this method MUST return an empty string.</p>
+<p>The value returned MUST be normalized to lowercase, per RFC 3986
+Section 3.1.</p>
+<p>The trailing &quot;:&quot; character is not part of the scheme and MUST NOT be
+added.</p>
+</div>
+
+
+							<h4>Returns</h4>
+							<div><p>The URI scheme.</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getScheme">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getAuthority" id="_getAuthority">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getAuthority(): string</code>
+
+
+	<div class="expandable-collapsedView">
+		Retrieve the authority component of the URI.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Retrieve the authority component of the URI.</p>
+<p>If no authority information is present, this method MUST return an empty
+string.</p>
+<p>The authority syntax of the URI is:</p>
+<pre>
+[user-info@]host[:port]
+</pre>
+<p>If the port component is not set or is the standard port for the current
+scheme, it SHOULD NOT be included.</p>
+</div>
+
+
+							<h4>Returns</h4>
+							<div><p>The URI authority, in &quot;[user-info@]host[:port]&quot; format.</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getAuthority">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getUserInfo" id="_getUserInfo">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getUserInfo(): string</code>
+
+
+	<div class="expandable-collapsedView">
+		Retrieve the user information component of the URI.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Retrieve the user information component of the URI.</p>
+<p>If no user information is present, this method MUST return an empty
+string.</p>
+<p>If a user is present in the URI, this will return that value;
+additionally, if the password is also present, it will be appended to the
+user value, with a colon (&quot;:&quot;) separating the values.</p>
+<p>The trailing &quot;@&quot; character is not part of the user information and MUST
+NOT be added.</p>
+</div>
+
+
+							<h4>Returns</h4>
+							<div><p>The URI user information, in &quot;username[:password]&quot; format.</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getUserInfo">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getHost" id="_getHost">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getHost(): string</code>
+
+
+	<div class="expandable-collapsedView">
+		Retrieve the host component of the URI.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Retrieve the host component of the URI.</p>
+<p>If no host is present, this method MUST return an empty string.</p>
+<p>The value returned MUST be normalized to lowercase, per RFC 3986
+Section 3.2.2.</p>
+</div>
+
+
+							<h4>Returns</h4>
+							<div><p>The URI host.</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getHost">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getPort" id="_getPort">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getPort(): null|int</code>
+
+
+	<div class="expandable-collapsedView">
+		Retrieve the port component of the URI.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Retrieve the port component of the URI.</p>
+<p>If a port is present, and it is non-standard for the current scheme,
+this method MUST return it as an integer. If the port is the standard port
+used with the current scheme, this method SHOULD return null.</p>
+<p>If no port is present, and no scheme is present, this method MUST return
+a null value.</p>
+<p>If no port is present, but a scheme is present, this method MAY return
+the standard port for that scheme, but SHOULD return null.</p>
+</div>
+
+
+							<h4>Returns</h4>
+							<div><p>The URI port.</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getPort">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getPath" id="_getPath">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getPath(): string</code>
+
+
+	<div class="expandable-collapsedView">
+		Retrieve the path component of the URI.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Retrieve the path component of the URI.</p>
+<p>The path can either be empty or absolute (starting with a slash) or
+rootless (not starting with a slash). Implementations MUST support all
+three syntaxes.</p>
+<p>Normally, the empty path &quot;&quot; and absolute path &quot;/&quot; are considered equal as
+defined in RFC 7230 Section 2.7.3. But this method MUST NOT automatically
+do this normalization because in contexts with a trimmed base path, e.g.
+the front controller, this difference becomes significant. It's the task
+of the user to handle both &quot;&quot; and &quot;/&quot;.</p>
+<p>The value returned MUST be percent-encoded, but MUST NOT double-encode
+any characters. To determine what characters to encode, please refer to
+RFC 3986, Sections 2 and 3.3.</p>
+<p>As an example, if the value should include a slash (&quot;/&quot;) not intended as
+delimiter between path segments, that value MUST be passed in encoded
+form (e.g., &quot;%2F&quot;) to the instance.</p>
+</div>
+
+
+							<h4>Returns</h4>
+							<div><p>The URI path.</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getPath">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getQuery" id="_getQuery">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getQuery(): string</code>
+
+
+	<div class="expandable-collapsedView">
+		Retrieve the query string of the URI.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Retrieve the query string of the URI.</p>
+<p>If no query string is present, this method MUST return an empty string.</p>
+<p>The leading &quot;?&quot; character is not part of the query and MUST NOT be
+added.</p>
+<p>The value returned MUST be percent-encoded, but MUST NOT double-encode
+any characters. To determine what characters to encode, please refer to
+RFC 3986, Sections 2 and 3.4.</p>
+<p>As an example, if a value in a key/value pair of the query string should
+include an ampersand (&quot;&amp;&quot;) not intended as a delimiter between values,
+that value MUST be passed in encoded form (e.g., &quot;%26&quot;) to the instance.</p>
+</div>
+
+
+							<h4>Returns</h4>
+							<div><p>The URI query string.</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getQuery">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getFragment" id="_getFragment">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getFragment(): string</code>
+
+
+	<div class="expandable-collapsedView">
+		Retrieve the fragment component of the URI.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Retrieve the fragment component of the URI.</p>
+<p>If no fragment is present, this method MUST return an empty string.</p>
+<p>The leading &quot;#&quot; character is not part of the fragment and MUST NOT be
+added.</p>
+<p>The value returned MUST be percent-encoded, but MUST NOT double-encode
+any characters. To determine what characters to encode, please refer to
+RFC 3986, Sections 2 and 3.5.</p>
+</div>
+
+
+							<h4>Returns</h4>
+							<div><p>The URI fragment.</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getFragment">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="withScheme" id="_withScheme">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>withScheme(<span>string <var>$scheme</var></span>): static</code>
+
+
+	<div class="expandable-collapsedView">
+		Return an instance with the specified scheme.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Return an instance with the specified scheme.</p>
+<p>This method MUST retain the state of the current instance, and return
+an instance that contains the specified scheme.</p>
+<p>Implementations MUST support the schemes &quot;http&quot; and &quot;https&quot; case
+insensitively, and MAY accommodate other schemes if required.</p>
+<p>An empty scheme is equivalent to removing the scheme.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$scheme</var>&nbsp;&nbsp;</td>
+										<td><p>The scheme to use with the new instance.</p>
+</td>
+									</tr>
+							</table>
+
+							<h4>Returns</h4>
+							<div><p>A new instance with the specified scheme.</p>
+</div>
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="InvalidArgumentException.html"><span>InvalidArgumentException</span></a></code>&nbsp;</td>
+										<td><p>for invalid or unsupported schemes.</p>
+</td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_withScheme">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="withUserInfo" id="_withUserInfo">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>withUserInfo(<span>string <var>$user</var></span>, <span>null|string <var>$password</var> = <span class="php-kw">null</span></span>): static</code>
+
+
+	<div class="expandable-collapsedView">
+		Return an instance with the specified user information.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Return an instance with the specified user information.</p>
+<p>This method MUST retain the state of the current instance, and return
+an instance that contains the specified user information.</p>
+<p>Password is optional, but the user information MUST include the
+user; an empty string for the user is equivalent to removing user
+information.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$user</var>&nbsp;&nbsp;</td>
+										<td><p>The user name to use for authority.</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$password</var>&nbsp;&nbsp;</td>
+										<td><p>The password associated with $user.</p>
+</td>
+									</tr>
+							</table>
+
+							<h4>Returns</h4>
+							<div><p>A new instance with the specified user information.</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_withUserInfo">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="withHost" id="_withHost">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>withHost(<span>string <var>$host</var></span>): static</code>
+
+
+	<div class="expandable-collapsedView">
+		Return an instance with the specified host.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Return an instance with the specified host.</p>
+<p>This method MUST retain the state of the current instance, and return
+an instance that contains the specified host.</p>
+<p>An empty host value is equivalent to removing the host.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$host</var>&nbsp;&nbsp;</td>
+										<td><p>The hostname to use with the new instance.</p>
+</td>
+									</tr>
+							</table>
+
+							<h4>Returns</h4>
+							<div><p>A new instance with the specified host.</p>
+</div>
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="InvalidArgumentException.html"><span>InvalidArgumentException</span></a></code>&nbsp;</td>
+										<td><p>for invalid hostnames.</p>
+</td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_withHost">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="withPort" id="_withPort">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>withPort(<span>null|int <var>$port</var></span>): static</code>
+
+
+	<div class="expandable-collapsedView">
+		Return an instance with the specified port.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Return an instance with the specified port.</p>
+<p>This method MUST retain the state of the current instance, and return
+an instance that contains the specified port.</p>
+<p>Implementations MUST raise an exception for ports outside the
+established TCP and UDP port ranges.</p>
+<p>A null value provided for the port is equivalent to removing the port
+information.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$port</var>&nbsp;&nbsp;</td>
+										<td><p>The port to use with the new instance; a null value
+removes the port information.</p>
+</td>
+									</tr>
+							</table>
+
+							<h4>Returns</h4>
+							<div><p>A new instance with the specified port.</p>
+</div>
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="InvalidArgumentException.html"><span>InvalidArgumentException</span></a></code>&nbsp;</td>
+										<td><p>for invalid ports.</p>
+</td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_withPort">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="withPath" id="_withPath">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>withPath(<span>string <var>$path</var></span>): static</code>
+
+
+	<div class="expandable-collapsedView">
+		Return an instance with the specified path.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Return an instance with the specified path.</p>
+<p>This method MUST retain the state of the current instance, and return
+an instance that contains the specified path.</p>
+<p>The path can either be empty or absolute (starting with a slash) or
+rootless (not starting with a slash). Implementations MUST support all
+three syntaxes.</p>
+<p>If the path is intended to be domain-relative rather than path relative then
+it must begin with a slash (&quot;/&quot;). Paths not starting with a slash (&quot;/&quot;)
+are assumed to be relative to some base path known to the application or
+consumer.</p>
+<p>Users can provide both encoded and decoded path characters.
+Implementations ensure the correct encoding as outlined in getPath().</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$path</var>&nbsp;&nbsp;</td>
+										<td><p>The path to use with the new instance.</p>
+</td>
+									</tr>
+							</table>
+
+							<h4>Returns</h4>
+							<div><p>A new instance with the specified path.</p>
+</div>
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="InvalidArgumentException.html"><span>InvalidArgumentException</span></a></code>&nbsp;</td>
+										<td><p>for invalid paths.</p>
+</td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_withPath">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="withQuery" id="_withQuery">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>withQuery(<span>string <var>$query</var></span>): static</code>
+
+
+	<div class="expandable-collapsedView">
+		Return an instance with the specified query string.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Return an instance with the specified query string.</p>
+<p>This method MUST retain the state of the current instance, and return
+an instance that contains the specified query string.</p>
+<p>Users can provide both encoded and decoded query characters.
+Implementations ensure the correct encoding as outlined in getQuery().</p>
+<p>An empty query string value is equivalent to removing the query string.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$query</var>&nbsp;&nbsp;</td>
+										<td><p>The query string to use with the new instance.</p>
+</td>
+									</tr>
+							</table>
+
+							<h4>Returns</h4>
+							<div><p>A new instance with the specified query string.</p>
+</div>
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="InvalidArgumentException.html"><span>InvalidArgumentException</span></a></code>&nbsp;</td>
+										<td><p>for invalid query strings.</p>
+</td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_withQuery">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="withFragment" id="_withFragment">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>withFragment(<span>string <var>$fragment</var></span>): static</code>
+
+
+	<div class="expandable-collapsedView">
+		Return an instance with the specified URI fragment.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Return an instance with the specified URI fragment.</p>
+<p>This method MUST retain the state of the current instance, and return
+an instance that contains the specified URI fragment.</p>
+<p>Users can provide both encoded and decoded fragment characters.
+Implementations ensure the correct encoding as outlined in getFragment().</p>
+<p>An empty fragment value is equivalent to removing the fragment.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$fragment</var>&nbsp;&nbsp;</td>
+										<td><p>The fragment to use with the new instance.</p>
+</td>
+									</tr>
+							</table>
+
+							<h4>Returns</h4>
+							<div><p>A new instance with the specified fragment.</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_withFragment">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="__toString" id="___toString">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>__toString(): string</code>
+
+
+	<div class="expandable-collapsedView">
+		Return the string representation as a URI reference.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Return the string representation as a URI reference.</p>
+<p>Depending on which components of the URI are present, the resulting
+string is either a full URI or relative reference according to RFC 3986,
+Section 4.1. The method concatenates the various components of the URI,
+using the appropriate delimiters:</p>
+<ul>
+<li>If a scheme is present, it MUST be suffixed by &quot;:&quot;.</li>
+<li>If an authority is present, it MUST be prefixed by &quot;//&quot;.</li>
+<li>The path can be concatenated without delimiters. But there are two
+cases where the path has to be adjusted to make the URI reference
+valid as PHP does not allow to throw an exception in __toString():
+<ul>
+<li>If the path is rootless and an authority is present, the path MUST
+be prefixed by &quot;/&quot;.</li>
+<li>If the path is starting with more than one &quot;/&quot; and no authority is
+present, the starting slashes MUST be reduced to one.</li>
+</ul>
+</li>
+<li>If a query is present, it MUST be prefixed by &quot;?&quot;.</li>
+<li>If a fragment is present, it MUST be prefixed by &quot;#&quot;.</li>
+</ul>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#___toString">#</a>
+		</td>
+	</tr>
+		</table>
+
+
+
+
+		</div>
+
+		<div class="layout-footer">
+			Akamai &#123;OPEN} EdgeGrid Authentication for PHP API documentation generated by <a href="https://www.apigen.org">ApiGen v7.0.0-alpha</a>
+		</div>
+	</div>
+
+	<div class="layout-rest">
+		<div class="navbar"></div>
+	</div>
+</body>
+</html>

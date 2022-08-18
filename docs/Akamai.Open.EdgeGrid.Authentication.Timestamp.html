@@ -1,0 +1,378 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Class Akamai\Open\EdgeGrid\Authentication\Timestamp | Akamai &#123;OPEN} EdgeGrid Authentication for PHP API</title>
+	<link rel="stylesheet" href="assets/main.css">
+	<script src="assets/main.js" defer></script>
+</head>
+
+<body class="layout">
+	<div class="layout-aside">
+	<div class="menu">
+			<div class="menu-section">
+				<h3>Namespaces</h3>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-Akamai.html">Akamai</a>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-Akamai.Open.html">Open</a>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-Akamai.Open.EdgeGrid.html">EdgeGrid</a>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-Akamai.Open.EdgeGrid.Authentication.html">Authentication</a>
+	<ul>
+	</ul>
+			</li>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.Open.EdgeGrid.Exception.html">Exception</a>
+			</li>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.Open.EdgeGrid.Handler.html">Handler</a>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</div>
+
+		<div class="menu-section">
+			<h3>Classes</h3>
+			<ul>
+					<li>
+						<a href="Akamai.Open.EdgeGrid.Authentication.Nonce.html">
+							Nonce
+						</a>
+					</li>
+					<li class="active">
+						<a href="Akamai.Open.EdgeGrid.Authentication.Timestamp.html">
+							Timestamp
+						</a>
+					</li>
+			</ul>
+		</div>
+
+
+
+
+		<div class="menu-section">
+			<h3>Exceptions</h3>
+			<ul>
+					<li>
+						<a href="Akamai.Open.EdgeGrid.Authentication.Exception.html">
+							Exception
+						</a>
+					</li>
+			</ul>
+		</div>
+
+	</div>
+	</div>
+
+	<div class="layout-main">
+		<div class="layout-navbar">
+	<nav class="navbar">
+		<div class="navbar-left">
+			<ul class="navbar-links">
+				<li>
+					<a href="index.html">Overview</a>
+				</li>
+				<li>
+					
+						<a href="namespace-Akamai.Open.EdgeGrid.Authentication.html">Namespace</a>
+					
+				</li>
+<li class="active"><a href="Akamai.Open.EdgeGrid.Authentication.Timestamp.html">Class</a></li>				<li>
+					<a href="tree.html">Tree</a>
+				</li>
+			</ul>
+		</div>
+		<div class="navbar-right">
+	<div class="search" data-elements="assets/elements.js">
+		<input class="search-input" placeholder="Search class, function or namespace" autofocus>
+		<ul class="search-results"></ul>
+	</div>
+		</div>
+	</nav>
+		</div>
+
+		<div class="layout-content">
+		<h1>
+			Class <a href="namespace-Akamai.html">Akamai</a>\<a href="namespace-Akamai.Open.html">Open</a>\<a href="namespace-Akamai.Open.EdgeGrid.html">EdgeGrid</a>\<a href="namespace-Akamai.Open.EdgeGrid.Authentication.html">Authentication</a>\<a href="Akamai.Open.EdgeGrid.Authentication.Timestamp.html">Timestamp</a>
+		</h1>
+
+
+	<table class="classLikeSignatureTable">
+
+
+
+	</table>
+		<div class="classLikeDescription">
+	<div class="description"><p>Generates an Akamai formatted Date for each request</p>
+</div>
+		</div>
+
+
+		<div class="classLikeSection">
+
+		</div>
+
+
+		<table class="table" id="methods">
+			<tr>
+				<th class="table-heading sortable" colspan="3" title="Switch between natural and alphabetical order">Methods</th>
+			</tr>
+
+	<tr class="expandable collapsed" data-order="__construct" id="___construct">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>__construct()</code>
+
+
+	<div class="expandable-collapsedView">
+		Signing Timestamp
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Signing Timestamp</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#___construct">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="isValid" id="_isValid">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>isValid(): bool</code>
+
+
+	<div class="expandable-collapsedView">
+		Return true is timestamp is less than 10s old
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Return true is timestamp is less than 10s old</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_isValid">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setValidFor" id="_setValidFor">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>setValidFor(<span>string <var>$interval</var></span>): $this</code>
+
+
+	<div class="expandable-collapsedView">
+		Set how long the current timestamp is considered valid
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Set how long the current timestamp is considered valid</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$interval</var>&nbsp;&nbsp;</td>
+										<td><p>A \DateInterval time spec</p>
+</td>
+									</tr>
+							</table>
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setValidFor">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="__toString" id="___toString">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>__toString(): string</code>
+
+
+	<div class="expandable-collapsedView">
+		Return the timestamp when cast to string
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Return the timestamp when cast to string</p>
+</div>
+
+
+							<h4>Returns</h4>
+							<div><p>Returns the date</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#___toString">#</a>
+		</td>
+	</tr>
+		</table>
+
+
+
+		<table class="table" id="constants">
+			<tr>
+				<th class="table-heading sortable" colspan="3" title="Switch between natural and alphabetical order">Constants</th>
+			</tr>
+
+	<tr class="expandable collapsed" data-order="FORMAT" id="FORMAT">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+				</code>
+			</td>
+
+			<td class="table-cell">
+<code>FORMAT = <span class="php-str">'Ymd\TH:i:sO'</span></code>
+
+
+	<div class="expandable-expandedView">
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#FORMAT">#</a>
+		</td>
+	</tr>
+		</table>
+
+
+
+		<table class="table" id="properties">
+			<tr>
+				<th class="table-heading sortable" colspan="4" title="Switch between natural and alphabetical order">Properties</th>
+			</tr>
+
+	<tr class="expandable collapsed" data-order="timestamp" id="$timestamp">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell table-shrink">
+				<code class="nowrap"><a href="DateTime.html"><span title="DateTime">DateTime</span></a></code>
+			</td>
+
+			<td class="table-cell">
+<code><var>$timestamp</var></code>
+				
+	<div class="expandable-collapsedView">
+		Signing Timestamp
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Signing Timestamp</p>
+</div>
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#$timestamp">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="validFor" id="$validFor">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell table-shrink">
+				<code class="nowrap">string</code>
+			</td>
+
+			<td class="table-cell">
+<code><var>$validFor</var> = <span class="php-str">'PT10S'</span></code>
+				
+	<div class="expandable-collapsedView">
+		\DateInterval spec
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>\DateInterval spec</p>
+</div>
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#$validFor">#</a>
+		</td>
+	</tr>
+		</table>
+
+
+		</div>
+
+		<div class="layout-footer">
+			Akamai &#123;OPEN} EdgeGrid Authentication for PHP API documentation generated by <a href="https://www.apigen.org">ApiGen v7.0.0-alpha</a>
+		</div>
+	</div>
+
+	<div class="layout-rest">
+		<div class="navbar"></div>
+	</div>
+</body>
+</html>

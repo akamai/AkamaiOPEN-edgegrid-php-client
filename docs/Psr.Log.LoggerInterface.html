@@ -1,0 +1,440 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Interface Psr\Log\LoggerInterface | Akamai &#123;OPEN} EdgeGrid Authentication for PHP API</title>
+	<link rel="stylesheet" href="assets/main.css">
+	<script src="assets/main.js" defer></script>
+</head>
+
+<body class="layout">
+	<div class="layout-aside">
+	<div class="menu">
+			<div class="menu-section">
+				<h3>Namespaces</h3>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.html">Akamai</a>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.Open.html">Open</a>
+			</li>
+	</ul>
+			</li>
+			<li class="menuGroup-item active">
+				<a href="namespace-Psr.html">Psr</a>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-Psr.Log.html">Log</a>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</div>
+
+
+		<div class="menu-section">
+			<h3>Interfaces</h3>
+			<ul>
+					<li>
+						<a href="Psr.Log.LoggerAwareInterface.html">
+							LoggerAwareInterface
+						</a>
+					</li>
+					<li class="active">
+						<a href="Psr.Log.LoggerInterface.html">
+							LoggerInterface
+						</a>
+					</li>
+			</ul>
+		</div>
+
+
+
+		<div class="menu-section">
+			<h3>Exceptions</h3>
+			<ul>
+					<li>
+						<a href="Psr.Log.InvalidArgumentException.html">
+							InvalidArgumentException
+						</a>
+					</li>
+			</ul>
+		</div>
+
+	</div>
+	</div>
+
+	<div class="layout-main">
+		<div class="layout-navbar">
+	<nav class="navbar">
+		<div class="navbar-left">
+			<ul class="navbar-links">
+				<li>
+					<a href="index.html">Overview</a>
+				</li>
+				<li>
+					
+						<a href="namespace-Psr.Log.html">Namespace</a>
+					
+				</li>
+<li class="active"><a href="Psr.Log.LoggerInterface.html">Interface</a></li>				<li>
+					<a href="tree.html">Tree</a>
+				</li>
+			</ul>
+		</div>
+		<div class="navbar-right">
+	<div class="search" data-elements="assets/elements.js">
+		<input class="search-input" placeholder="Search class, function or namespace" autofocus>
+		<ul class="search-results"></ul>
+	</div>
+		</div>
+	</nav>
+		</div>
+
+		<div class="layout-content">
+		<h1>
+			Interface <a href="namespace-Psr.html">Psr</a>\<a href="namespace-Psr.Log.html">Log</a>\<a href="Psr.Log.LoggerInterface.html">LoggerInterface</a>
+		</h1>
+
+
+	<table class="classLikeSignatureTable">
+
+	</table>
+		<div class="classLikeDescription">
+	<div class="description"><p>Describes a logger instance.</p>
+<p>The message MUST be a string or object implementing __toString().</p>
+<p>The message MAY contain placeholders in the form: {foo} where foo
+will be replaced by the context data in key &quot;foo&quot;.</p>
+<p>The context array can contain arbitrary data. The only assumption that
+can be made by implementors is that if an Exception instance is given
+to produce a stack trace, it MUST be in a key named &quot;exception&quot;.</p>
+<p>See <a href="https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md">https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md</a>
+for the full interface specification.</p>
+</div>
+		</div>
+
+
+		<div class="classLikeSection">
+
+		</div>
+
+
+		<table class="table" id="methods">
+			<tr>
+				<th class="table-heading sortable" colspan="3" title="Switch between natural and alphabetical order">Methods</th>
+			</tr>
+
+	<tr class="expandable collapsed" data-order="emergency" id="_emergency">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>emergency(<span>string <var>$message</var></span>, <span>mixed[] <var>$context</var> = []</span>): void</code>
+
+
+	<div class="expandable-collapsedView">
+		System is unusable.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>System is unusable.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_emergency">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="alert" id="_alert">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>alert(<span>string <var>$message</var></span>, <span>mixed[] <var>$context</var> = []</span>): void</code>
+
+
+	<div class="expandable-collapsedView">
+		Action must be taken immediately.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Action must be taken immediately.</p>
+<p>Example: Entire website down, database unavailable, etc. This should
+trigger the SMS alerts and wake you up.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_alert">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="critical" id="_critical">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>critical(<span>string <var>$message</var></span>, <span>mixed[] <var>$context</var> = []</span>): void</code>
+
+
+	<div class="expandable-collapsedView">
+		Critical conditions.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Critical conditions.</p>
+<p>Example: Application component unavailable, unexpected exception.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_critical">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="error" id="_error">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>error(<span>string <var>$message</var></span>, <span>mixed[] <var>$context</var> = []</span>): void</code>
+
+
+	<div class="expandable-collapsedView">
+		Runtime errors that do not require immediate action but should typically
+be logged and monitored.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Runtime errors that do not require immediate action but should typically
+be logged and monitored.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_error">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="warning" id="_warning">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>warning(<span>string <var>$message</var></span>, <span>mixed[] <var>$context</var> = []</span>): void</code>
+
+
+	<div class="expandable-collapsedView">
+		Exceptional occurrences that are not errors.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Exceptional occurrences that are not errors.</p>
+<p>Example: Use of deprecated APIs, poor use of an API, undesirable things
+that are not necessarily wrong.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_warning">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="notice" id="_notice">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>notice(<span>string <var>$message</var></span>, <span>mixed[] <var>$context</var> = []</span>): void</code>
+
+
+	<div class="expandable-collapsedView">
+		Normal but significant events.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Normal but significant events.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_notice">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="info" id="_info">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>info(<span>string <var>$message</var></span>, <span>mixed[] <var>$context</var> = []</span>): void</code>
+
+
+	<div class="expandable-collapsedView">
+		Interesting events.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Interesting events.</p>
+<p>Example: User logs in, SQL logs.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_info">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="debug" id="_debug">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>debug(<span>string <var>$message</var></span>, <span>mixed[] <var>$context</var> = []</span>): void</code>
+
+
+	<div class="expandable-collapsedView">
+		Detailed debug information.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Detailed debug information.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_debug">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="log" id="_log">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>log(<span>mixed <var>$level</var></span>, <span>string <var>$message</var></span>, <span>mixed[] <var>$context</var> = []</span>): void</code>
+
+
+	<div class="expandable-collapsedView">
+		Logs with an arbitrary level.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Logs with an arbitrary level.</p>
+</div>
+
+
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="Psr.Log.InvalidArgumentException.html"><span>Psr\Log\InvalidArgumentException</span></a></code>&nbsp;</td>
+										<td></td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_log">#</a>
+		</td>
+	</tr>
+		</table>
+
+
+
+
+		</div>
+
+		<div class="layout-footer">
+			Akamai &#123;OPEN} EdgeGrid Authentication for PHP API documentation generated by <a href="https://www.apigen.org">ApiGen v7.0.0-alpha</a>
+		</div>
+	</div>
+
+	<div class="layout-rest">
+		<div class="navbar"></div>
+	</div>
+</body>
+</html>

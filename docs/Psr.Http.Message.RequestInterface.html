@@ -1,0 +1,458 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Interface Psr\Http\Message\RequestInterface | Akamai &#123;OPEN} EdgeGrid Authentication for PHP API</title>
+	<link rel="stylesheet" href="assets/main.css">
+	<script src="assets/main.js" defer></script>
+</head>
+
+<body class="layout">
+	<div class="layout-aside">
+	<div class="menu">
+			<div class="menu-section">
+				<h3>Namespaces</h3>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.html">Akamai</a>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.Open.html">Open</a>
+			</li>
+	</ul>
+			</li>
+			<li class="menuGroup-item active">
+				<a href="namespace-Psr.html">Psr</a>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-Psr.Http.html">Http</a>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-Psr.Http.Message.html">Message</a>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</div>
+
+
+		<div class="menu-section">
+			<h3>Interfaces</h3>
+			<ul>
+					<li>
+						<a href="Psr.Http.Message.MessageInterface.html">
+							MessageInterface
+						</a>
+					</li>
+					<li class="active">
+						<a href="Psr.Http.Message.RequestInterface.html">
+							RequestInterface
+						</a>
+					</li>
+					<li>
+						<a href="Psr.Http.Message.ResponseInterface.html">
+							ResponseInterface
+						</a>
+					</li>
+					<li>
+						<a href="Psr.Http.Message.StreamInterface.html">
+							StreamInterface
+						</a>
+					</li>
+					<li>
+						<a href="Psr.Http.Message.UriInterface.html">
+							UriInterface
+						</a>
+					</li>
+			</ul>
+		</div>
+
+
+
+
+	</div>
+	</div>
+
+	<div class="layout-main">
+		<div class="layout-navbar">
+	<nav class="navbar">
+		<div class="navbar-left">
+			<ul class="navbar-links">
+				<li>
+					<a href="index.html">Overview</a>
+				</li>
+				<li>
+					
+						<a href="namespace-Psr.Http.Message.html">Namespace</a>
+					
+				</li>
+<li class="active"><a href="Psr.Http.Message.RequestInterface.html">Interface</a></li>				<li>
+					<a href="tree.html">Tree</a>
+				</li>
+			</ul>
+		</div>
+		<div class="navbar-right">
+	<div class="search" data-elements="assets/elements.js">
+		<input class="search-input" placeholder="Search class, function or namespace" autofocus>
+		<ul class="search-results"></ul>
+	</div>
+		</div>
+	</nav>
+		</div>
+
+		<div class="layout-content">
+		<h1>
+			Interface <a href="namespace-Psr.html">Psr</a>\<a href="namespace-Psr.Http.html">Http</a>\<a href="namespace-Psr.Http.Message.html">Message</a>\<a href="Psr.Http.Message.RequestInterface.html">RequestInterface</a>
+		</h1>
+
+
+	<table class="classLikeSignatureTable">
+		<tr>
+			<th><code>extends</code></th>
+			<td>
+<code><a href="Psr.Http.Message.MessageInterface.html"><span title="Psr\Http\Message\MessageInterface">MessageInterface</span></a></code>			</td>
+		</tr>
+
+	</table>
+		<div class="classLikeDescription">
+	<div class="description"><p>Representation of an outgoing, client-side request.</p>
+<p>Per the HTTP specification, this interface includes properties for
+each of the following:</p>
+<ul>
+<li>Protocol version</li>
+<li>HTTP method</li>
+<li>URI</li>
+<li>Headers</li>
+<li>Message body</li>
+</ul>
+<p>During construction, implementations MUST attempt to set the Host header from
+a provided URI if no Host header is provided.</p>
+<p>Requests are considered immutable; all methods that might change state MUST
+be implemented such that they retain the internal state of the current
+message and return an instance that contains the changed state.</p>
+</div>
+		</div>
+
+			<div class="classLikeSection">
+	<ul class="classTree">
+	<li>
+<b><span class="active">Psr\Http\Message\RequestInterface</span></b>
+		extends
+			<a href="Psr.Http.Message.MessageInterface.html"><span title="Psr\Http\Message\MessageInterface">MessageInterface</span></a>
+
+
+	</li>
+	</ul>
+			</div>
+
+		<div class="classLikeSection">
+
+		</div>
+
+
+		<table class="table" id="methods">
+			<tr>
+				<th class="table-heading sortable" colspan="3" title="Switch between natural and alphabetical order">Methods</th>
+			</tr>
+
+	<tr class="expandable collapsed" data-order="getRequestTarget" id="_getRequestTarget">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getRequestTarget(): string</code>
+
+
+	<div class="expandable-collapsedView">
+		Retrieves the message's request target.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Retrieves the message's request target.</p>
+<p>Retrieves the message's request-target either as it will appear (for
+clients), as it appeared at request (for servers), or as it was
+specified for the instance (see withRequestTarget()).</p>
+<p>In most cases, this will be the origin-form of the composed URI,
+unless a value was provided to the concrete implementation (see
+withRequestTarget() below).</p>
+<p>If no URI is available, and no request-target has been specifically
+provided, this method MUST return the string &quot;/&quot;.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getRequestTarget">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="withRequestTarget" id="_withRequestTarget">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>withRequestTarget(<span>mixed <var>$requestTarget</var></span>): static</code>
+
+
+	<div class="expandable-collapsedView">
+		Return an instance with the specific request-target.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Return an instance with the specific request-target.</p>
+<p>If the request needs a non-origin-form request-target — e.g., for
+specifying an absolute-form, authority-form, or asterisk-form —
+this method may be used to create an instance with the specified
+request-target, verbatim.</p>
+<p>This method MUST be implemented in such a way as to retain the
+immutability of the message, and MUST return an instance that has the
+changed request target.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_withRequestTarget">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getMethod" id="_getMethod">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getMethod(): string</code>
+
+
+	<div class="expandable-collapsedView">
+		Retrieves the HTTP method of the request.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Retrieves the HTTP method of the request.</p>
+</div>
+
+
+							<h4>Returns</h4>
+							<div><p>Returns the request method.</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getMethod">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="withMethod" id="_withMethod">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>withMethod(<span>string <var>$method</var></span>): static</code>
+
+
+	<div class="expandable-collapsedView">
+		Return an instance with the provided HTTP method.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Return an instance with the provided HTTP method.</p>
+<p>While HTTP method names are typically all uppercase characters, HTTP
+method names are case-sensitive and thus implementations SHOULD NOT
+modify the given string.</p>
+<p>This method MUST be implemented in such a way as to retain the
+immutability of the message, and MUST return an instance that has the
+changed request method.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$method</var>&nbsp;&nbsp;</td>
+										<td><p>Case-sensitive method.</p>
+</td>
+									</tr>
+							</table>
+
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="InvalidArgumentException.html"><span>InvalidArgumentException</span></a></code>&nbsp;</td>
+										<td><p>for invalid HTTP methods.</p>
+</td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_withMethod">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getUri" id="_getUri">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getUri(): <a href="Psr.Http.Message.UriInterface.html"><span title="Psr\Http\Message\UriInterface">UriInterface</span></a></code>
+
+
+	<div class="expandable-collapsedView">
+		Retrieves the URI instance.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Retrieves the URI instance.</p>
+<p>This method MUST return a UriInterface instance.</p>
+</div>
+
+
+							<h4>Returns</h4>
+							<div><p>Returns a UriInterface instance
+representing the URI of the request.</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getUri">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="withUri" id="_withUri">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>withUri(<span><a href="Psr.Http.Message.UriInterface.html"><span title="Psr\Http\Message\UriInterface">UriInterface</span></a> <var>$uri</var></span>, <span>bool <var>$preserveHost</var> = <span class="php-kw">false</span></span>): static</code>
+
+
+	<div class="expandable-collapsedView">
+		Returns an instance with the provided URI.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Returns an instance with the provided URI.</p>
+<p>This method MUST update the Host header of the returned request by
+default if the URI contains a host component. If the URI does not
+contain a host component, any pre-existing Host header MUST be carried
+over to the returned request.</p>
+<p>You can opt-in to preserving the original state of the Host header by
+setting <code>$preserveHost</code> to <code>true</code>. When <code>$preserveHost</code> is set to
+<code>true</code>, this method interacts with the Host header in the following ways:</p>
+<ul>
+<li>If the Host header is missing or empty, and the new URI contains
+a host component, this method MUST update the Host header in the returned
+request.</li>
+<li>If the Host header is missing or empty, and the new URI does not contain a
+host component, this method MUST NOT update the Host header in the returned
+request.</li>
+<li>If a Host header is present and non-empty, this method MUST NOT update
+the Host header in the returned request.</li>
+</ul>
+<p>This method MUST be implemented in such a way as to retain the
+immutability of the message, and MUST return an instance that has the
+new UriInterface instance.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$uri</var>&nbsp;&nbsp;</td>
+										<td><p>New request URI to use.</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$preserveHost</var>&nbsp;&nbsp;</td>
+										<td><p>Preserve the original state of the Host header.</p>
+</td>
+									</tr>
+							</table>
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_withUri">#</a>
+		</td>
+	</tr>
+		</table>
+		<table class="table">
+			<tr>
+				<th class="table-heading">Methods inherited from <a href="Psr.Http.Message.MessageInterface.html"><span>Psr\Http\Message\MessageInterface</span></a></th>
+			</tr>
+			<tr>
+				<td class="table-cell">
+<code><a href="Psr.Http.Message.MessageInterface.html#_getProtocolVersion">getProtocolVersion()</a>, <a href="Psr.Http.Message.MessageInterface.html#_withProtocolVersion">withProtocolVersion()</a>, <a href="Psr.Http.Message.MessageInterface.html#_getHeaders">getHeaders()</a>, <a href="Psr.Http.Message.MessageInterface.html#_hasHeader">hasHeader()</a>, <a href="Psr.Http.Message.MessageInterface.html#_getHeader">getHeader()</a>, <a href="Psr.Http.Message.MessageInterface.html#_getHeaderLine">getHeaderLine()</a>, <a href="Psr.Http.Message.MessageInterface.html#_withHeader">withHeader()</a>, <a href="Psr.Http.Message.MessageInterface.html#_withAddedHeader">withAddedHeader()</a>, <a href="Psr.Http.Message.MessageInterface.html#_withoutHeader">withoutHeader()</a>, <a href="Psr.Http.Message.MessageInterface.html#_getBody">getBody()</a>, <a href="Psr.Http.Message.MessageInterface.html#_withBody">withBody()</a></code>				</td>
+			</tr>
+		</table>
+
+
+
+
+
+
+
+
+
+
+
+		</div>
+
+		<div class="layout-footer">
+			Akamai &#123;OPEN} EdgeGrid Authentication for PHP API documentation generated by <a href="https://www.apigen.org">ApiGen v7.0.0-alpha</a>
+		</div>
+	</div>
+
+	<div class="layout-rest">
+		<div class="navbar"></div>
+	</div>
+</body>
+</html>

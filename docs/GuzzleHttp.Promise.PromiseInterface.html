@@ -1,0 +1,463 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Interface GuzzleHttp\Promise\PromiseInterface | Akamai &#123;OPEN} EdgeGrid Authentication for PHP API</title>
+	<link rel="stylesheet" href="assets/main.css">
+	<script src="assets/main.js" defer></script>
+</head>
+
+<body class="layout">
+	<div class="layout-aside">
+	<div class="menu">
+			<div class="menu-section">
+				<h3>Namespaces</h3>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.html">Akamai</a>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.Open.html">Open</a>
+			</li>
+	</ul>
+			</li>
+			<li class="menuGroup-item active">
+				<a href="namespace-GuzzleHttp.html">GuzzleHttp</a>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-GuzzleHttp.Promise.html">Promise</a>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</div>
+
+
+		<div class="menu-section">
+			<h3>Interfaces</h3>
+			<ul>
+					<li class="active">
+						<a href="GuzzleHttp.Promise.PromiseInterface.html">
+							PromiseInterface
+						</a>
+					</li>
+			</ul>
+		</div>
+
+
+
+
+	</div>
+	</div>
+
+	<div class="layout-main">
+		<div class="layout-navbar">
+	<nav class="navbar">
+		<div class="navbar-left">
+			<ul class="navbar-links">
+				<li>
+					<a href="index.html">Overview</a>
+				</li>
+				<li>
+					
+						<a href="namespace-GuzzleHttp.Promise.html">Namespace</a>
+					
+				</li>
+<li class="active"><a href="GuzzleHttp.Promise.PromiseInterface.html">Interface</a></li>				<li>
+					<a href="tree.html">Tree</a>
+				</li>
+			</ul>
+		</div>
+		<div class="navbar-right">
+	<div class="search" data-elements="assets/elements.js">
+		<input class="search-input" placeholder="Search class, function or namespace" autofocus>
+		<ul class="search-results"></ul>
+	</div>
+		</div>
+	</nav>
+		</div>
+
+		<div class="layout-content">
+		<h1>
+			Interface <a href="namespace-GuzzleHttp.html">GuzzleHttp</a>\<a href="namespace-GuzzleHttp.Promise.html">Promise</a>\<a href="GuzzleHttp.Promise.PromiseInterface.html">PromiseInterface</a>
+		</h1>
+
+
+	<table class="classLikeSignatureTable">
+
+	</table>
+		<div class="classLikeDescription">
+	<div class="description"><p>A promise represents the eventual result of an asynchronous operation.</p>
+<p>The primary way of interacting with a promise is through its then method,
+which registers callbacks to receive either a promise’s eventual value or
+the reason why the promise cannot be fulfilled.</p>
+</div>
+		</div>
+
+
+		<div class="classLikeSection">
+
+		</div>
+
+
+		<table class="table" id="methods">
+			<tr>
+				<th class="table-heading sortable" colspan="3" title="Switch between natural and alphabetical order">Methods</th>
+			</tr>
+
+	<tr class="expandable collapsed" data-order="then" id="_then">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>then(<span>callable <var>$onFulfilled</var> = <span class="php-kw">null</span></span>, <span>callable <var>$onRejected</var> = <span class="php-kw">null</span></span>): <b><span class="active" title="GuzzleHttp\Promise\PromiseInterface">PromiseInterface</span></b></code>
+
+
+	<div class="expandable-collapsedView">
+		Appends fulfillment and rejection handlers to the promise, and returns
+a new promise resolving to the return value of…
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Appends fulfillment and rejection handlers to the promise, and returns
+a new promise resolving to the return value of the called handler.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$onFulfilled</var>&nbsp;&nbsp;</td>
+										<td><p>Invoked when the promise fulfills.</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$onRejected</var>&nbsp;&nbsp;</td>
+										<td><p>Invoked when the promise is rejected.</p>
+</td>
+									</tr>
+							</table>
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_then">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="otherwise" id="_otherwise">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>otherwise(<span>callable <var>$onRejected</var></span>): <b><span class="active" title="GuzzleHttp\Promise\PromiseInterface">PromiseInterface</span></b></code>
+
+
+	<div class="expandable-collapsedView">
+		Appends a rejection handler callback to the promise, and returns a new
+promise resolving to the return value of the…
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Appends a rejection handler callback to the promise, and returns a new
+promise resolving to the return value of the callback if it is called,
+or to its original fulfillment value if the promise is instead
+fulfilled.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$onRejected</var>&nbsp;&nbsp;</td>
+										<td><p>Invoked when the promise is rejected.</p>
+</td>
+									</tr>
+							</table>
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_otherwise">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getState" id="_getState">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getState(): string</code>
+
+
+	<div class="expandable-collapsedView">
+		Get the state of the promise ("pending", "rejected", or "fulfilled").
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Get the state of the promise (&quot;pending&quot;, &quot;rejected&quot;, or &quot;fulfilled&quot;).</p>
+<p>The three states can be checked against the constants defined on
+PromiseInterface: PENDING, FULFILLED, and REJECTED.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getState">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="resolve" id="_resolve">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>resolve(<span>mixed <var>$value</var></span>)</code>
+
+
+	<div class="expandable-collapsedView">
+		Resolve the promise with the given value.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Resolve the promise with the given value.</p>
+</div>
+
+
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="RuntimeException.html"><span>RuntimeException</span></a></code>&nbsp;</td>
+										<td><p>if the promise is already resolved.</p>
+</td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_resolve">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="reject" id="_reject">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>reject(<span>mixed <var>$reason</var></span>)</code>
+
+
+	<div class="expandable-collapsedView">
+		Reject the promise with the given reason.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Reject the promise with the given reason.</p>
+</div>
+
+
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="RuntimeException.html"><span>RuntimeException</span></a></code>&nbsp;</td>
+										<td><p>if the promise is already resolved.</p>
+</td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_reject">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="cancel" id="_cancel">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>cancel()</code>
+
+
+	<div class="expandable-collapsedView">
+		Cancels the promise if possible.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Cancels the promise if possible.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_cancel">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="wait" id="_wait">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>wait(<span>bool <var>$unwrap</var> = <span class="php-kw">true</span></span>): mixed</code>
+
+
+	<div class="expandable-collapsedView">
+		Waits until the promise completes if possible.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Waits until the promise completes if possible.</p>
+<p>Pass $unwrap as true to unwrap the result of the promise, either
+returning the resolved value or throwing the rejected exception.</p>
+<p>If the promise cannot be waited on, then the promise will be rejected.</p>
+</div>
+
+
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="LogicException.html"><span>LogicException</span></a></code>&nbsp;</td>
+										<td><p>if the promise has no wait function or if the
+promise does not settle after waiting.</p>
+</td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_wait">#</a>
+		</td>
+	</tr>
+		</table>
+
+
+		<table class="table" id="constants">
+			<tr>
+				<th class="table-heading sortable" colspan="3" title="Switch between natural and alphabetical order">Constants</th>
+			</tr>
+
+	<tr class="expandable collapsed" data-order="PENDING" id="PENDING">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+				</code>
+			</td>
+
+			<td class="table-cell">
+<code>PENDING = <span class="php-str">'pending'</span></code>
+
+
+	<div class="expandable-expandedView">
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#PENDING">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="FULFILLED" id="FULFILLED">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+				</code>
+			</td>
+
+			<td class="table-cell">
+<code>FULFILLED = <span class="php-str">'fulfilled'</span></code>
+
+
+	<div class="expandable-expandedView">
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#FULFILLED">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="REJECTED" id="REJECTED">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+				</code>
+			</td>
+
+			<td class="table-cell">
+<code>REJECTED = <span class="php-str">'rejected'</span></code>
+
+
+	<div class="expandable-expandedView">
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#REJECTED">#</a>
+		</td>
+	</tr>
+		</table>
+
+
+		</div>
+
+		<div class="layout-footer">
+			Akamai &#123;OPEN} EdgeGrid Authentication for PHP API documentation generated by <a href="https://www.apigen.org">ApiGen v7.0.0-alpha</a>
+		</div>
+	</div>
+
+	<div class="layout-rest">
+		<div class="navbar"></div>
+	</div>
+</body>
+</html>

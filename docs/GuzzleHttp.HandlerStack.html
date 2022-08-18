@@ -1,0 +1,632 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Class GuzzleHttp\HandlerStack | Akamai &#123;OPEN} EdgeGrid Authentication for PHP API</title>
+	<link rel="stylesheet" href="assets/main.css">
+	<script src="assets/main.js" defer></script>
+</head>
+
+<body class="layout">
+	<div class="layout-aside">
+	<div class="menu">
+			<div class="menu-section">
+				<h3>Namespaces</h3>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.html">Akamai</a>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.Open.html">Open</a>
+			</li>
+	</ul>
+			</li>
+			<li class="menuGroup-item active">
+				<a href="namespace-GuzzleHttp.html">GuzzleHttp</a>
+	<ul>
+	</ul>
+			</li>
+	</ul>
+			</div>
+
+		<div class="menu-section">
+			<h3>Classes</h3>
+			<ul>
+					<li>
+						<a href="GuzzleHttp.Client.html">
+							Client
+						</a>
+					</li>
+					<li class="active">
+						<a href="GuzzleHttp.HandlerStack.html">
+							HandlerStack
+						</a>
+					</li>
+					<li>
+						<a href="GuzzleHttp.MessageFormatter.html">
+							MessageFormatter
+						</a>
+					</li>
+			</ul>
+		</div>
+
+		<div class="menu-section">
+			<h3>Interfaces</h3>
+			<ul>
+					<li>
+						<a href="GuzzleHttp.ClientInterface.html">
+							ClientInterface
+						</a>
+					</li>
+					<li>
+						<a href="GuzzleHttp.MessageFormatterInterface.html">
+							MessageFormatterInterface
+						</a>
+					</li>
+			</ul>
+		</div>
+
+		<div class="menu-section">
+			<h3>Traits</h3>
+			<ul>
+					<li>
+						<a href="GuzzleHttp.ClientTrait.html">
+							ClientTrait
+						</a>
+					</li>
+			</ul>
+		</div>
+
+
+
+	</div>
+	</div>
+
+	<div class="layout-main">
+		<div class="layout-navbar">
+	<nav class="navbar">
+		<div class="navbar-left">
+			<ul class="navbar-links">
+				<li>
+					<a href="index.html">Overview</a>
+				</li>
+				<li>
+					
+						<a href="namespace-GuzzleHttp.html">Namespace</a>
+					
+				</li>
+<li class="active"><a href="GuzzleHttp.HandlerStack.html">Class</a></li>				<li>
+					<a href="tree.html">Tree</a>
+				</li>
+			</ul>
+		</div>
+		<div class="navbar-right">
+	<div class="search" data-elements="assets/elements.js">
+		<input class="search-input" placeholder="Search class, function or namespace" autofocus>
+		<ul class="search-results"></ul>
+	</div>
+		</div>
+	</nav>
+		</div>
+
+		<div class="layout-content">
+		<h1>
+			Class <a href="namespace-GuzzleHttp.html">GuzzleHttp</a>\<a href="GuzzleHttp.HandlerStack.html">HandlerStack</a>
+		</h1>
+
+
+	<table class="classLikeSignatureTable">
+
+
+
+	</table>
+		<div class="classLikeDescription">
+	<div class="description"><p>Creates a composed Guzzle handler function by stacking middlewares on top of
+an HTTP handler function.</p>
+</div>
+		</div>
+
+
+		<div class="classLikeSection">
+
+		</div>
+
+
+		<table class="table" id="methods">
+			<tr>
+				<th class="table-heading sortable" colspan="3" title="Switch between natural and alphabetical order">Methods</th>
+			</tr>
+
+	<tr class="expandable collapsed" data-order="create" id="_create">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					static
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>create(<span>(callable(<a href="Psr.Http.Message.RequestInterface.html"><span title="Psr\Http\Message\RequestInterface">RequestInterface</span></a>, array):&nbsp;<a href="GuzzleHttp.Promise.PromiseInterface.html"><span title="GuzzleHttp\Promise\PromiseInterface">PromiseInterface</span></a>)|null <var>$handler</var> = <span class="php-kw">null</span></span>): self</code>
+
+
+	<div class="expandable-collapsedView">
+		Creates a default handler stack that can be used by clients.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Creates a default handler stack that can be used by clients.</p>
+<p>The returned handler will wrap the provided handler or use the most
+appropriate default handler for your system. The returned HandlerStack has
+support for cookies, redirects, HTTP error exceptions, and preparing a body
+before sending.</p>
+<p>The returned handler stack can be passed to a client in the &quot;handler&quot;
+option.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$handler</var>&nbsp;&nbsp;</td>
+										<td><p>HTTP handler function to use with the stack. If no
+handler is provided, the best handler for your
+system will be utilized.</p>
+</td>
+									</tr>
+							</table>
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_create">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="__construct" id="___construct">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>__construct(<span>(callable(<a href="Psr.Http.Message.RequestInterface.html"><span title="Psr\Http\Message\RequestInterface">RequestInterface</span></a>, array):&nbsp;<a href="GuzzleHttp.Promise.PromiseInterface.html"><span title="GuzzleHttp\Promise\PromiseInterface">PromiseInterface</span></a>)|null <var>$handler</var> = <span class="php-kw">null</span></span>)</code>
+
+
+
+	<div class="expandable-expandedView">
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$handler</var>&nbsp;&nbsp;</td>
+										<td><p>Underlying HTTP handler.</p>
+</td>
+									</tr>
+							</table>
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#___construct">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="__invoke" id="___invoke">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>__invoke(<span><a href="Psr.Http.Message.RequestInterface.html"><span title="Psr\Http\Message\RequestInterface">RequestInterface</span></a> <var>$request</var></span>, <span>array <var>$options</var></span>): <a href="Psr.Http.Message.ResponseInterface.html"><span title="Psr\Http\Message\ResponseInterface">ResponseInterface</span></a>|<a href="GuzzleHttp.Promise.PromiseInterface.html"><span title="GuzzleHttp\Promise\PromiseInterface">PromiseInterface</span></a></code>
+
+
+	<div class="expandable-collapsedView">
+		Invokes the handler stack as a composed handler
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Invokes the handler stack as a composed handler</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#___invoke">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="__toString" id="___toString">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>__toString(): string</code>
+
+
+	<div class="expandable-collapsedView">
+		Dumps a string representation of the stack.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Dumps a string representation of the stack.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#___toString">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setHandler" id="_setHandler">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>setHandler(<span>callable(<a href="Psr.Http.Message.RequestInterface.html"><span title="Psr\Http\Message\RequestInterface">RequestInterface</span></a>, array):&nbsp;<a href="GuzzleHttp.Promise.PromiseInterface.html"><span title="GuzzleHttp\Promise\PromiseInterface">PromiseInterface</span></a> <var>$handler</var></span>): void</code>
+
+
+	<div class="expandable-collapsedView">
+		Set the HTTP handler that actually returns a promise.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Set the HTTP handler that actually returns a promise.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$handler</var>&nbsp;&nbsp;</td>
+										<td><p>Accepts a request and array of options and
+returns a Promise.</p>
+</td>
+									</tr>
+							</table>
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setHandler">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="hasHandler" id="_hasHandler">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>hasHandler(): bool</code>
+
+
+	<div class="expandable-collapsedView">
+		Returns true if the builder has a handler.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Returns true if the builder has a handler.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_hasHandler">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="unshift" id="_unshift">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>unshift(<span>callable(callable):&nbsp;callable <var>$middleware</var></span>, <span>string <var>$name</var> = <span class="php-kw">null</span></span>): void</code>
+
+
+	<div class="expandable-collapsedView">
+		Unshift a middleware to the bottom of the stack.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Unshift a middleware to the bottom of the stack.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$middleware</var>&nbsp;&nbsp;</td>
+										<td><p>Middleware function</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$name</var>&nbsp;&nbsp;</td>
+										<td><p>Name to register for this middleware.</p>
+</td>
+									</tr>
+							</table>
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_unshift">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="push" id="_push">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>push(<span>callable(callable):&nbsp;callable <var>$middleware</var></span>, <span>string <var>$name</var> = <span class="php-str">''</span></span>): void</code>
+
+
+	<div class="expandable-collapsedView">
+		Push a middleware to the top of the stack.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Push a middleware to the top of the stack.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$middleware</var>&nbsp;&nbsp;</td>
+										<td><p>Middleware function</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$name</var>&nbsp;&nbsp;</td>
+										<td><p>Name to register for this middleware.</p>
+</td>
+									</tr>
+							</table>
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_push">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="before" id="_before">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>before(<span>string <var>$findName</var></span>, <span>callable(callable):&nbsp;callable <var>$middleware</var></span>, <span>string <var>$withName</var> = <span class="php-str">''</span></span>): void</code>
+
+
+	<div class="expandable-collapsedView">
+		Add a middleware before another middleware by name.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Add a middleware before another middleware by name.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$findName</var>&nbsp;&nbsp;</td>
+										<td><p>Middleware to find</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$middleware</var>&nbsp;&nbsp;</td>
+										<td><p>Middleware function</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$withName</var>&nbsp;&nbsp;</td>
+										<td><p>Name to register for this middleware.</p>
+</td>
+									</tr>
+							</table>
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_before">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="after" id="_after">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>after(<span>string <var>$findName</var></span>, <span>callable(callable):&nbsp;callable <var>$middleware</var></span>, <span>string <var>$withName</var> = <span class="php-str">''</span></span>): void</code>
+
+
+	<div class="expandable-collapsedView">
+		Add a middleware after another middleware by name.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Add a middleware after another middleware by name.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$findName</var>&nbsp;&nbsp;</td>
+										<td><p>Middleware to find</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$middleware</var>&nbsp;&nbsp;</td>
+										<td><p>Middleware function</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$withName</var>&nbsp;&nbsp;</td>
+										<td><p>Name to register for this middleware.</p>
+</td>
+									</tr>
+							</table>
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_after">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="remove" id="_remove">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>remove(<span>callable|string <var>$remove</var></span>): void</code>
+
+
+	<div class="expandable-collapsedView">
+		Remove a middleware by instance or name from the stack.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Remove a middleware by instance or name from the stack.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$remove</var>&nbsp;&nbsp;</td>
+										<td><p>Middleware to remove by instance or name.</p>
+</td>
+									</tr>
+							</table>
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_remove">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="resolve" id="_resolve">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>resolve(): callable(<a href="Psr.Http.Message.RequestInterface.html"><span title="Psr\Http\Message\RequestInterface">RequestInterface</span></a>, array):&nbsp;<a href="GuzzleHttp.Promise.PromiseInterface.html"><span title="GuzzleHttp\Promise\PromiseInterface">PromiseInterface</span></a></code>
+
+
+	<div class="expandable-collapsedView">
+		Compose the middleware and handler into a single callable function.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Compose the middleware and handler into a single callable function.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_resolve">#</a>
+		</td>
+	</tr>
+		</table>
+
+
+
+
+
+
+
+
+		</div>
+
+		<div class="layout-footer">
+			Akamai &#123;OPEN} EdgeGrid Authentication for PHP API documentation generated by <a href="https://www.apigen.org">ApiGen v7.0.0-alpha</a>
+		</div>
+	</div>
+
+	<div class="layout-rest">
+		<div class="navbar"></div>
+	</div>
+</body>
+</html>

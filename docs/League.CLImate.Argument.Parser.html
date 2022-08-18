@@ -1,0 +1,763 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Class League\CLImate\Argument\Parser | Akamai &#123;OPEN} EdgeGrid Authentication for PHP API</title>
+	<link rel="stylesheet" href="assets/main.css">
+	<script src="assets/main.js" defer></script>
+</head>
+
+<body class="layout">
+	<div class="layout-aside">
+	<div class="menu">
+			<div class="menu-section">
+				<h3>Namespaces</h3>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.html">Akamai</a>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.Open.html">Open</a>
+			</li>
+	</ul>
+			</li>
+			<li class="menuGroup-item active">
+				<a href="namespace-League.html">League</a>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-League.CLImate.html">CLImate</a>
+	<ul>
+			<li class="menuGroup-item active">
+				<a href="namespace-League.CLImate.Argument.html">Argument</a>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</li>
+	</ul>
+			</div>
+
+		<div class="menu-section">
+			<h3>Classes</h3>
+			<ul>
+					<li>
+						<a href="League.CLImate.Argument.Argument.html">
+							Argument
+						</a>
+					</li>
+					<li>
+						<a href="League.CLImate.Argument.Filter.html">
+							Filter
+						</a>
+					</li>
+					<li>
+						<a href="League.CLImate.Argument.Manager.html">
+							Manager
+						</a>
+					</li>
+					<li class="active">
+						<a href="League.CLImate.Argument.Parser.html">
+							Parser
+						</a>
+					</li>
+					<li>
+						<a href="League.CLImate.Argument.Summary.html">
+							Summary
+						</a>
+					</li>
+			</ul>
+		</div>
+
+
+
+
+
+	</div>
+	</div>
+
+	<div class="layout-main">
+		<div class="layout-navbar">
+	<nav class="navbar">
+		<div class="navbar-left">
+			<ul class="navbar-links">
+				<li>
+					<a href="index.html">Overview</a>
+				</li>
+				<li>
+					
+						<a href="namespace-League.CLImate.Argument.html">Namespace</a>
+					
+				</li>
+<li class="active"><a href="League.CLImate.Argument.Parser.html">Class</a></li>				<li>
+					<a href="tree.html">Tree</a>
+				</li>
+			</ul>
+		</div>
+		<div class="navbar-right">
+	<div class="search" data-elements="assets/elements.js">
+		<input class="search-input" placeholder="Search class, function or namespace" autofocus>
+		<ul class="search-results"></ul>
+	</div>
+		</div>
+	</nav>
+		</div>
+
+		<div class="layout-content">
+		<h1>
+			Class <a href="namespace-League.html">League</a>\<a href="namespace-League.CLImate.html">CLImate</a>\<a href="namespace-League.CLImate.Argument.html">Argument</a>\<a href="League.CLImate.Argument.Parser.html">Parser</a>
+		</h1>
+
+
+	<table class="classLikeSignatureTable">
+
+
+
+	</table>
+
+
+		<div class="classLikeSection">
+
+		</div>
+
+
+		<table class="table" id="methods">
+			<tr>
+				<th class="table-heading sortable" colspan="3" title="Switch between natural and alphabetical order">Methods</th>
+			</tr>
+
+	<tr class="expandable collapsed" data-order="__construct" id="___construct">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>__construct()</code>
+
+
+
+	<div class="expandable-expandedView">
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#___construct">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setFilter" id="_setFilter">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>setFilter(<span><a href="League.CLImate.Argument.Filter.html"><span title="League\CLImate\Argument\Filter">Filter</span></a> <var>$filter</var></span>, <span><a href="League.CLImate.Argument.Argument.html"><span title="League\CLImate\Argument\Argument">Argument</span></a>[] <var>$arguments</var></span>): <b><span class="active" title="League\CLImate\Argument\Parser">Parser</span></b></code>
+
+
+
+	<div class="expandable-expandedView">
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setFilter">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="parse" id="_parse">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>parse(<span>array <var>$argv</var> = <span class="php-kw">null</span></span>): void</code>
+
+
+	<div class="expandable-collapsedView">
+		Parse command line arguments into CLImate arguments.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Parse command line arguments into CLImate arguments.</p>
+</div>
+
+
+
+							<h4>Throws</h4>
+							<table>
+									<tr>
+										<td><code><a href="League.CLImate.Exceptions.InvalidArgumentException.html"><span>League\CLImate\Exceptions\InvalidArgumentException</span></a></code>&nbsp;</td>
+										<td><p>if required arguments aren't defined.</p>
+</td>
+									</tr>
+							</table>
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_parse">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="command" id="_command">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>command(<span>array <var>$argv</var> = <span class="php-kw">null</span></span>): string</code>
+
+
+	<div class="expandable-collapsedView">
+		Get the command name.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Get the command name.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_command">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="arguments" id="_arguments">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>arguments(<span>array <var>$argv</var> = <span class="php-kw">null</span></span>): array</code>
+
+
+	<div class="expandable-collapsedView">
+		Get the passed arguments.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Get the passed arguments.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_arguments">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="trailing" id="_trailing">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>trailing(): string|null</code>
+
+
+	<div class="expandable-collapsedView">
+		Get the trailing arguments
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Get the trailing arguments</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_trailing">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="trailingArray" id="_trailingArray">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>trailingArray(): array|null</code>
+
+
+	<div class="expandable-collapsedView">
+		Get the trailing arguments as an array
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Get the trailing arguments as an array</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_trailingArray">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="removeTrailingArguments" id="_removeTrailingArguments">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>removeTrailingArguments(<span>array <var>$arguments</var></span>): array</code>
+
+
+	<div class="expandable-collapsedView">
+		Remove the trailing arguments from the parser and set them aside
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Remove the trailing arguments from the parser and set them aside</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_removeTrailingArguments">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="prefixedArguments" id="_prefixedArguments">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>prefixedArguments(<span>array <var>$argv</var> = []</span>): array</code>
+
+
+	<div class="expandable-collapsedView">
+		Parse command line options into prefixed CLImate arguments.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Parse command line options into prefixed CLImate arguments.</p>
+<p>Prefixed arguments are arguments with a prefix (-) or a long prefix (--)
+on the command line.</p>
+<p>Return the arguments passed on the command line that didn't match up with
+prefixed arguments so they can be assigned to non-prefixed arguments.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_prefixedArguments">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="nonPrefixedArguments" id="_nonPrefixedArguments">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>nonPrefixedArguments(<span>array <var>$unParsedArguments</var> = []</span>)</code>
+
+
+	<div class="expandable-collapsedView">
+		Parse unset command line options into non-prefixed CLImate arguments.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Parse unset command line options into non-prefixed CLImate arguments.</p>
+<p>Non-prefixed arguments are parsed after the prefixed arguments on the
+command line, in the order that they're defined in the script.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_nonPrefixedArguments">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getNameAndValue" id="_getNameAndValue">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getNameAndValue(<span>string <var>$cliArgument</var></span>): string[]</code>
+
+
+	<div class="expandable-collapsedView">
+		Parse the name and value of the argument passed in
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Parse the name and value of the argument passed in</p>
+</div>
+
+
+							<h4>Returns</h4>
+							<div><p>[$name, $value]</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getNameAndValue">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="trySettingArgumentValue" id="_trySettingArgumentValue">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>trySettingArgumentValue(<span>array <var>$argv</var></span>, <span>int <var>$key</var></span>, <span>string <var>$passed_argument</var></span>): array</code>
+
+
+	<div class="expandable-collapsedView">
+		Attempt to set the an argument's value and remove applicable
+arguments from array
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Attempt to set the an argument's value and remove applicable
+arguments from array</p>
+</div>
+
+
+							<h4>Returns</h4>
+							<div><p>The new $argv</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_trySettingArgumentValue">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="setArgumentValue" id="_setArgumentValue">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>setArgumentValue(<span>array <var>$argv</var></span>, <span><a href="League.CLImate.Argument.Argument.html"><span title="League\CLImate\Argument\Argument">Argument</span></a> <var>$argument</var></span>, <span>int <var>$key</var></span>, <span>string|null <var>$value</var></span>): array</code>
+
+
+	<div class="expandable-collapsedView">
+		Set the argument's value
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Set the argument's value</p>
+</div>
+
+
+							<h4>Returns</h4>
+							<div><p>The new $argv</p>
+</div>
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_setArgumentValue">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="isValidArgumentValue" id="_isValidArgumentValue">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>isValidArgumentValue(<span><var>$argumentValue</var></span>): bool</code>
+
+
+	<div class="expandable-collapsedView">
+		Check if the value is considered a valid input value.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Check if the value is considered a valid input value.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_isValidArgumentValue">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="findPrefixedArgument" id="_findPrefixedArgument">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>findPrefixedArgument(<span>string <var>$name</var></span>): <a href="League.CLImate.Argument.Argument.html"><span title="League\CLImate\Argument\Argument">Argument</span></a>|false</code>
+
+
+	<div class="expandable-collapsedView">
+		Search for argument in defined prefix arguments
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Search for argument in defined prefix arguments</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_findPrefixedArgument">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="getCommandAndArguments" id="_getCommandAndArguments">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>getCommandAndArguments(<span>array <var>$argv</var> = <span class="php-kw">null</span></span>): array</code>
+
+
+	<div class="expandable-collapsedView">
+		Pull a command name and arguments from $argv.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Pull a command name and arguments from $argv.</p>
+</div>
+
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_getCommandAndArguments">#</a>
+		</td>
+	</tr>
+		</table>
+
+
+
+
+
+
+		<table class="table" id="properties">
+			<tr>
+				<th class="table-heading sortable" colspan="4" title="Switch between natural and alphabetical order">Properties</th>
+			</tr>
+
+	<tr class="expandable collapsed" data-order="filter" id="$filter">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell table-shrink">
+				<code class="nowrap"><a href="League.CLImate.Argument.Filter.html"><span title="League\CLImate\Argument\Filter">Filter</span></a></code>
+			</td>
+
+			<td class="table-cell">
+<code><var>$filter</var></code>
+				
+
+	<div class="expandable-expandedView">
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#$filter">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="summary" id="$summary">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell table-shrink">
+				<code class="nowrap"><a href="League.CLImate.Argument.Summary.html"><span title="League\CLImate\Argument\Summary">Summary</span></a></code>
+			</td>
+
+			<td class="table-cell">
+<code><var>$summary</var></code>
+				
+
+	<div class="expandable-expandedView">
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#$summary">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="trailing" id="$trailing">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell table-shrink">
+				<code class="nowrap"></code>
+			</td>
+
+			<td class="table-cell">
+<code><var>$trailing</var></code>
+				
+
+	<div class="expandable-expandedView">
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#$trailing">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="trailingArray" id="$trailingArray">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+	protected
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell table-shrink">
+				<code class="nowrap"></code>
+			</td>
+
+			<td class="table-cell">
+<code><var>$trailingArray</var></code>
+				
+
+	<div class="expandable-expandedView">
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#$trailingArray">#</a>
+		</td>
+	</tr>
+		</table>
+
+
+		</div>
+
+		<div class="layout-footer">
+			Akamai &#123;OPEN} EdgeGrid Authentication for PHP API documentation generated by <a href="https://www.apigen.org">ApiGen v7.0.0-alpha</a>
+		</div>
+	</div>
+
+	<div class="layout-rest">
+		<div class="navbar"></div>
+	</div>
+</body>
+</html>

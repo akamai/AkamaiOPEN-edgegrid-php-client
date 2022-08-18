@@ -1,0 +1,347 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Class GuzzleHttp\MessageFormatter | Akamai &#123;OPEN} EdgeGrid Authentication for PHP API</title>
+	<link rel="stylesheet" href="assets/main.css">
+	<script src="assets/main.js" defer></script>
+</head>
+
+<body class="layout">
+	<div class="layout-aside">
+	<div class="menu">
+			<div class="menu-section">
+				<h3>Namespaces</h3>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.html">Akamai</a>
+	<ul>
+			<li class="menuGroup-item">
+				<a href="namespace-Akamai.Open.html">Open</a>
+			</li>
+	</ul>
+			</li>
+			<li class="menuGroup-item active">
+				<a href="namespace-GuzzleHttp.html">GuzzleHttp</a>
+	<ul>
+	</ul>
+			</li>
+	</ul>
+			</div>
+
+		<div class="menu-section">
+			<h3>Classes</h3>
+			<ul>
+					<li>
+						<a href="GuzzleHttp.Client.html">
+							Client
+						</a>
+					</li>
+					<li>
+						<a href="GuzzleHttp.HandlerStack.html">
+							HandlerStack
+						</a>
+					</li>
+					<li class="active">
+						<a href="GuzzleHttp.MessageFormatter.html">
+							MessageFormatter
+						</a>
+					</li>
+			</ul>
+		</div>
+
+		<div class="menu-section">
+			<h3>Interfaces</h3>
+			<ul>
+					<li>
+						<a href="GuzzleHttp.ClientInterface.html">
+							ClientInterface
+						</a>
+					</li>
+					<li>
+						<a href="GuzzleHttp.MessageFormatterInterface.html">
+							MessageFormatterInterface
+						</a>
+					</li>
+			</ul>
+		</div>
+
+		<div class="menu-section">
+			<h3>Traits</h3>
+			<ul>
+					<li>
+						<a href="GuzzleHttp.ClientTrait.html">
+							ClientTrait
+						</a>
+					</li>
+			</ul>
+		</div>
+
+
+
+	</div>
+	</div>
+
+	<div class="layout-main">
+		<div class="layout-navbar">
+	<nav class="navbar">
+		<div class="navbar-left">
+			<ul class="navbar-links">
+				<li>
+					<a href="index.html">Overview</a>
+				</li>
+				<li>
+					
+						<a href="namespace-GuzzleHttp.html">Namespace</a>
+					
+				</li>
+<li class="active"><a href="GuzzleHttp.MessageFormatter.html">Class</a></li>				<li>
+					<a href="tree.html">Tree</a>
+				</li>
+			</ul>
+		</div>
+		<div class="navbar-right">
+	<div class="search" data-elements="assets/elements.js">
+		<input class="search-input" placeholder="Search class, function or namespace" autofocus>
+		<ul class="search-results"></ul>
+	</div>
+		</div>
+	</nav>
+		</div>
+
+		<div class="layout-content">
+		<h1>
+			Class <a href="namespace-GuzzleHttp.html">GuzzleHttp</a>\<a href="GuzzleHttp.MessageFormatter.html">MessageFormatter</a>
+		</h1>
+
+
+	<table class="classLikeSignatureTable">
+
+
+		<tr>
+			<th><code>implements</code></th>
+			<td>
+<code><a href="GuzzleHttp.MessageFormatterInterface.html"><span title="GuzzleHttp\MessageFormatterInterface">MessageFormatterInterface</span></a></code>			</td>
+		</tr>
+
+	</table>
+		<div class="classLikeDescription">
+	<div class="description"><p>Formats log messages using variable substitutions for requests, responses,
+and other transactional data.</p>
+<p>The following variable substitutions are supported:</p>
+<ul>
+<li>{request}:        Full HTTP request message</li>
+<li>{response}:       Full HTTP response message</li>
+<li>{ts}:             ISO 8601 date in GMT</li>
+<li>{date_iso_8601}   ISO 8601 date in GMT</li>
+<li>{date_common_log} Apache common log date using the configured timezone.</li>
+<li>{host}:           Host of the request</li>
+<li>{method}:         Method of the request</li>
+<li>{uri}:            URI of the request</li>
+<li>{version}:        Protocol version</li>
+<li>{target}:         Request target of the request (path + query + fragment)</li>
+<li>{hostname}:       Hostname of the machine that sent the request</li>
+<li>{code}:           Status code of the response (if available)</li>
+<li>{phrase}:         Reason phrase of the response  (if available)</li>
+<li>{error}:          Any error messages (if available)</li>
+<li>{req_header_*}:   Replace <code>*</code> with the lowercased name of a request header to add to the message</li>
+<li>{res_header_*}:   Replace <code>*</code> with the lowercased name of a response header to add to the message</li>
+<li>{req_headers}:    Request headers</li>
+<li>{res_headers}:    Response headers</li>
+<li>{req_body}:       Request body</li>
+<li>{res_body}:       Response body</li>
+</ul>
+</div>
+		</div>
+
+
+		<div class="classLikeSection">
+
+		</div>
+
+
+		<table class="table" id="methods">
+			<tr>
+				<th class="table-heading sortable" colspan="3" title="Switch between natural and alphabetical order">Methods</th>
+			</tr>
+
+	<tr class="expandable collapsed" data-order="__construct" id="___construct">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>__construct(<span>string <var>$template</var> = <b><span class="active" title="GuzzleHttp\MessageFormatter">self</span></b>::<a href="GuzzleHttp.MessageFormatter.html#CLF">CLF</a></span>)</code>
+
+
+
+	<div class="expandable-expandedView">
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$template</var>&nbsp;&nbsp;</td>
+										<td><p>Log message template</p>
+</td>
+									</tr>
+							</table>
+
+
+
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#___construct">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="format" id="_format">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+					
+					
+				</code>
+			</td>
+
+			<td class="table-cell">
+				<code>format(<span><a href="Psr.Http.Message.RequestInterface.html"><span title="Psr\Http\Message\RequestInterface">RequestInterface</span></a> <var>$request</var></span>, <span><a href="Psr.Http.Message.ResponseInterface.html"><span title="Psr\Http\Message\ResponseInterface">ResponseInterface</span></a>|null <var>$response</var> = <span class="php-kw">null</span></span>, <span><a href="Throwable.html"><span title="Throwable">Throwable</span></a>|null <var>$error</var> = <span class="php-kw">null</span></span>): string</code>
+
+
+	<div class="expandable-collapsedView">
+		Returns a formatted message string.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Returns a formatted message string.</p>
+</div>
+
+							<h4>Parameters</h4>
+							<table>
+									<tr>
+										<td><var>$request</var>&nbsp;&nbsp;</td>
+										<td><p>Request that was sent</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$response</var>&nbsp;&nbsp;</td>
+										<td><p>Response that was received</p>
+</td>
+									</tr>
+									<tr>
+										<td><var>$error</var>&nbsp;&nbsp;</td>
+										<td><p>Exception that was received</p>
+</td>
+									</tr>
+							</table>
+
+
+
+		<h4>Implements</h4>
+		<ul>
+				<li>
+<a href="GuzzleHttp.MessageFormatterInterface.html#_format">						<code>GuzzleHttp\MessageFormatterInterface::format()</code></a>				</li>
+		</ul>
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#_format">#</a>
+		</td>
+	</tr>
+		</table>
+
+
+
+		<table class="table" id="constants">
+			<tr>
+				<th class="table-heading sortable" colspan="3" title="Switch between natural and alphabetical order">Constants</th>
+			</tr>
+
+	<tr class="expandable collapsed" data-order="CLF" id="CLF">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+				</code>
+			</td>
+
+			<td class="table-cell">
+<code>CLF = <span class="php-str">"&#123;hostname} &#123;req_header_User-Agent} - [&#123;date_common_log}] \"&#123;method} &#123;target} HTTP/&#123;version}\" &#123;code} &#123;res_header_Content-Length}"</span></code>
+
+	<div class="expandable-collapsedView">
+		Apache Common Log Format.
+	</div>
+
+	<div class="expandable-expandedView">
+	<div class="description"><p>Apache Common Log Format.</p>
+</div>
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#CLF">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="DEBUG" id="DEBUG">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+				</code>
+			</td>
+
+			<td class="table-cell">
+<code>DEBUG = <span class="php-str">"&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;\n&#123;request}\n&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;\n&#123;response}\n--------\n&#123;error}"</span></code>
+
+
+	<div class="expandable-expandedView">
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#DEBUG">#</a>
+		</td>
+	</tr>
+	<tr class="expandable collapsed" data-order="SHORT" id="SHORT">
+			<td class="table-cell table-shrink">
+				<code class="nowrap">
+					
+	public
+				</code>
+			</td>
+
+			<td class="table-cell">
+<code>SHORT = <span class="php-str">'[&#123;ts}] "&#123;method} &#123;target} HTTP/&#123;version}" &#123;code}'</span></code>
+
+
+	<div class="expandable-expandedView">
+	</div>
+			</td>
+		<td class="table-anchor">
+			<a href="#SHORT">#</a>
+		</td>
+	</tr>
+		</table>
+
+
+
+
+
+
+		</div>
+
+		<div class="layout-footer">
+			Akamai &#123;OPEN} EdgeGrid Authentication for PHP API documentation generated by <a href="https://www.apigen.org">ApiGen v7.0.0-alpha</a>
+		</div>
+	</div>
+
+	<div class="layout-rest">
+		<div class="navbar"></div>
+	</div>
+</body>
+</html>
