@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": ">=5.5",
-        "akamai-open/edgegrid-auth": "^1.0.0",
+        "akamai-open/edgegrid-auth": "dev-master",
         "guzzlehttp/guzzle": "^6.1.1",
         "psr/log": "^1.0",
         "monolog/monolog": "^1.15",
@@ -36,6 +36,12 @@
             "Akamai\\Open\\EdgeGrid\\Tests\\": ["tests", "vendor/akamai-open/edgegrid-auth/tests"]
         }
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:guillaumedelre/AkamaiOPEN-edgegrid-php.git"
+        }
+    ],
     "config": {
         "platform": {
             "php": "5.5"
