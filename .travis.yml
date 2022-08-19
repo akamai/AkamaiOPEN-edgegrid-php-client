@@ -2,9 +2,7 @@ language: php
 services:
   - mysql
 php:
-  - 8.1
-  - nightly
-  - hhvm
+  - '8.1.0'
 env:
   # composer install (uses lock file)
   #
