@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Akamai {OPEN} EdgeGrid Auth Client
  *
@@ -9,6 +10,7 @@
  * @link https://developer.akamai.com
  * @link https://developer.akamai.com/introduction/Client_Auth.html
  */
+
 namespace Akamai\Open\EdgeGrid;
 
 /**
@@ -110,8 +112,10 @@ class Cli
 
         if ($this->climate->arguments->defined('auth-type')) {
             $auth = $this->climate->arguments->get('auth');
-            if ($this->climate->arguments->get('auth-type') === 'edgegrid' ||
-                (!$this->climate->arguments->defined('auth-type'))) {
+            if (
+                $this->climate->arguments->get('auth-type') === 'edgegrid' ||
+                (!$this->climate->arguments->defined('auth-type'))
+            ) {
                 $section = 'default';
                 if ($this->climate->arguments->defined('auth')) {
                     $section = (substr($auth, -1) === ':') ? substr($auth, 0, -1) : $auth;
@@ -157,7 +161,7 @@ class Cli
             if (!isset($url) && preg_match('@^(http(s?)://|:).*$@', trim($value))) {
                 $url = $value;
 
-                if ($url{0} === ':') {
+                if ($url[0] === ':') {
                     $url = substr($url, 1);
                 }
 
@@ -174,8 +178,10 @@ class Cli
                 continue;
             }
 
-            if (preg_match('/^(?<header>.*?):(?<value>.*?)$/', $value, $matches)
-                && !preg_match('@^http(s?)://@', $value)) {
+            if (
+                preg_match('/^(?<header>.*?):(?<value>.*?)$/', $value, $matches)
+                && !preg_match('@^http(s?)://@', $value)
+            ) {
                 $options['headers'][$matches['header']] = $matches['value'];
                 continue;
             }
@@ -258,7 +264,7 @@ class Cli
     public function help()
     {
         $arguments = new \League\CLImate\Argument\Manager();
-        $arguments->description('Akamai {OPEN} Edgegrid Auth for PHP Client (v' .Client::VERSION. ')');
+        $arguments->description('Akamai {OPEN} Edgegrid Auth for PHP Client (v' . Client::VERSION . ')');
         $arguments->add($this->getNamedArgs());
         $arguments->usage($this->climate, $_SERVER['argv']);
     }

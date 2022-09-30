@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Akamai {OPEN} EdgeGrid Auth Client
  *
@@ -9,15 +10,25 @@
  * @link https://developer.akamai.com
  * @link https://developer.akamai.com/introduction/Client_Auth.html
  */
+
 namespace Akamai\Open\EdgeGrid\Tests\Handler;
 
 use GuzzleHttp\Psr7\Response;
 
-/**
- * @requires PHP 5.5
- */
 class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->prophet = new \Prophecy\Prophet();
+    }
+
+    protected function tearDown(): void
+    {
+        $this->prophet->checkPredictions();
+        parent::tearDown();
+    }
+
     /**
      * @dataProvider createFromEdgeRcProvider
      * @param $section
@@ -43,10 +54,10 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         $container = [];
         $handler = $this->getMockHandler([new Response(200)], $container);
 
-        $timestamp = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Timestamp::class);
+        $timestamp = $this->prophet->prophesize(\Akamai\Open\EdgeGrid\Authentication\Timestamp::class);
         $timestamp->__toString()->willReturn($options['timestamp']);
         $timestamp->isValid()->willReturn(true);
-        $nonce = $this->prophesize(\Akamai\Open\EdgeGrid\Authentication\Nonce::class);
+        $nonce = $this->prophet->prophesize(\Akamai\Open\EdgeGrid\Authentication\Nonce::class);
         $nonce->__toString()->willReturn($options['nonce']);
 
         $auth = new \Akamai\Open\EdgeGrid\Handler\Authentication();
@@ -121,12 +132,11 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         $this->assertInstanceOf(\Psr\Http\Message\RequestInterface::class, $request);
     }
 
-    /**
-     * @expectedException \Akamai\Open\EdgeGrid\Exception\HandlerException
-     * @expectedExceptionMessage Signer not set, make sure to call setSigner first
-     */
     public function testRequireSetSignerCall()
     {
+        $this->expectException(\Akamai\Open\EdgeGrid\Exception\HandlerException::class);
+        $this->expectExceptionMessage('Signer not set, make sure to call setSigner first');
+
         $container = [];
         $handler = $this->getMockHandler([new Response(200)], $container);
 
@@ -155,12 +165,11 @@ class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
         $this->assertEquals('test.host', $auth->getHost());
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Signer not set, make sure to call setSigner first
-     */
     public function testProxyNoSigner()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Signer not set, make sure to call setSigner first');
+
         $auth = new \Akamai\Open\EdgeGrid\Handler\Authentication();
         $auth->setHost('test.host');
     }

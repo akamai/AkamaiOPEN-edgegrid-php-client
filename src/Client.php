@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Akamai {OPEN} EdgeGrid Auth Client
  *
@@ -9,6 +10,7 @@
  * @link https://developer.akamai.com
  * @link https://developer.akamai.com/introduction/Client_Auth.html
  */
+
 namespace Akamai\Open\EdgeGrid;
 
 use Akamai\Open\EdgeGrid\Handler\Authentication as AuthenticationHandler;
@@ -31,12 +33,12 @@ use Akamai\Open\EdgeGrid\Handler\Verbose as VerboseHandler;
  */
 class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
 {
-    const VERSION = '1.0.0';
+    public const VERSION = '2.0.0';
 
     /**
      * @const int Default Timeout in seconds
      */
-    const DEFAULT_REQUEST_TIMEOUT = 300;
+    public const DEFAULT_REQUEST_TIMEOUT = 300;
 
     /**
      * @var bool|array|resource Whether verbose mode is enabled
@@ -123,13 +125,13 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
      * @return \GuzzleHttp\Promise\PromiseInterface
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function requestAsync($method, $uri = null, array $options = [])
+    public function requestAsync($method, $uri = null, array $options = []): \GuzzleHttp\Promise\PromiseInterface
     {
         $options = $this->setRequestOptions($options);
 
         $query = parse_url($uri, PHP_URL_QUERY);
         if (!empty($query)) {
-            $uri = substr($uri, 0, (strlen($query)+1) * -1);
+            $uri = substr($uri, 0, (strlen($query) + 1) * -1);
             parse_str($query, $options['query']);
         }
 
@@ -144,7 +146,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
      *
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function sendAsync(\Psr\Http\Message\RequestInterface $request, array $options = [])
+    public function sendAsync(\Psr\Http\Message\RequestInterface $request, array $options = []): \GuzzleHttp\Promise\PromiseInterface
     {
         $options = $this->setRequestOptions($options);
 
@@ -319,7 +321,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
         $auth = \Akamai\Open\EdgeGrid\Authentication::createInstance($section, $path);
 
         if ($host = $auth->getHost()) {
-            $config['base_uri'] = 'https://' .$host;
+            $config['base_uri'] = 'https://' . $host;
         }
 
         return new static($config, $auth);

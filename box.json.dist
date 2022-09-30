@@ -25,8 +25,8 @@
     }
   ],
   "compression": "BZ2",
-  "bootstrap": "build/phar/bootstrap.php",
   "git-version": "package_version",
+  "main": false,
   "output": "akamai-open-edgegrid-client.phar",
   "stub": "build/phar/stub.php"
 }
