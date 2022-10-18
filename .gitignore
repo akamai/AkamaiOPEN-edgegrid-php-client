@@ -3,6 +3,8 @@ composer.phar
 vendor/
 build/
 akamai-open-edgegrid-client*.phar
+.phpunit.result.cache
+.php-cs-fixer.cache
 
 ### IntelliJ ###
 *.iml

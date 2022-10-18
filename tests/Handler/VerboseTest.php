@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Akamai {OPEN} EdgeGrid Auth Client
  *
@@ -9,19 +10,18 @@
  * @link https://developer.akamai.com
  * @link https://developer.akamai.com/introduction/Client_Auth.html
  */
+
 namespace Akamai\Open\EdgeGrid\Tests\Handler;
 
 use GuzzleHttp\Psr7\Response;
 use Akamai\Open\EdgeGrid\Client;
 
-/**
- * @requires PHP 5.5
- */
-class VerboseTest extends \PHPUnit_Framework_TestCase
+class VerboseTest extends \PHPUnit\Framework\TestCase
 {
-    public function teardown()
+    protected function tearDown(): void
     {
         Client::setVerbose(false);
+        parent::tearDown();
     }
 
     public function testInstanceVerboseSingle()
@@ -520,19 +520,24 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
     {
         $verbose = new \Akamai\Open\EdgeGrid\Handler\Verbose('php://memory');
 
-        $fp = \PHPUnit_Framework_Assert::readAttribute($verbose, 'outputStream');
-        $fp2 = \PHPUnit_Framework_Assert::readAttribute($verbose, 'errorStream');
+        $reflector = new \ReflectionClass($verbose);
+        $reflectedOutputStream = $reflector->getProperty('outputStream');
+        $reflectedErrorStream = $reflector->getProperty('errorStream');
+        $reflectedOutputStream->setAccessible(true);
+        $reflectedErrorStream->setAccessible(true);
+
+        $fp = $reflectedOutputStream->getValue($verbose);
+        $fp2 = $reflectedErrorStream->getvalue($verbose);
 
         $this->assertSame($fp, $fp2);
         $this->assertEquals(stream_get_meta_data($fp)['uri'], 'php://memory');
     }
 
-    /**
-     * @expectedException \Akamai\Open\EdgeGrid\Exception\HandlerException\IOException
-     * @expectedExceptionMessage Unable to use output stream: error://stream
-     */
     public function testVerboseSingleStreamStringInvalid()
     {
+        $this->expectException(\Akamai\Open\EdgeGrid\Exception\HandlerException\IOException::class);
+        $this->expectExceptionMessage('Unable to use output stream: error://stream');
+
         $verbose = new \Akamai\Open\EdgeGrid\Handler\Verbose('error://stream');
     }
 
@@ -540,20 +545,25 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
     {
         $verbose = new \Akamai\Open\EdgeGrid\Handler\Verbose('php://memory', 'php://temp');
 
-        $fp = \PHPUnit_Framework_Assert::readAttribute($verbose, 'outputStream');
-        $fp2 = \PHPUnit_Framework_Assert::readAttribute($verbose, 'errorStream');
+        $reflector = new \ReflectionClass($verbose);
+        $reflectedOutputStream = $reflector->getProperty('outputStream');
+        $reflectedErrorStream = $reflector->getProperty('errorStream');
+        $reflectedOutputStream->setAccessible(true);
+        $reflectedErrorStream->setAccessible(true);
+
+        $fp = $reflectedOutputStream->getValue($verbose);
+        $fp2 = $reflectedErrorStream->getvalue($verbose);
 
         $this->assertNotSame($fp, $fp2);
         $this->assertEquals(stream_get_meta_data($fp)['uri'], 'php://memory');
         $this->assertEquals(stream_get_meta_data($fp2)['uri'], 'php://temp');
     }
 
-    /**
-     * @expectedException \Akamai\Open\EdgeGrid\Exception\HandlerException\IOException
-     * @expectedExceptionMessage Unable to use error stream: error://stream
-     */
     public function testVerboseDualStreamStringErrorInvalid()
     {
+        $this->expectException(\Akamai\Open\EdgeGrid\Exception\HandlerException\IOException::class);
+        $this->expectExceptionMessage('Unable to use error stream: error://stream');
+
         $verbose = new \Akamai\Open\EdgeGrid\Handler\Verbose('php://input', 'error://stream');
     }
 
@@ -563,6 +573,9 @@ class VerboseTest extends \PHPUnit_Framework_TestCase
      */
     public function testVerboseDualStreamStringInvalid()
     {
+        $this->expectException(\Akamai\Open\EdgeGrid\Exception\HandlerException\IOException::class);
+        $this->expectExceptionMessage('Unable to use output stream: error://stream');
+
         $verbose = new \Akamai\Open\EdgeGrid\Handler\Verbose('error://stream', 'error://stream2');
     }
 

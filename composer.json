@@ -12,19 +12,19 @@
         }
     ],
     "require": {
-        "php": ">=5.5",
-        "akamai-open/edgegrid-auth": "^1.0.0",
-        "guzzlehttp/guzzle": "^6.1.1",
+        "php": ">=8.1",
+        "akamai-open/edgegrid-auth": "2.0.0",
+        "guzzlehttp/guzzle": "^7.5.0",
         "psr/log": "^1.0",
-        "monolog/monolog": "^1.15",
+        "monolog/monolog": "^2.0",
         "league/climate": "~3.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.7",
-        "squizlabs/php_codesniffer": "^2.3",
-        "friendsofphp/php-cs-fixer": "^1.9",
-        "kherge/box": "^2.5",
-        "apigen/apigen": "^4.0.0"
+        "phpunit/phpunit": "^9.5",
+        "phpspec/prophecy": "~1.0",
+        "squizlabs/php_codesniffer": "^3.7",
+        "friendsofphp/php-cs-fixer": "^3.9",
+        "humbug/box": ">=4.1.0"
     },
     "autoload": {
         "psr-4": {
@@ -38,7 +38,7 @@
     },
     "config": {
         "platform": {
-            "php": "5.5"
+            "php": "8.1"
         }
     },
     "bin": [
@@ -47,21 +47,15 @@
     "scripts": {
         "build": [
             "@test",
-            "@build-docs",
             "@build-phar",
             "@fix-cs"
         ],
         "test": "phpunit",
-        "build-docs": [
-            "rm -Rf docs",
-            "composer install",
-            "apigen generate"
-        ],
         "build-phar": "./tools/build-phar.sh",
         "fix-cs": [
-            "phpcbf --standard=PSR1,PSR2 ./src ./tests",
-            "php-cs-fixer fix --level=psr2 ./src",
-            "php-cs-fixer fix --level=psr2 ./tests"
+            "phpcbf --standard=PSR12 ./src ./tests",
+            "php-cs-fixer fix --rules=@PSR12 ./src",
+            "php-cs-fixer fix --rules=@PSR12 ./tests"
         ],
         "check-version": "./tools/check-version.sh"
     }

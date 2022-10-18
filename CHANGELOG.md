@@ -1,3 +1,10 @@
+2.0.0
+---
+[18 Oct, 2022]
+* Upgrade to php 8.1
+* Upgrade to Guzzle 7.5, Monolog 2.0
+* Upgrade to akamai-open/edgegrid-auth 2.0.0
+
 1.0.0
 ---
 [01 Sep, 2017]
