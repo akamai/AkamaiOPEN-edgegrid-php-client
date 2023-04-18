@@ -28,6 +28,8 @@ use GuzzleHttp\Psr7\Response;
  */
 class ClientTest extends \PHPUnit\Framework\TestCase
 {
+    private \Prophecy\Prophet $prophet;
+    
     protected function setUp(): void
     {
         parent::setUp();

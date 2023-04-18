@@ -265,12 +265,11 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
      *
      * @param \Psr\Log\LoggerInterface $logger
      * @param string $messageFormat Message format
-     * @return $this
      */
     public function setLogger(
         \Psr\Log\LoggerInterface $logger = null,
         $messageFormat = \GuzzleHttp\MessageFormatter::CLF
-    ) {
+    ) : void  {
         if ($logger === null) {
             $handler = new \Monolog\Handler\ErrorLogHandler(\Monolog\Handler\ErrorLogHandler::SAPI);
             $handler->setFormatter(new \Monolog\Formatter\LineFormatter('%message%'));
@@ -284,8 +283,6 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
 
         $handlerStack = $this->getConfig('handler');
         $this->setLogHandler($handlerStack, $handler);
-
-        return $this;
     }
 
     /**
