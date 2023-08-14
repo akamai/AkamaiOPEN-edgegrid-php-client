@@ -247,7 +247,7 @@ class Cli
                 $options['headers']['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8';
             }
 
-            $options['body'] = (!is_string($body)) ? http_build_query($body, null, null, PHP_QUERY_RFC1738) : $body;
+            $options['body'] = (!is_string($body)) ? http_build_query($body, '', null, PHP_QUERY_RFC1738) : $body;
         }
 
         $options['allow_redirects'] = false;
