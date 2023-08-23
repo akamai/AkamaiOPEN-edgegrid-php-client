@@ -16,6 +16,8 @@ namespace Akamai\Open\EdgeGrid;
 use Akamai\Open\EdgeGrid\Handler\Authentication as AuthenticationHandler;
 use Akamai\Open\EdgeGrid\Handler\Debug as DebugHandler;
 use Akamai\Open\EdgeGrid\Handler\Verbose as VerboseHandler;
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\ClientTrait;
 
 /**
  * Akamai {OPEN} EdgeGrid Client for PHP
@@ -31,9 +33,11 @@ use Akamai\Open\EdgeGrid\Handler\Verbose as VerboseHandler;
  *
  * @package Akamai\Open\EdgeGrid\Client
  */
-class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
+class Client implements \Psr\Log\LoggerAwareInterface, \Psr\Http\Client\ClientInterface
 {
-    public const VERSION = '2.0.0';
+    use ClientTrait;
+
+    public const VERSION = '2.1.0';
 
     /**
      * @const int Default Timeout in seconds
@@ -53,6 +57,11 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
      * @var bool|resource Whether debug mode is enabled
      */
     protected static $staticDebug = false;
+
+    /**
+     * @var \GuzzleHttp\Client
+     */
+    protected $guzzler;    
 
     /**
      * @var \Akamai\Open\EdgeGrid\Authentication
@@ -113,7 +122,41 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
         $config['headers']['User-Agent'] = 'Akamai-Open-Edgegrid-PHP/' .
             self::VERSION . ' ' . \GuzzleHttp\default_user_agent();
 
-        parent::__construct($config);
+        $this->guzzler = new GuzzleClient($config);
+    }
+
+    /**
+     * Get client configuration options.
+     *
+     * @param string|null $option The config option to retrieve or all if null
+     * 
+     * @return mixed
+     */
+    public function getConfig($option = null)
+    {
+        return $this->guzzler->getConfig($option);
+    }
+
+    /**
+     * Make a request
+     *
+     * @param string $method
+     * @param string $uri
+     * @param array $options
+     * @return \Psr\Http\Message\ResponseInterface
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function request(string $method, $uri = null, array $options = []): \Psr\Http\Message\ResponseInterface
+    {
+        $options = $this->setRequestOptions($options);
+
+        $query = parse_url($uri, PHP_URL_QUERY);
+        if (!empty($query)) {
+            $uri = substr($uri, 0, (strlen($query) + 1) * -1);
+            parse_str($query, $options['query']);
+        }
+        
+        return $this->guzzler->request($method, $uri, $options);
     }
 
     /**
@@ -135,7 +178,34 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
             parse_str($query, $options['query']);
         }
 
-        return parent::requestAsync($method, $uri, $options);
+        return $this->guzzler->requestAsync($method, $uri, $options);
+    }
+
+    /**
+     * Send an HTTP request
+     *
+     * @param \Psr\Http\Message\RequestInterface $request The HTTP request
+     * @param array $options Request options
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function send(\Psr\Http\Message\RequestInterface $request, array $options = []): \Psr\Http\Message\ResponseInterface
+    {
+        $options = $this->setRequestOptions($options);
+
+        return $this->guzzler->send($request, $options);
+    }
+
+    /**
+     * Send an HTTP request
+     *
+     * @param \Psr\Http\Message\RequestInterface $request The HTTP request
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function sendRequest(\Psr\Http\Message\RequestInterface $request): \Psr\Http\Message\ResponseInterface
+    {
+        return $this->guzzleClient->sendRequest($request);
     }
 
     /**
@@ -150,7 +220,21 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     {
         $options = $this->setRequestOptions($options);
 
-        return parent::sendAsync($request, $options);
+        return $this->guzzler->sendAsync($request, $options);
+    }
+
+    /**
+     * Create and send an HTTP OPTIONS request.
+     * Implemented here as it is no longer provided by Guzzle built-in.
+     *
+     * @param string|UriInterface $uri     URI object or string.
+     * @param array               $options Request options to apply.
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function options($uri, array $options = []): \Psr\Http\Message\ResponseInterface
+    {
+        return $this->request('OPTIONS', $uri, $options);
     }
 
     /**
@@ -521,7 +605,7 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
             $this->config[$what] = $value;
         };
 
-        $closure = $closure->bindTo($this, \GuzzleHttp\Client::class);
+        $closure = $closure->bindTo($this->guzzler, \GuzzleHttp\Client::class);
         $closure();
     }
 

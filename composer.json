@@ -15,6 +15,7 @@
         "php": ">=8.1",
         "akamai-open/edgegrid-auth": "2.0.0",
         "guzzlehttp/guzzle": "^7.5.0",
+        "psr/http-client": "^1.0.2",
         "psr/log": "^3.0",
         "monolog/monolog": "^3.0",
         "league/climate": "~3.2"
