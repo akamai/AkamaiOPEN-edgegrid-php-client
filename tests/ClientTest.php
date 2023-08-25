@@ -28,6 +28,8 @@ use GuzzleHttp\Psr7\Response;
  */
 class ClientTest extends \PHPUnit\Framework\TestCase
 {
+    private \Prophecy\Prophet $prophet;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -1020,7 +1022,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     public function testLoggingDefault()
     {
         $client = new Client();
-        $client->setLogger();
+        $client->setLogger($client->defaultLogger());
 
         $reflector = new \ReflectionClass($client);
         $reflectedLogger = $reflector->getProperty('logger');
@@ -1028,14 +1030,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $logger = $reflectedLogger->getValue($client);
         $this->assertInstanceOf(
-            \Closure::class,
+            \Monolog\Logger::class,
             $logger
         );
-
-        $reflection = new \ReflectionFunction($logger);
-        $args = $reflection->getParameters();
-        $arg = array_shift($args);
-        $this->assertTrue($arg->getType() && $arg->getType()->getName() === 'callable');
     }
 
     public function testLoggingRequestHandler()
@@ -1213,7 +1210,8 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     {
         $handler = new \Monolog\Handler\TestHandler();
         $logger = new \Monolog\Logger('Test Logger', [$handler]);
-        $client->setLogger($logger, '{method} {target} {code} {res_header_content-type}');
+        $client->setMessageFormat('{method} {target} {code} {res_header_content-type}');
+        $client->setLogger($logger);
 
         return $handler;
     }
