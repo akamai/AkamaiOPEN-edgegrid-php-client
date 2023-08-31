@@ -1,6 +1,8 @@
-X.Y.Z
-
+2.1.0
+---
 [XX Xxx, 2023]
+* Change from extending Guzzle Client to using trait 
+* Resolve deprecation warnings
 * Upgrade to psr/log 3.0.0, humbug/box 4.3.8, monolog/monolog 3.3.1
 * Remove return value from `\Akamai\Open\EdgeGrid\Client` `setLogger` function
 
