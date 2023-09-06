@@ -269,25 +269,26 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     /**
      * Set a PSR-3 compatible logger (or use monolog by default)
      *
-     * @param LoggerInterface $logger
-     * @return void
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param string $messageFormat Message format
      */
-    public function setLogger(LoggerInterface $logger): void
-    {
-        $formatter = new \GuzzleHttp\MessageFormatter($this->messageFormat);
+    public function setLogger(
+        \Psr\Log\LoggerInterface $logger = null,
+        $messageFormat = \GuzzleHttp\MessageFormatter::CLF
+    ) : void  {
+        if ($logger === null) {
+            $handler = new \Monolog\Handler\ErrorLogHandler(\Monolog\Handler\ErrorLogHandler::SAPI);
+            $handler->setFormatter(new \Monolog\Formatter\LineFormatter('%message%'));
+            $logger = new \Monolog\Logger('HTTP Log', [$handler]);
+        }
+
+        $formatter = new \GuzzleHttp\MessageFormatter($messageFormat);
 
         $handler = \GuzzleHttp\Middleware::log($logger, $formatter);
         $this->logger = $logger;
 
         $handlerStack = $this->getConfig('handler');
         $this->setLogHandler($handlerStack, $handler);
-    }
-
-    public function defaultLogger(): LoggerInterface
-    {
-        $handler = new \Monolog\Handler\ErrorLogHandler(\Monolog\Handler\ErrorLogHandler::SAPI);
-        $handler->setFormatter(new \Monolog\Formatter\LineFormatter('%message%'));
-        return new \Monolog\Logger('HTTP Log', [$handler]);
     }
 
     /**
