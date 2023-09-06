@@ -1022,7 +1022,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     public function testLoggingDefault()
     {
         $client = new Client();
-        $client->setLogger($client->defaultLogger());
+        $client->setLogger();
 
         $reflector = new \ReflectionClass($client);
         $reflectedLogger = $reflector->getProperty('logger');
@@ -1210,8 +1210,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     {
         $handler = new \Monolog\Handler\TestHandler();
         $logger = new \Monolog\Logger('Test Logger', [$handler]);
-        $client->setMessageFormat('{method} {target} {code} {res_header_content-type}');
-        $client->setLogger($logger);
+        $client->setLogger($logger, '{method} {target} {code} {res_header_content-type}');
 
         return $handler;
     }
