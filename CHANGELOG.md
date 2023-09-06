@@ -1,3 +1,9 @@
+X.Y.Z
+
+[XX Xxx, 2023]
+* Upgrade to psr/log 3.0.0, humbug/box 4.3.8, monolog/monolog 3.3.1
+* Remove return value from `\Akamai\Open\EdgeGrid\Client` `setLogger` function
+
 2.0.0
 ---
 [18 Oct, 2022]
