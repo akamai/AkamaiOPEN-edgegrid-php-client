@@ -16,6 +16,7 @@ namespace Akamai\Open\EdgeGrid;
 use Akamai\Open\EdgeGrid\Handler\Authentication as AuthenticationHandler;
 use Akamai\Open\EdgeGrid\Handler\Debug as DebugHandler;
 use Akamai\Open\EdgeGrid\Handler\Verbose as VerboseHandler;
+use Psr\Log\LoggerInterface;
 
 /**
  * Akamai {OPEN} EdgeGrid Client for PHP
@@ -94,9 +95,14 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
     protected $debugOverride = false;
 
     /**
-     * @var callable Logging Handler
+     * @var LoggerInterface|null
      */
-    protected $logger;
+    protected ?LoggerInterface $logger = null;
+
+    /**
+     * @var string
+     */
+    protected $messageFormat = \GuzzleHttp\MessageFormatter::CLF;
 
     /**
      * \GuzzleHttp\Client-compatible constructor
@@ -264,22 +270,24 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
      * Set a PSR-3 compatible logger (or use monolog by default)
      *
      * @param \Psr\Log\LoggerInterface $logger
-     * @param string $messageFormat Message format
      */
     public function setLogger(
         \Psr\Log\LoggerInterface $logger = null,
-        $messageFormat = \GuzzleHttp\MessageFormatter::CLF
-    ) : void  {
+        $messageFormat = null
+    ): void  {
         if ($logger === null) {
             $handler = new \Monolog\Handler\ErrorLogHandler(\Monolog\Handler\ErrorLogHandler::SAPI);
             $handler->setFormatter(new \Monolog\Formatter\LineFormatter('%message%'));
             $logger = new \Monolog\Logger('HTTP Log', [$handler]);
         }
 
-        $formatter = new \GuzzleHttp\MessageFormatter($messageFormat);
+        if ($messageFormat !== null) {
+            $this->setMessageFormat($messageFormat);
+        }
+        $formatter = new \GuzzleHttp\MessageFormatter($this->messageFormat);
 
         $handler = \GuzzleHttp\Middleware::log($logger, $formatter);
-        $this->logger = $handler;
+        $this->logger = $logger;
 
         $handlerStack = $this->getConfig('handler');
         $this->setLogHandler($handlerStack, $handler);
@@ -302,7 +310,9 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
         $handler->setFormatter(new \Monolog\Formatter\LineFormatter('%message%'));
         $log = new \Monolog\Logger('HTTP Log', [$handler]);
 
-        return $this->setLogger($log, $format);
+        $this->setLogger($log, $format);
+
+        return $this;
     }
 
     /**
@@ -667,10 +677,19 @@ class Client extends \GuzzleHttp\Client implements \Psr\Log\LoggerAwareInterface
         }
 
         if ($this->logger && isset($options['handler'])) {
-            $this->setLogHandler($options['handler'], $this->logger);
+
+            $formatter = new \GuzzleHttp\MessageFormatter($this->messageFormat);
+            $handler = \GuzzleHttp\Middleware::log($this->logger, $formatter);
+
+            $this->setLogHandler($options['handler'], $handler);
             return $options;
         }
 
         return $options;
+    }
+
+    public function setMessageFormat(string $format): void
+    {
+        $this->messageFormat = $format;
     }
 }

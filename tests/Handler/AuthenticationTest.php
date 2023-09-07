@@ -18,7 +18,7 @@ use GuzzleHttp\Psr7\Response;
 class AuthenticationTest extends \Akamai\Open\EdgeGrid\Tests\ClientTest
 {
     private \Prophecy\Prophet $prophet;
-    
+
     protected function setUp(): void
     {
         parent::setUp();

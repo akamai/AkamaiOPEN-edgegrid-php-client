@@ -29,7 +29,7 @@ use GuzzleHttp\Psr7\Response;
 class ClientTest extends \PHPUnit\Framework\TestCase
 {
     private \Prophecy\Prophet $prophet;
-    
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -1030,14 +1030,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $logger = $reflectedLogger->getValue($client);
         $this->assertInstanceOf(
-            \Closure::class,
+            \Monolog\Logger::class,
             $logger
         );
-
-        $reflection = new \ReflectionFunction($logger);
-        $args = $reflection->getParameters();
-        $arg = array_shift($args);
-        $this->assertTrue($arg->getType() && $arg->getType()->getName() === 'callable');
     }
 
     public function testLoggingRequestHandler()
