@@ -1,6 +1,6 @@
 2.1.0
 ---
-[XX Xxx, 2023]
+[25 Sep, 2023]
 * Change from extending Guzzle Client to using trait 
 * Resolve deprecation warnings
 * Upgrade to psr/log 3.0 and monolog/monolog 3.3 
