@@ -5,12 +5,6 @@
     "type": "library",
     "license": "Apache-2.0",
     "homepage": "https://github.com/akamai-open/AkamaiOPEN-edgegrid-php",
-    "authors": [
-        {
-            "name": "Davey Shafik",
-            "email": "dshafik@akamai.com"
-        }
-    ],
     "require": {
         "php": ">=8.1",
         "akamai-open/edgegrid-auth": "2.0.0",
