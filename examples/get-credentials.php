@@ -24,4 +24,3 @@ $headers = [
 $response = $client->get('/identity-management/v3/api-clients/self/credentials', $headers);
 
 echo $response->getBody();
-?>

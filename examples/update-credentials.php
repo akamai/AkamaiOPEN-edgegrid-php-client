@@ -37,4 +37,3 @@ $body = [
 $response = $client->put('/identity-management/v3/api-clients/self/credentials/123456', $body, $headers);
 
 echo $response->getBody();
-?>

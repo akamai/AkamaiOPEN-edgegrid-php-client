@@ -26,4 +26,3 @@ $headers = [
 $response = $client->delete('/identity-management/v3/api-clients/self/credentials/123456', $headers);
 
 echo $response->getBody();
-?>

@@ -28,7 +28,7 @@ You can obtain the authentication credentials through an API client. Requests to
 
 1. [Create authentication credentials](https://techdocs.akamai.com/developer/docs/set-up-authentication-credentials).
 
-2. Place your credentials in an EdgeGrid resource file, `.edgerc`, under a heading of `[default]` at your local home directory.
+2. Place your credentials in an EdgeGrid file `~/.edgerc`, in the `[default]` section.
 
     ```
     [default]
@@ -43,7 +43,7 @@ You can obtain the authentication credentials through an API client. Requests to
     The location of your `.edgerc` file is optional, as it defaults to `~/.edgerc`.
 
     ```php
-    $client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile('default', '~/.edgerc');
+    $client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile('{credentials_section_name}', '{path/to/.edgerc}');
 
     // use $client just as you would \Guzzle\Http\Client
     $response = $client->get('/identity-management/v3/user-profile');
@@ -84,7 +84,6 @@ $client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile('default');
 $response = $client->get('/identity-management/v3/user-profile');
 
 echo $response->getBody();
-?>
 ```
 
 ### Query string parameters
@@ -104,7 +103,6 @@ $headers = [
 $response = $client->get('/identity-management/v3/user-profile?authGrants=true&notifications=true&actions=true', $headers);
 
 echo $response->getBody();
-?>
 ```
 
 You can also pass the query parameters using a `query` request option. See the [Guzzle documentation](https://docs.guzzlephp.org/en/stable/quickstart.html#query-string-parameters) for details.
@@ -128,7 +126,6 @@ $headers = [
 $response = $client->get('/identity-management/v3/user-profile', $headers);
 
 echo $response->getBody();
-?>
 ```
 
 See the [Guzzle documentation](https://docs.guzzlephp.org/en/stable/request-options.html#headers) for details on defining headers as a `headers` request option.
@@ -164,7 +161,6 @@ $body = [
 $response = $client->put('/identity-management/v3/user-profile/basic-info', $body, $headers);
 
 echo $response->getBody();
-?>
 ```
 
 ## Command line interface

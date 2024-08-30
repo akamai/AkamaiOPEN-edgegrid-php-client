@@ -21,7 +21,6 @@ $headers = [
   'Accept' => 'application/json',
 ];
 
-$response = $client->put('/identity-management/v3/api-clients/self/credentials', $headers);
+$response = $client->post('/identity-management/v3/api-clients/self/credentials', $headers);
 
 echo $response->getBody();
-?>
