@@ -11,7 +11,7 @@ To run any of the files:
 3. Open a Terminal or shell instance and run the .php file.
 
     ```
-    $ php </examples/<file-name>.php
+    $ php examples/<file-name>.php
     ```
 
 ## Sample files

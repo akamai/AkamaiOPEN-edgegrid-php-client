@@ -45,7 +45,7 @@ You can obtain the authentication credentials through an API client. Requests to
     ```php
     $client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile('{credentials_section_name}', '{path/to/.edgerc}');
 
-    // use $client just as you would \Guzzle\Http\Client
+    // Use $client just as you would \Guzzle\Http\Client
     $response = $client->get('/identity-management/v3/user-profile');
     ```
 
@@ -186,7 +186,7 @@ php akamai-open-edgegrid-client.phar --help
 
 You can set authentication and specify an HTTP method (case insensitive), its headers, and any JSON body fields.
 
-> **Note:** Our CLI shows all HTTP and body data. JSON is formated.
+> **Note:** Our CLI shows all HTTP and body data. JSON is formatted.
 
 |Argument|Description|
 |---|---|
@@ -253,15 +253,13 @@ This package provides three different middleware handlers you can add transparen
 <pre lang="php">
     // Create the Authentication Handler
     $auth = \Akamai\Open\EdgeGrid\Handler\Authentication::createFromEdgeRcFile();
-    // or:
+    // Or hard code your credentials
     $auth = new \Akamai\Open\EdgeGrid\Handler\Authentication;
     $auth->setAuth($client_token, $client_secret, $access_token);
     // Create the handler stack
     $handlerStack = \GuzzleHttp\HandlerStack::create();
-
     // Add the Auth handler to the stack
     $handlerStack->push($auth);
-
     // Add the handler to a regular \GuzzleHttp\Client
     $guzzle = new \GuzzleHttp\Client([
     "handler" => $handlerStack
@@ -275,10 +273,8 @@ This package provides three different middleware handlers you can add transparen
 <pre lang="php">
     // Create the handler stack
     $handlerStack = HandlerStack::create();
-
     // Add the Auth handler to the stack
     $handlerStack->push(new \Akamai\Open\EdgeGrid\Handler\Verbose());
-
     // Add the handler to a regular \GuzzleHttp\Client
     $guzzle = new \GuzzleHttp\Client([
         "handler" => $handlerStack
@@ -292,10 +288,8 @@ This package provides three different middleware handlers you can add transparen
 <pre lang="php">
     // Create the handler stack
     $handlerStack = HandlerStack::create();
-
     // Add the Auth handler to the stack
     $handlerStack->push(new \Akamai\Open\EdgeGrid\Handler\Debug());
-
     // Add the handler to a regular \GuzzleHttp\Client
     $guzzle = new \GuzzleHttp\Client([
         "handler" => $handlerStack
@@ -311,7 +305,7 @@ This package provides three different middleware handlers you can add transparen
 Copyright © 2024 Akamai Technologies, Inc. All rights reserved
 
 Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
+you may not use these files except in compliance with the License.
 You may obtain a copy of the License at <http://www.apache.org/licenses/LICENSE-2.0>.
 
 Unless required by applicable law or agreed to in writing, software

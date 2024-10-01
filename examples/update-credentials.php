@@ -5,15 +5,15 @@
 //
 // 1. Specify the section header of the set of credentials to use.
 //
-// The defaults here expect the .edgerc at your home directory and use the credentials under the heading of default.
+// The defaults here expect the `.edgerc` at your home directory and use the credentials under the heading of `default`.
 //
-// 2. Add the credentialId for the set of credentials created using the create example as a path parameter.
+// 2. Add the `credentialId` for the set of credentials created using the create example as a path parameter.
 //
-// 3. Edit the expiresOn date to today's date. Optionally, you can change the description value.
+// 3. Edit the `expiresOn` date to today's date. Optionally, you can change the `description` value.
 //
 // 4. Open a Terminal or shell instance and run "php examples/update-credentials.php".
 //
-// A successful call returns.
+// A successful call returns an object with modified credentials.
 //
 // For more information on the call used in this example, see https://techdocs.akamai.com/iam-api/reference/put-self-credential.
 
