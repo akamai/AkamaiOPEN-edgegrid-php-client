@@ -1,5 +1,19 @@
 # Release notes
 
+
+
+## X.X.X (X X, X)
+
+
+
+* Upgraded to symfony/process 6.4.15
+
+
+
+
+
+
+
 ## 2.1.0 (25 Sep, 2023)
 
 * Changed from the extending Guzzle Client to using a trait.
