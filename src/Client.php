@@ -120,7 +120,7 @@ class Client implements \Psr\Log\LoggerAwareInterface, \Psr\Http\Client\ClientIn
      */
     public function __construct(
         $config = [],
-        Authentication $authentication = null
+        ?Authentication $authentication = null
     ) {
         $config = $this->setAuthenticationHandler($config, $authentication);
         $config = $this->setBasicOptions($config);
@@ -355,7 +355,7 @@ class Client implements \Psr\Log\LoggerAwareInterface, \Psr\Http\Client\ClientIn
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function setLogger(
-        \Psr\Log\LoggerInterface $logger = null,
+        ?\Psr\Log\LoggerInterface $logger = null,
         $messageFormat = null
     ): void  {
         if ($logger === null) {
@@ -533,7 +533,7 @@ class Client implements \Psr\Log\LoggerAwareInterface, \Psr\Http\Client\ClientIn
      * @param array $config
      * @param Authentication|null $authentication
      */
-    protected function setAuthentication(array $config, Authentication $authentication = null)
+    protected function setAuthentication(array $config, ?Authentication $authentication = null)
     {
         $this->authentication = $authentication;
         if ($authentication === null) {
@@ -556,7 +556,7 @@ class Client implements \Psr\Log\LoggerAwareInterface, \Psr\Http\Client\ClientIn
      * @param Authentication|null $authentication
      * @return array
      */
-    protected function setAuthenticationHandler(array $config, Authentication $authentication = null)
+    protected function setAuthenticationHandler(array $config, ?Authentication $authentication = null)
     {
         $this->setAuthentication($config, $authentication);
 
