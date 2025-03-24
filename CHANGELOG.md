@@ -1,18 +1,9 @@
 # Release notes
 
+## 2.1.1 (25 Mar, 2025)
 
-
-## X.X.X (X X, X)
-
-
-
-* Upgraded to symfony/process 6.4.15
-
-
-
-
-
-
+* Upgraded `symfony/process` to 6.4.15.
+* Fixed deprecations for PHP 8.4 ([PR#54](https://github.com/akamai/AkamaiOPEN-edgegrid-php-client/pull/54)).
 
 ## 2.1.0 (25 Sep, 2023)
 
