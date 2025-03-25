@@ -1,16 +1,4 @@
 <?php
-
-/**
- * Akamai {OPEN} EdgeGrid Auth Client
- *
- * @author Davey Shafik <dshafik@akamai.com>
- * @copyright Copyright 2016 Akamai Technologies, Inc. All rights reserved.
- * @license Apache 2.0
- * @link https://github.com/akamai-open/AkamaiOPEN-edgegrid-php-client
- * @link https://developer.akamai.com
- * @link https://developer.akamai.com/introduction/Client_Auth.html
- */
-
 namespace Akamai\Open\EdgeGrid;
 
 use Akamai\Open\EdgeGrid\Handler\Authentication as AuthenticationHandler;
@@ -37,7 +25,7 @@ class Client implements \Psr\Log\LoggerAwareInterface, \Psr\Http\Client\ClientIn
 {
     use ClientTrait;
 
-    public const VERSION = '2.1.0';
+    public const VERSION = '2.1.1';
 
     /**
      * @const int Default Timeout in seconds

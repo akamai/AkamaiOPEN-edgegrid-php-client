@@ -1,6 +1,6 @@
 # akamai-open/edgegrid-client
 
-[Akamai EdgeGrid Authentication](https://techdocs.akamai.com/developer/docs/set-up-authentication-credentials) for PHP
+[Akamai EdgeGrid Authentication](https://techdocs.akamai.com/developer/docs/set-up-authentication-credentials) for PHP.
 
 This library requires PHP 8+ and implements the Akamai EdgeGrid Authentication scheme on top of [Guzzle](https://github.com/guzzle/guzzle) as both a drop-in replacement client and middleware.
 
@@ -16,62 +16,152 @@ $ composer require akamai-open/edgegrid-client
 
 Download the PHAR file from the [releases](https://github.com/akamai/AkamaiOPEN-edgegrid-php/releases) page and include it inside your code:
 
-    ```php
-    include 'akamai-open-edgegrid-auth.phar';
+```php
+include 'akamai-open-edgegrid-auth.phar';
 
-    // Library is ready to use
+// Library is ready to use
+```
+
+## Authentication
+
+You can obtain the authentication credentials through an API client. Requests to the API are marked with a timestamp and a signature and are executed immediately.
+
+1. [Create authentication credentials](https://techdocs.akamai.com/developer/docs/set-up-authentication-credentials).
+
+2. Place your credentials in an EdgeGrid file `~/.edgerc`, in the `[default]` section.
+
+    ```
+    [default]
+    client_secret = C113nt53KR3TN6N90yVuAgICxIRwsObLi0E67/N8eRN=
+    host = akab-h05tnam3wl42son7nktnlnnx-kbob3i3v.luna.akamaiapis.net
+    access_token = akab-acc35t0k3nodujqunph3w7hzp7-gtm6ij
+    client_token = akab-c113ntt0k3n4qtari252bfxxbsl-yvsdj
+    ```
+
+3. Use your local `.edgerc` by providing credentials' section header and the path to your resource file. You can call your `.edgerc` file using the `\Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile()` method.
+
+    The location of your `.edgerc` file is optional, as it defaults to `~/.edgerc`.
+
+    ```php
+    $client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile('{credentials_section_name}', '{path/to/.edgerc}');
+
+    // Use $client just as you would \Guzzle\Http\Client
+    $response = $client->get('/identity-management/v3/user-profile');
+    ```
+
+    Alternatively, you can hard code your credentials by passing the credential values to the `\Akamai\Open\EdgeGrid\Client->setAuth()` method.
+
+    ```php
+    $client = new Akamai\Open\EdgeGrid\Client([
+    'base_uri' => 'https://akab-h05tnam3wl42son7nktnlnnx-kbob3i3v.luna.akamaiapis.net'
+    ]);
+
+    $client_token = 'akab-c113ntt0k3n4qtari252bfxxbsl-yvsdj';
+    $client_secret = 'C113nt53KR3TN6N90yVuAgICxIRwsObLi0E67/N8eRN=';
+    $access_token = 'akab-acc35t0k3nodujqunph3w7hzp7-gtm6ij';
+
+    $client->setAuth($client_token, $client_secret, $access_token);
+
+    // use $client just as you would \Guzzle\Http\Client
+    $response = $client->get('/identity-management/v3/user-profile');
     ```
 
 ## Use
 
 The `Akamai\Open\EdgeGrid\Client` extends `\GuzzleHttp\Client` as a drop-in replacement. It works transparently to sign API requests without changing other ways you use Guzzle.
 
-To use the client, call `\Akamai\Open\EdgeGrid\Client->setAuth()` or provide an instance of `\Akamai\Open\EdgeGrid\Authentication` to the constructor prior to making a request to an API.
+Include the autoloader to import all the required classes.
+
+Provide your credentials section header and appropriate endpoint information.
 
 ```php
-$client = new Akamai\Open\EdgeGrid\Client([
-  'base_uri' => 'https://akab-h05tnam3wl42son7nktnlnnx-kbob3i3v.luna.akamaiapis.net'
-]);
+<?php
+require "vendor/autoload.php";
 
-$client->setAuth($client_token, $client_secret, $access_token);
+$client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile('default');
 
 // use $client just as you would \Guzzle\Http\Client
 $response = $client->get('/identity-management/v3/user-profile');
+
+echo $response->getBody();
 ```
 
-## Authentication
+### Query string parameters
 
-To generate your credentials, see [Create authentication credentials](https://techdocs.akamai.com/developer/docs/set-up-authentication-credentials).
+You can pass the query parameters in the url after a question mark ("?") at the end of the main URL path.
 
-We recommend using a local `.edgerc` authentication file. Place your credentials under a heading of `[default]` at your local home directory or the home directory of a web-server user.
+```php
+<?php
+require "vendor/autoload.php";
 
+$client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile('default');
+
+$headers = [
+'Accept' => 'application/json',
+];
+
+$response = $client->get('/identity-management/v3/user-profile?authGrants=true&notifications=true&actions=true', $headers);
+
+echo $response->getBody();
 ```
-[default]
-client_secret = C113nt53KR3TN6N90yVuAgICxIRwsObLi0E67/N8eRN=
-host = akab-h05tnam3wl42son7nktnlnnx-kbob3i3v.luna.akamaiapis.net
-access_token = akab-acc35t0k3nodujqunph3w7hzp7-gtm6ij
-client_token = akab-c113ntt0k3n4qtari252bfxxbsl-yvsdj
+
+You can also pass the query parameters using a `query` request option. See the [Guzzle documentation](https://docs.guzzlephp.org/en/stable/quickstart.html#query-string-parameters) for details.
+
+### Headers
+
+You can enter request headers as a PSR-7 request object.
+
+> **Note:** You don't need to include the `Content-Type` and `Content-Length` headers. The authentication layer adds these values.
+
+```php
+<?php
+require "vendor/autoload.php";
+
+$client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile('default');
+
+$headers = [
+  'Accept' => 'application/json'
+];
+
+$response = $client->get('/identity-management/v3/user-profile', $headers);
+
+echo $response->getBody();
 ```
 
-You can call your `.edgerc` file one of two ways:
+See the [Guzzle documentation](https://docs.guzzlephp.org/en/stable/request-options.html#headers) for details on defining headers as a `headers` request option.
 
-*  Use the factory method `\Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile()`.
+### Body data
 
-    ```php
-    $client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile();
+Use the [Guzzle syntax](https://docs.guzzlephp.org/en/stable/request-options.html#json) to pass simple JSON data as a `json` option in the request.
 
-    // use $client just as you would \Guzzle\Http\Client
-    $response = $client->get('/identity-management/v3/user-profile');
-    ```
+```php
+<?php
+require "vendor/autoload.php";
 
-* Specify a credentials section and/or `.edgerc` location:
+$client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile('default');
 
-    ```php
-    $client = \Akamai\Open\EdgeGrid\Client::createFromEdgeRcFile('example', '../config/.edgerc');
+$headers = [
+    'Content-Type' => 'application/json',
+    'Accept' => 'application/json'
+  ];
 
-    // use $client just as you would \Guzzle\Http\Client
-    $response = $client->get('/identity-management/v3/user-profile');
-    ```
+$body = [
+  'json' => [
+    'contractType' => 'Billing',
+    'country' => 'USA',
+    'firstName' => 'John',
+    'lastName' => 'Smith',
+    'phone' => '3456788765',
+    'preferredLanguage' => 'English',
+    'sessionTimeOut' => '30',
+    'timeZone' => 'GMT'
+  ]
+];
+
+$response = $client->put('/identity-management/v3/user-profile/basic-info', $body, $headers);
+
+echo $response->getBody();
+```
 
 ## Command line interface
 
@@ -79,7 +169,7 @@ This library provides a command line interface (CLI) with a limited set of capab
 
 ### Install
 
-Install the CLI with composer `vendor/bin/http` or execute the PHAR file.
+Install the CLI with a composer `vendor/bin/http` or execute the PHAR file.
 
 ```sh
 # Composer installed
@@ -96,7 +186,7 @@ php akamai-open-edgegrid-client.phar --help
 
 You can set authentication and specify an HTTP method (case insensitive), its headers, and any JSON body fields.
 
-> **Note:** Our CLI shows all HTTP and body data. JSON is formated.
+> **Note:** Our CLI shows all HTTP and body data. JSON is formatted.
 
 |Argument|Description|
 |---|---|
@@ -108,13 +198,13 @@ You can set authentication and specify an HTTP method (case insensitive), its he
 
 ### Limitations
 
-* You cannot send `multipart/mime` (file upload) data.
-* Client certs are not supported.
-* Server certs cannot be verified.
-* Output cannot be customized.
-* Responses are not syntax highlighted.
+* You can't send `multipart/mime` (file upload) data.
+* Client certs aren't supported.
+* Server certs can't be verified.
+* Output can't be customized.
+* Responses aren't syntax highlighted.
 
-## Guzzle Middleware
+## Guzzle middleware
 
 This package provides three different middleware handlers you can add transparently when using the `Client`, to a standard `\GuzzleHttp\Client` or as a handler.
 
@@ -122,90 +212,100 @@ This package provides three different middleware handlers you can add transparen
 * The `\Akamai\Open\EdgeGrid\Handler\Verbose` for output (or log) responses.
 * The `\Akamai\Open\EdgeGrid\Handler\Debug` for output (or log) errors.
 
-### Transparent Use
+### Transparent use
 
-|Handler|Call|
-|---|---|
-|`Authentication`|`Client->setAuthentication()` or pass in an instance of `\Akamai\EdgeGrid\Authentication` to `Client->__construct()`.|
-|`Verbose`|`Client->setInstanceVerbose()` or `Client::setVerbose()` passing in on of `true|resource|[resource output, resource error]`. The default is `[STDOUT, STDERR]`.|
-|`Debug`|`Client->setInstanceDebug()`, `Client::setDebug()`, or set the `debug` config option with `true|resource`. The default is `STDERR`.|
+<table>
+    <thead>
+        <tr>
+            <th>Handler</th>
+            <th>Call</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>Authentication</code></td>
+            <td><code>Client->setAuthentication()</code> or pass in an instance of <code>\Akamai\EdgeGrid\Authentication</code> to <code>Client->__construct()</code>.</td>
+        </tr>
+        <tr>
+            <td><code>Verbose</code></td>
+            <td><code>Client->setInstanceVerbose()</code> or <code>Client::setVerbose()</code> passing in on of <code>true|resource|[resource output, resource error]</code>. The default is <code>[STDOUT, STDERR]</code>.</td>
+        </tr>
+        <tr>
+            <td><code>Debug</code></td>
+            <td><code>Client->setInstanceDebug()</code>, <code>Client::setDebug()</code>, or set the <code>debug</code> config option with <code>true|resource</code>. The default is <code>STDERR</code>.</td>
+        </tr>
+    </tbody>
+</table>
 
 ### Middleware
 
 <table>
-  <thead>
-    <tr>
-      <th>Handler</th>
-      <th>Example</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Authentication</td>
-      <td>
+    <thead>
+        <tr>
+            <th>Handler</th>
+            <th>Example</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Authentication</td>
+            <td>
 <pre lang="php">
-// Create the Authentication Handler
-$auth = \Akamai\Open\EdgeGrid\Handler\Authentication::createFromEdgeRcFile();
-// or:
-$auth = new \Akamai\Open\EdgeGrid\Handler\Authentication;
-$auth-&gt;setAuth($client_token, $client_secret, $access_token);
-
-// Create the handler stack
-$handlerStack = \GuzzleHttp\HandlerStack::create();
-
-// Add the Auth handler to the stack
-$handlerStack-&gt;push($auth);
-
-// Add the handler to a regular \GuzzleHttp\Client
-$guzzle = new \GuzzleHttp\Client([
-    "handler" =&gt; $handlerStack
-]);
+    // Create the Authentication Handler
+    $auth = \Akamai\Open\EdgeGrid\Handler\Authentication::createFromEdgeRcFile();
+    // Or hard code your credentials
+    $auth = new \Akamai\Open\EdgeGrid\Handler\Authentication;
+    $auth->setAuth($client_token, $client_secret, $access_token);
+    // Create the handler stack
+    $handlerStack = \GuzzleHttp\HandlerStack::create();
+    // Add the Auth handler to the stack
+    $handlerStack->push($auth);
+    // Add the handler to a regular \GuzzleHttp\Client
+    $guzzle = new \GuzzleHttp\Client([
+    "handler" => $handlerStack
+    ]);
 </pre>
-      </td>
-    </tr>
-    <tr>
-      <td>Verbose</td>
-      <td>
+            </td>
+        </tr>
+        <tr>
+            <td>Verbose</td>
+            <td>
 <pre lang="php">
-// Create the handler stack
-$handlerStack = HandlerStack::create();
-
-// Add the Auth handler to the stack
-$handlerStack-&gt;push(new \Akamai\Open\EdgeGrid\Handler\Verbose());
-
-// Add the handler to a regular \GuzzleHttp\Client
-$guzzle = new \GuzzleHttp\Client([
-    "handler" =&gt; $handlerStack
-]);
+    // Create the handler stack
+    $handlerStack = HandlerStack::create();
+    // Add the Auth handler to the stack
+    $handlerStack->push(new \Akamai\Open\EdgeGrid\Handler\Verbose());
+    // Add the handler to a regular \GuzzleHttp\Client
+    $guzzle = new \GuzzleHttp\Client([
+        "handler" => $handlerStack
+    ]);
 </pre>
-      </td>
-    </tr>
-    <tr>
-      <td>Debug</td>
-      <td>
+            </td>
+        </tr>
+        <tr>
+            <td>Debug</td>
+            <td>
 <pre lang="php">
-// Create the handler stack
-$handlerStack = HandlerStack::create();
-
-// Add the Auth handler to the stack
-$handlerStack-&gt;push(new \Akamai\Open\EdgeGrid\Handler\Debug());
-
-// Add the handler to a regular \GuzzleHttp\Client
-$guzzle = new \GuzzleHttp\Client([
-    "handler" =&gt; $handlerStack
-]);
+    // Create the handler stack
+    $handlerStack = HandlerStack::create();
+    // Add the Auth handler to the stack
+    $handlerStack->push(new \Akamai\Open\EdgeGrid\Handler\Debug());
+    // Add the handler to a regular \GuzzleHttp\Client
+    $guzzle = new \GuzzleHttp\Client([
+        "handler" => $handlerStack
+    ]);
 </pre>
-      </td>
-    </tr>
-  </tbody>
+            </td>
+        </tr>
+    </tbody>
 </table>
 
 ## License
 
-Copyright © 2022 Akamai Technologies, Inc. All rights reserved
+Copyright © 2025 Akamai Technologies, Inc. All rights reserved
 
 Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
+you may not use these files except in compliance with the License.
 You may obtain a copy of the License at <http://www.apache.org/licenses/LICENSE-2.0>.
 
 Unless required by applicable law or agreed to in writing, software
