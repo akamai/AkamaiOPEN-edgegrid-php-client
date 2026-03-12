@@ -1,5 +1,10 @@
 # Release notes
 
+## 2.1.2 (12 Mar, 2026)
+
+* Dropped support for end of life PHP version. Minimal PHP version is now 8.2.
+* Updated various dependencies.
+
 ## 2.1.1 (25 Mar, 2025)
 
 * Upgraded `symfony/process` to 6.4.15.
