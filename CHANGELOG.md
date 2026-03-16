@@ -1,6 +1,6 @@
 # Release notes
 
-## 2.1.2 (12 Mar, 2026)
+## 2.1.2 (16 Mar, 2026)
 
 * Dropped support for end of life PHP version. Minimal PHP version is now 8.2.
 * Updated various dependencies.
