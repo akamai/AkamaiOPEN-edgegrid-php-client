@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "akamai-open/edgegrid-auth",
-            "version": "2.0.2",
+            "version": "2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/akamai/AkamaiOPEN-edgegrid-php.git",
-                "reference": "33cf1efc1981cd4e5b3ba71d58ff2aa71794ee37"
+                "reference": "c38686338997b0ec3811781d9bef9ab2c6b4b6cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/akamai/AkamaiOPEN-edgegrid-php/zipball/33cf1efc1981cd4e5b3ba71d58ff2aa71794ee37",
-                "reference": "33cf1efc1981cd4e5b3ba71d58ff2aa71794ee37",
+                "url": "https://api.github.com/repos/akamai/AkamaiOPEN-edgegrid-php/zipball/c38686338997b0ec3811781d9bef9ab2c6b4b6cc",
+                "reference": "c38686338997b0ec3811781d9bef9ab2c6b4b6cc",
                 "shasum": ""
             },
             "require": {
@@ -28,7 +28,7 @@
                 "humbug/box": ">=4.3.8",
                 "phpspec/prophecy": "~1.0",
                 "phpunit/phpunit": "^9.6.33",
-                "squizlabs/php_codesniffer": "^3.7"
+                "squizlabs/php_codesniffer": "^3.13.6"
             },
             "suggest": {
                 "akamai-open/edgegrid-client": "Provide a fully featured HTTP client & CLI pre-configured with EdgeGrid authentication. (PHP 8.2+)"
@@ -53,9 +53,9 @@
             ],
             "support": {
                 "issues": "https://github.com/akamai/AkamaiOPEN-edgegrid-php/issues",
-                "source": "https://github.com/akamai/AkamaiOPEN-edgegrid-php/tree/2.0.2"
+                "source": "https://github.com/akamai/AkamaiOPEN-edgegrid-php/tree/2.0.3"
             },
-            "time": "2026-03-10T09:33:40+00:00"
+            "time": "2026-10-12T09:25:00+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",

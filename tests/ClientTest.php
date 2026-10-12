@@ -30,7 +30,23 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         $this->prophet->checkPredictions();
+        $this->clearAkamaiEnvVars();
         parent::tearDown();
+    }
+
+    private function clearAkamaiEnvVars(): void
+    {
+        foreach (array_keys(getenv()) as $name) {
+            if (strpos($name, 'AKAMAI_') === 0) {
+                putenv($name);
+            }
+        }
+
+        foreach (array_keys($_ENV) as $name) {
+            if (strpos($name, 'AKAMAI_') === 0) {
+                unset($_ENV[$name]);
+            }
+        }
     }
 
     /**
@@ -201,11 +217,11 @@ class ClientTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateFromEnvNoSection()
     {
-        $_ENV['AKAMAI_HOST'] = 'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net';
-        $_ENV['AKAMAI_CLIENT_TOKEN'] = 'akab-client-token-xxx-xxxxxxxxxxxxxxxx';
-        $_ENV['AKAMAI_CLIENT_SECRET'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=';
-        $_ENV['AKAMAI_ACCESS_TOKEN'] = 'akab-access-token-xxx-xxxxxxxxxxxxxxxx';
-        $_ENV['AKAMAI_MAX_SIZE'] = 2048;
+        putenv('AKAMAI_HOST=akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net');
+        putenv('AKAMAI_CLIENT_TOKEN=akab-client-token-xxx-xxxxxxxxxxxxxxxx');
+        putenv('AKAMAI_CLIENT_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=');
+        putenv('AKAMAI_ACCESS_TOKEN=akab-access-token-xxx-xxxxxxxxxxxxxxxx');
+        putenv('AKAMAI_MAX_SIZE=2048');
 
         $client = \Akamai\Open\EdgeGrid\Client::createFromEnv();
         $clientReflector = new \ReflectionClass($client);
@@ -248,11 +264,11 @@ class ClientTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateFromEnvDefaultSection()
     {
-        $_ENV['AKAMAI_DEFAULT_HOST'] = 'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net';
-        $_ENV['AKAMAI_DEFAULT_CLIENT_TOKEN'] = 'akab-client-token-xxx-xxxxxxxxxxxxxxxx';
-        $_ENV['AKAMAI_DEFAULT_CLIENT_SECRET'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=';
-        $_ENV['AKAMAI_DEFAULT_ACCESS_TOKEN'] = 'akab-access-token-xxx-xxxxxxxxxxxxxxxx';
-        $_ENV['AKAMAI_DEFAULT_MAX_SIZE'] = 2048;
+        putenv('AKAMAI_DEFAULT_HOST=akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net');
+        putenv('AKAMAI_DEFAULT_CLIENT_TOKEN=akab-client-token-xxx-xxxxxxxxxxxxxxxx');
+        putenv('AKAMAI_DEFAULT_CLIENT_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=');
+        putenv('AKAMAI_DEFAULT_ACCESS_TOKEN=akab-access-token-xxx-xxxxxxxxxxxxxxxx');
+        putenv('AKAMAI_DEFAULT_MAX_SIZE=2048');
 
         $client = \Akamai\Open\EdgeGrid\Client::createFromEnv();
         $clientReflector = new \ReflectionClass($client);
@@ -295,17 +311,17 @@ class ClientTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateFromEnvPreferSection()
     {
-        $_ENV['AKAMAI_HOST'] = false;
-        $_ENV['AKAMAI_CLIENT_TOKEN'] = false;
-        $_ENV['AKAMAI_CLIENT_SECRET'] = false;
-        $_ENV['AKAMAI_ACCESS_TOKEN'] = false;
-        $_ENV['AKAMAI_MAX_SIZE'] = 0;
+        putenv('AKAMAI_HOST=');
+        putenv('AKAMAI_CLIENT_TOKEN=');
+        putenv('AKAMAI_CLIENT_SECRET=');
+        putenv('AKAMAI_ACCESS_TOKEN=');
+        putenv('AKAMAI_MAX_SIZE=0');
 
-        $_ENV['AKAMAI_TESTING_HOST'] = 'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net';
-        $_ENV['AKAMAI_TESTING_CLIENT_TOKEN'] = 'akab-client-token-xxx-xxxxxxxxxxxxxxxx';
-        $_ENV['AKAMAI_TESTING_CLIENT_SECRET'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=';
-        $_ENV['AKAMAI_TESTING_ACCESS_TOKEN'] = 'akab-access-token-xxx-xxxxxxxxxxxxxxxx';
-        $_ENV['AKAMAI_TESTING_MAX_SIZE'] = 2048;
+        putenv('AKAMAI_TESTING_HOST=akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net');
+        putenv('AKAMAI_TESTING_CLIENT_TOKEN=akab-client-token-xxx-xxxxxxxxxxxxxxxx');
+        putenv('AKAMAI_TESTING_CLIENT_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=');
+        putenv('AKAMAI_TESTING_ACCESS_TOKEN=akab-access-token-xxx-xxxxxxxxxxxxxxxx');
+        putenv('AKAMAI_TESTING_MAX_SIZE=2048');
 
         $client = \Akamai\Open\EdgeGrid\Client::createFromEnv('testing');
         $clientReflector = new \ReflectionClass($client);
@@ -348,10 +364,10 @@ class ClientTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateFromEnvNoMaxSize()
     {
-        $_ENV['AKAMAI_HOST'] = 'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net';
-        $_ENV['AKAMAI_CLIENT_TOKEN'] = 'akab-client-token-xxx-xxxxxxxxxxxxxxxx';
-        $_ENV['AKAMAI_CLIENT_SECRET'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=';
-        $_ENV['AKAMAI_ACCESS_TOKEN'] = 'akab-access-token-xxx-xxxxxxxxxxxxxxxx';
+        putenv('AKAMAI_HOST=akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net');
+        putenv('AKAMAI_CLIENT_TOKEN=akab-client-token-xxx-xxxxxxxxxxxxxxxx');
+        putenv('AKAMAI_CLIENT_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=');
+        putenv('AKAMAI_ACCESS_TOKEN=akab-access-token-xxx-xxxxxxxxxxxxxxxx');
 
         $client = \Akamai\Open\EdgeGrid\Client::createFromEnv('testing');
         $clientReflector = new \ReflectionClass($client);
@@ -404,11 +420,11 @@ class ClientTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateInstancePreferEnv()
     {
-        $_ENV['AKAMAI_HOST'] = 'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net';
-        $_ENV['AKAMAI_CLIENT_TOKEN'] = 'akab-client-token-xxx-xxxxxxxxxxxxxxxx';
-        $_ENV['AKAMAI_CLIENT_SECRET'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=';
-        $_ENV['AKAMAI_ACCESS_TOKEN'] = 'akab-access-token-xxx-xxxxxxxxxxxxxxxx';
-        $_ENV['AKAMAI_MAX_SIZE'] = 2048;
+        putenv('AKAMAI_HOST=akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net');
+        putenv('AKAMAI_CLIENT_TOKEN=akab-client-token-xxx-xxxxxxxxxxxxxxxx');
+        putenv('AKAMAI_CLIENT_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=');
+        putenv('AKAMAI_ACCESS_TOKEN=akab-access-token-xxx-xxxxxxxxxxxxxxxx');
+        putenv('AKAMAI_MAX_SIZE=2048');
 
         $client = \Akamai\Open\EdgeGrid\Client::createInstance(
             'default',
@@ -476,11 +492,11 @@ class ClientTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateInstanceSection()
     {
-        $_ENV['AKAMAI_TESTING_HOST'] = 'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net';
-        $_ENV['AKAMAI_TESTING_CLIENT_TOKEN'] = 'akab-client-token-xxx-xxxxxxxxxxxxxxxx';
-        $_ENV['AKAMAI_TESTING_CLIENT_SECRET'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=';
-        $_ENV['AKAMAI_TESTING_ACCESS_TOKEN'] = 'akab-access-token-xxx-xxxxxxxxxxxxxxxx';
-        $_ENV['AKAMAI_TESTING_MAX_SIZE'] = 2048;
+        putenv('AKAMAI_TESTING_HOST=akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net');
+        putenv('AKAMAI_TESTING_CLIENT_TOKEN=akab-client-token-xxx-xxxxxxxxxxxxxxxx');
+        putenv('AKAMAI_TESTING_CLIENT_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=');
+        putenv('AKAMAI_TESTING_ACCESS_TOKEN=akab-access-token-xxx-xxxxxxxxxxxxxxxx');
+        putenv('AKAMAI_TESTING_MAX_SIZE=2048');
 
         $authentication = \Akamai\Open\EdgeGrid\Authentication::createInstance('testing', __DIR__ . '/edgerc/.edgerc');
 
@@ -511,11 +527,11 @@ class ClientTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateInstanceSectionFallback()
     {
-        $_ENV['AKAMAI_HOST'] = false;
-        $_ENV['AKAMAI_CLIENT_TOKEN'] = false;
-        $_ENV['AKAMAI_CLIENT_SECRET'] = false;
-        $_ENV['AKAMAI_ACCESS_TOKEN'] = false;
-        $_ENV['AKAMAI_MAX_SIZE'] = 0;
+        putenv('AKAMAI_HOST=');
+        putenv('AKAMAI_CLIENT_TOKEN=');
+        putenv('AKAMAI_CLIENT_SECRET=');
+        putenv('AKAMAI_ACCESS_TOKEN=');
+        putenv('AKAMAI_MAX_SIZE=0');
 
         $authentication = \Akamai\Open\EdgeGrid\Authentication::createInstance(
             'testing',
@@ -549,11 +565,11 @@ class ClientTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateInstanceSectionFallbackEnv()
     {
-        $_ENV['AKAMAI_HOST'] = 'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net';
-        $_ENV['AKAMAI_CLIENT_TOKEN'] = 'akab-client-token-xxx-xxxxxxxxxxxxxxxx';
-        $_ENV['AKAMAI_CLIENT_SECRET'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=';
-        $_ENV['AKAMAI_ACCESS_TOKEN'] = 'akab-access-token-xxx-xxxxxxxxxxxxxxxx';
-        $_ENV['AKAMAI_MAX_SIZE'] = 2048;
+        putenv('AKAMAI_HOST=akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net');
+        putenv('AKAMAI_CLIENT_TOKEN=akab-client-token-xxx-xxxxxxxxxxxxxxxx');
+        putenv('AKAMAI_CLIENT_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=');
+        putenv('AKAMAI_ACCESS_TOKEN=akab-access-token-xxx-xxxxxxxxxxxxxxxx');
+        putenv('AKAMAI_MAX_SIZE=2048');
 
         $authentication = \Akamai\Open\EdgeGrid\Authentication::createInstance('testing', __DIR__ . '/edgerc/.edgerc');
 
@@ -584,11 +600,11 @@ class ClientTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateInstanceSectionFallbackInvalidEdgerc()
     {
-        $_ENV['AKAMAI_HOST'] = 'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net';
-        $_ENV['AKAMAI_CLIENT_TOKEN'] = 'akab-client-token-xxx-xxxxxxxxxxxxxxxx';
-        $_ENV['AKAMAI_CLIENT_SECRET'] = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=';
-        $_ENV['AKAMAI_ACCESS_TOKEN'] = 'akab-access-token-xxx-xxxxxxxxxxxxxxxx';
-        $_ENV['AKAMAI_MAX_SIZE'] = 2048;
+        putenv('AKAMAI_HOST=akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net');
+        putenv('AKAMAI_CLIENT_TOKEN=akab-client-token-xxx-xxxxxxxxxxxxxxxx');
+        putenv('AKAMAI_CLIENT_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=');
+        putenv('AKAMAI_ACCESS_TOKEN=akab-access-token-xxx-xxxxxxxxxxxxxxxx');
+        putenv('AKAMAI_MAX_SIZE=2048');
 
         $authentication = \Akamai\Open\EdgeGrid\Authentication::createInstance(
             'testing',
@@ -647,7 +663,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\ConfigException::class);
         $this->expectExceptionMessage('Unable to create instance using environment or .edgerc file');
 
-        $_ENV['AKAMAI_TESTING_HOST'] = 'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net';
+        putenv('AKAMAI_TESTING_HOST=akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net');
 
         try {
             $client = \Akamai\Open\EdgeGrid\Client::createInstance("testing", __DIR__ . '/edgerc/.edgerc');
@@ -674,7 +690,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\ConfigException::class);
         $this->expectExceptionMessage('Unable to create instance using environment or .edgerc file');
 
-        $_ENV['AKAMAI_TESTING_HOST'] = 'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net';
+        putenv('AKAMAI_TESTING_HOST=akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net');
 
         try {
             $authentication = \Akamai\Open\EdgeGrid\Client::createInstance(
@@ -704,7 +720,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\Akamai\Open\EdgeGrid\Authentication\Exception\ConfigException::class);
         $this->expectExceptionMessage('Unable to create instance using environment or .edgerc file');
 
-        $_ENV['AKAMAI_HOST'] = 'akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net';
+        putenv('AKAMAI_HOST=akaa-baseurl-xxxxxxxxxxx-xxxxxxxxxxxxx.luna.akamaiapis.net');
 
         try {
             $authentication = \Akamai\Open\EdgeGrid\Client::createInstance(
