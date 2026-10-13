@@ -25,7 +25,7 @@ class Client implements \Psr\Log\LoggerAwareInterface, \Psr\Http\Client\ClientIn
 {
     use ClientTrait;
 
-    public const VERSION = '2.1.2';
+    public const VERSION = '2.1.3';
 
     /**
      * @const int Default Timeout in seconds
