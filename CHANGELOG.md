@@ -1,5 +1,10 @@
 # Release notes
 
+## 2.1.3 (14 Oct, 2026)
+
+* Upgraded `akamai-open/edgegrid-auth` to `2.0.3`, which updates environment credential loading to use `getenv()` first, with a possible fallback to `$_ENV`.
+* Updated various dependencies.
+
 ## 2.1.2 (16 Mar, 2026)
 
 * Dropped support for end of life PHP version. Minimal PHP version is now 8.2.
